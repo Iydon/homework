@@ -30,3 +30,6 @@
 # Contest
 ## 2019 MCM
 [2019年美国大学生数学建模竞赛](Contest/2019MCM)
+
+## 2019 CUMCM
+[2019年全国大学生数学建模竞赛](Contest/2019CUMCM)
