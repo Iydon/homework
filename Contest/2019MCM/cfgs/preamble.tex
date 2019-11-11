@@ -1,0 +1,38 @@
+% !Mode:: "TeX:UTF-8"
+
+% ------- Packages -------
+\usepackage{palatino}    % Palatino/Helvetica/TXTT and Greek replacements
+\usepackage{amsthm}      % Theorem
+    \newtheorem{thm}{Theorem}[section]
+    \newtheorem{cor}{Corollary}[section]
+    \newtheorem{defn}{Definition}% [section]w
+\usepackage{hyperref}    % 超链接
+\usepackage[all]{xy}
+\usepackage{subfigure}
+
+% ------- Symbols -------
+\input{cfgs/preamble-symbols-femabbr}
+\input{cfgs/preamble-symbols-calculus.tex}
+
+% ------- Command and Definition -------
+% 正文摘要和控制页摘要名字修改
+\def\abstractname{Abstract}
+\def\sheetsummaryname{Summary}
+\newcommand{\emphb}[1]{\textbf{#1}}
+\newcommand{\emphi}[1]{\textit{#1}}
+\setcounter{tocdepth}{2}
+
+% ------- Information -------
+\mcmsetup{CTeX = false,         % 使用 CTeX 套装时，设置为 true
+        tcn = 1911850,          % 队伍控制号码
+        problem = A,            % 选题
+        sheet = true,           % 摘要页
+        color = red,
+        titleinsheet = true,    % 摘要页中的标题
+        keywordsinsheet = false, % 摘要页中的关键字
+        titlepage = false,       % 标题页
+        abstract = true         % 标题页中的摘要
+}
+\title{When The Dragon Becomes A Reality}
+\author{IL, QL, GQ}
+\date{\today}

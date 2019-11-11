@@ -1,0 +1,24 @@
+% !Mode:: "TeX:UTF-8"
+\documentclass{mcmthesis}
+% Configurations
+\input{cfgs/preamble}  % 导言区
+\input{patch/patch}    % Warning补丁
+\begin{document}
+
+\input{sections/0_Sheetsummary_abstract_keywords}
+\maketitle
+% Generate the Table of Contents, if it's needed.
+\tableofcontents\newpage
+
+\input{sections/content.tex}
+
+\input{sections/others/3_Others.tex}
+
+\input{sections/others/1_Bibliography}
+
+\clearpage
+% \begin{appendices}
+ \input{sections/others/2_Appendices}
+% \end{appendices}
+
+\end{document}
