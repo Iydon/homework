@@ -1,0 +1,87 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program  = xelatex
+% Hyperref
+    % hyperref
+    \usepackage{hyperref}
+        \hypersetup{
+            pdfauthor={Iydon},
+            pdfcreator={Microsoft® Word 2017},
+            pdfproducer={Microsoft® Word 2017},
+        }
+
+% Math
+    % symbols and environment
+    \usepackage{amsmath,amssymb}
+        \newcommand{\dd}{\mathrm{d}}
+        \newcommand{\diff}[2]{\frac{\dd #1}{\dd #2}}
+        \newcommand{\tdiff}[2]{\tfrac{\dd #1}{\dd #2}}
+        \newcommand{\RR}{\mathbb{R}}
+        \newcommand{\vecw}{\symbf{w}}
+        \newcommand{\vecx}{\symbf{X}}
+        \newcommand{\vecy}{\symbf{Y}}
+        \newcommand{\logit}{\mathrm{logit}}
+    % font
+    \usepackage{unicode-math}
+        \unimathsetup{math-style=ISO, bold-style=ISO, mathrm=sym}
+        \setsansfont{FiraGO}[BoldFont=* SemiBold, Numbers=Monospaced]
+        \setmathfont{Fira Math Regular}
+
+% Listings
+    % Python
+    \usepackage{tcolorbox}
+        \tcbuselibrary{listings,breakable}
+        \newtcblisting{pylist}[1]{
+            listing options={language=Python,numbers=left,
+                numberstyle=\tiny\color{red!75!black},breaklines,
+                basicstyle=\small,keywordstyle=\color{blue!85!black},
+                commentstyle=\color{white!75!black}\textit},
+            title=\texttt{#1},listing only,breakable,
+            left=6mm,right=6mm,top=2mm,bottom=2mm,
+            colback=violet!5!white,colframe=violet!75!black}
+        \newtcbinputlisting{\Python}[2]{%
+            listing options={language=Python,numbers=left,
+                numberstyle=\tiny\color{red!75!black},
+                basicstyle=\small,keywordstyle=\color{blue!85!black},
+                commentstyle=\color{white!75!black}\textit,breaklines},
+            listing only,breakable,
+            listing file={#2},title=\texttt{#1},
+            left=6mm,right=6mm,top=2mm,bottom=2mm,
+            colback=violet!5!white,colframe=violet!75!black}
+        \tcbuselibrary{xparse}
+            \DeclareTotalTCBox{\verbbox}{ O{blue} v !O{} }
+                {fontupper=\ttfamily,nobeforeafter,tcbox raise base,
+                 arc=0pt,outer arc=0pt,top=0pt,bottom=0pt,left=0mm,
+                 right=0mm,leftrule=0pt,rightrule=0pt,toprule=0.3mm,
+                 bottomrule=0.3mm,boxsep=0.5mm,bottomrule=0.3mm,boxsep=0.5mm,
+                 colback=#1!10!white,colframe=#1!50!black,#3}{#2}
+        \DeclareTotalTCBox{\commandbox}{ s v }
+                {verbatim,colupper=white,colback=black!75!white,colframe=black}
+                {\IfBooleanTF{#1}{\textcolor{red}{\ttfamily\bfseries >> }}{}
+                    \lstinline[language=sh,morekeywords={python,python2,python3},keywordstyle=\color{blue!35!white}\bfseries]^#2^}
+        \tcbuselibrary{theorems}
+        \newtcbtheorem{theobox}{定理}%
+            {colback=white,colframe=orange!90!black,fonttitle=\bfseries,%
+             arc=2mm,separator sign={\ $\blacktriangleright$}}{theo}%
+        \newtcbtheorem{defnbox}{定义}%
+            {colback=white,colframe=blue!90!black,fonttitle=\bfseries,%
+             arc=2mm,separator sign={\ $\blacktriangleright$}}{defn}%
+
+% Miscellaneous
+    % color
+    % \usepackage[table,xcdraw]{xcolor}
+    % \verbatim in \macro arguments
+    \usepackage{cprotect}
+    % references style
+    \usepackage{gbt7714}
+    % commutative diagrams
+    \usepackage{tikz,tikz-cd}
+    % boottabs
+    \usepackage{booktabs}
+    % float throuth no section
+    \usepackage[section]{placeins}
+    % SI unit
+    \usepackage{siunitx}
+    % show label keys
+    % \usepackage{showkeys}
+    % float throuth no section
+    \usepackage[section]{placeins}

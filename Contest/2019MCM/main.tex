@@ -1,0 +1,50 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program  = xelatex
+% \documentclass[AutoFakeBold, AutoFakeSlant]{cumcmthesis}
+\documentclass[withoutpreface,bwprint,AutoFakeBold, AutoFakeSlant]{cumcmthesis}    % 去掉封面与编号页
+    \input{cfgs/info}
+    \input{cfgs/preamble}
+\begin{document}
+
+% \input{sections/example/index}
+\maketitle
+    \input{sections/摘要}
+    
+% \tableofcontents
+% \textcolor{red}{不需要目录，仅作写作参考}
+% \clearpage
+
+\section{问题重述}
+    \input{sections/问题重述}
+    
+\section{模型假设}
+    \input{sections/模型假设}
+    
+\section{符号说明}
+    \input{sections/名词解释与符号说明}
+    
+\section{问题一的模型建立与求解}
+    \input{sections/模型一}
+    
+\section{问题二的模型建立与求解}
+    \input{sections/模型二}
+    
+\section{问题三的模型建立与求解}
+    \input{sections/模型三}
+
+\section{问题四的模型建立与求解}
+    \input{sections/模型四}
+    
+\section{模型评价与推广}
+    \input{sections/评价与推广}
+
+\clearpage
+
+% 参考文献
+    \input{sections/bib}
+\clearpage
+
+\section{附录}\appendix
+    \input{sections/appendix}
+
+\end{document}

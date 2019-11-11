@@ -1,0 +1,30 @@
+\subsection{排队模型建立}
+根据排队论的相关理论，对枢纽内多点式出租车上客区这一排队系统建立排队模型 。当上客区排队系 统处于全忙期，且系统的服务强度$ρ< 1$时，系统达到稳定状态且不会形成无限排队的现象，在此基础上对系统的输入与输出进行建模。
+
+在系统达到稳态时，$C$个服务台工作，系统中出租车乘客数为$n$的概率如下：
+\begin{equation}\label{eq:排队系统出租车乘客数0}
+    P_0(C) = \left[\sum_{k=0}^{C-1}\frac{1}{k!}\left(\frac{\lambda}{\mu}\right)^k+ \frac{1}{C!}\frac{1}{(1-\rho)}\left(\frac{\lambda}{\mu}\right)^C\right]^{-1}
+\end{equation}
+
+\begin{equation}\label{eq:排队系统出租车乘客数n}
+    P_n(C) = \begin{cases}
+        \left(\lambda/\mu\right)^kP_0(C)/n, & n=1, 2, \ldots, C \\
+        \left(C!C^{n-C}\right)^{-1}\left(\lambda/\mu\right)P_0(C), & n=C+1
+    \end{cases}
+\end{equation}
+
+用系统中乘客排队的队长$L_s$及其逗留时间$W_s$对系统进行分析，得：
+\begin{equation}\label{eq:排队系统乘客队长-2}
+    L_s = L_q + C_\rho = \frac{1}{C!}\frac{(C\rho)^C\rho}{(1-\rho)^2}P_0 + \frac{\lambda}{\mu},
+\end{equation}
+
+\begin{equation}\label{eq:排队系统逗留时间}
+    E(W_s) = \frac{P_n(C)}{C\mu(1-\rho)^2} = \frac{n\mu}{n!(n\mu-\lambda)^2}\left(\frac{\lambda}{\mu}\right)^nP_0(C).
+\end{equation}
+
+
+\subsection{排队系统优化}
+利用排队系统的费用决策模型对排队系统进行优化设计。假设乘客等待时间的总费用为$Z_1=\alpha L_s$ ，上车点建设成本为$Z_2=\beta C$，其中$\alpha$为每个乘客单位时间的等待时间成本，$\beta$为单个服务台的服务时间成本与单个上车点的建设费用。当则需要满足两者之和最小才能使得系统进一步优化，即：
+\begin{equation}\label{eq:最小化成本}
+    \min:Z(C) = Z_1 + Z_2 = \alpha L_s(C) + \beta C, \quad Z(C-1)\leq Z(C)\leq Z(C+1)
+\end{equation}

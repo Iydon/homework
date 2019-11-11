@@ -1,0 +1,26 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program  = xelatex
+\section{国内主要机场2019年6月--8月准点率信息}
+    \begin{enumerate}[label=(\arabic*)]
+        \item 表~\ref{T:depart_1_1}：\emph{中国大陆TOP级（承载客流量超3000万，2019年8月）机场准点出发信息表}
+        \item 表~\ref{T:depart_2_1}：\emph{中国大陆TOP级（承载客流量超3000万，2019年7月）机场准点出发信息表}
+        \item 表~\ref{T:depart_3_1}：\emph{中国大陆TOP级（承载客流量超3000万，2019年6月）机场准点出发信息表}
+        \item 表~\ref{T:depart_1_2}：\emph{中国大陆TOP级（承载客流量1000万--3000万，2019年8月）机场准点出发信息表}
+        \item 表~\ref{T:depart_2_2}：\emph{中国大陆TOP级（承载客流量超1000--3000万，2019年7月）机场准点出发信息表}
+        \item 表~\ref{T:depart_3_2}：\emph{中国大陆TOP级（承载客流量超1000--3000万，2019年6月）机场准点出发信息表}
+        \item 表~\ref{T:depart_1_3}：\emph{中国大陆TOP级（承载客流量200万--1000万，2019年8月）机场准点出发信息表}
+        \item 表~\ref{T:depart_2_3}：\emph{中国大陆TOP级（承载客流量200万--1000万，2019年7月）机场准点出发信息表}
+        \item 表~\ref{T:depart_3_3}：\emph{中国大陆TOP级（承载客流量200万--1000万，2019年6月）机场准点出发信息表}
+    \end{enumerate}
+    
+    \input{utils/append-tables}
+
+
+
+\section{蒙特卡洛模拟}\label{A:python-simulink}
+    \Python{主文件（\texttt{main.py}）}{code/main.py}
+    \Python{配置文件（\texttt{settings.py}）}{code/settings.py}
+    \Python{根据数据库绘制地图（\texttt{map.py}）}{code/map.py}
+    \Python{持久化数据（\texttt{data.py}）}{code/data.py}
+    \Python{数据库建模---航空数据结构（\texttt{models.py}）}{code/models.py}
+    \Python{数据库建模---航线数据结构（\texttt{model-airline.py}）}{code/model_airline.py}
