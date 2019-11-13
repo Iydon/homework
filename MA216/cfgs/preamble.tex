@@ -58,22 +58,15 @@
     \usepackage{tcolorbox}
         \tcbuselibrary{listings,breakable}
         \newtcblisting{pylist}[1]{
-            listing options={language=Python,numbers=left,
-                numberstyle=\tiny\color{red!75!black},breaklines,
-                basicstyle=\small,keywordstyle=\color{blue!85!black},
-                commentstyle=\color{white!75!black}\textit},
+            listing options={language=Python,numbers=left,numberstyle=\tiny,
+                breaklines,commentstyle=\color{white!50!black}\textit},
             title=\texttt{#1},listing only,breakable,
-            left=6mm,right=6mm,top=2mm,bottom=2mm,
-            colback=violet!5!white,colframe=violet!75!black}
-        \newtcbinputlisting{\Python}[2]{%
-            listing options={language=Python,numbers=left,
-                numberstyle=\tiny\color{red!75!black},
-                basicstyle=\small,keywordstyle=\color{blue!85!black},
-                commentstyle=\color{white!75!black}\textit,breaklines},
-            listing only,breakable,
-            listing file={#2},title=\texttt{#1},
-            left=6mm,right=6mm,top=2mm,bottom=2mm,
-            colback=violet!5!white,colframe=violet!75!black}
+            left=6mm,right=6mm,top=2mm,bottom=2mm}
+        \newtcbinputlisting{\Python}[2]{
+            listing options={language=Python,numbers=left,numberstyle=\tiny,
+                breaklines,commentstyle=\color{white!50!black}\textit},
+            title=\texttt{#1},listing only,breakable,
+            left=6mm,right=6mm,top=2mm,bottom=2mm,listing file={#2}}
         \newtcbinputlisting{\MATLAB}[2]{%
             listing options={language=MATLAB,numbers=left,
                 numberstyle=\tiny\color{red!75!black},
