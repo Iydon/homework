@@ -18,4 +18,7 @@ __Δ = d1 - d2
 #   =     _______
 #     σ⋅╲╱ T - t
 
-pretty_print(__Δ.simplify())
+
+
+if __name__ == "__main__":
+    pretty_print(__Δ.simplify())
