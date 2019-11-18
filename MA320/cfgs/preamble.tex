@@ -78,6 +78,18 @@
         \newtcbtheorem{defnbox}{Definition}%
             {colback=white,colframe=blue!90!black,fonttitle=\bfseries,%
              arc=2mm,separator sign={\ $\blacktriangleright$}}{defn}%
+        \tcbuselibrary{skins}
+        \colorlet{colexam}{red!75!black}
+        \newtcolorbox{original}{%
+            empty,title={Original Text},attach boxed title to top left, boxed title style={empty,size=minimal,toprule=2pt,top=4pt,
+                overlay={\draw[colexam,line width=2pt]
+                    ([yshift=-1pt]frame.north west)--([yshift=-1pt]frame.north east);}},
+            coltitle=colexam,fonttitle=\Large\bfseries, before=\par\medskip\noindent,parbox=false,boxsep=0pt,left=0pt,right=3mm,top=4pt, breakable,pad at break*=0mm,vfill before first,
+            overlay unbroken={\draw[colexam,line width=1pt]
+                ([yshift=-1pt]title.north east)--([xshift=-0.5pt,yshift=-1pt]title.north-|frame.east) --([xshift=-0.5pt]frame.south east)--(frame.south west); },
+                overlay first={\draw[colexam,line width=1pt] ([yshift=-1pt]title.north east)--([xshift=-0.5pt,yshift=-1pt]title.north-|frame.east) --([xshift=-0.5pt]frame.south east); },
+                overlay middle={\draw[colexam,line width=1pt] ([xshift=-0.5pt]frame.north east) --([xshift=-0.5pt]frame.south east); },
+                overlay last={\draw[colexam,line width=1pt] ([xshift=-0.5pt]frame.north east) --([xshift=-0.5pt]frame.south east)--(frame.south west);}}
     % Notepad
     \tcbuselibrary{most}
     \usetikzlibrary{shapes.geometric}
