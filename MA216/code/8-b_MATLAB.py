@@ -28,7 +28,7 @@ def greeks(S, E, r, σ, τ, to_simple=False, to_str=False, to_latex=False):
         - to_simple: bool, wheather to simplify result
         - to_str: bool, wheather to convert result to str
         - to_latex: bool, wheather to convert result to latex
-    
+
     :Output:
         - C, call value
         - Cδ, δ value of call
