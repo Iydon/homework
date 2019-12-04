@@ -1,4 +1,4 @@
-function [C, Cdelta, Cvega, P, Pdelta, Pvega] = geeks(S,E,r,sigma,tau)
+function [C, Cdelta, Cvega, P, Pdelta, Pvega] = geeks(S, E, r, sigma, tau)
     %{
     :Argument:
         - S: [str, float], asset price @ time t

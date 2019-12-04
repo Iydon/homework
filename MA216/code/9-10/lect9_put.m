@@ -14,7 +14,7 @@ sigmadiff = 1;
 k = 1;
 kmax = 100;
 while sigmadiff>=tol && k<kmax
-    [~, ~, ~, P, ~, Pvega] = geeks(S,E,r,sigma,tau);
+    [~, ~, ~, P, ~, Pvega] = geeks(S, E, r, sigma, tau);
     increment = (P-P_true) / Pvega;
     sigma = sigma - increment;
     k = k + 1;
@@ -34,7 +34,7 @@ sigma = linspace(0, 1.5, M);
 [~, Pvalve] = blsprice(S, E, r, tau, sigma);
 Pvega = zeros(M, 1);
 for i = 1 : M
-    Pvega(i) = blsvega(S, E, r, tau,sigma(i));
+    Pvega(i) = blsvega(S, E, r, tau, sigma(i));
 end
 
 % Figure
