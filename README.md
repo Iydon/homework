@@ -23,6 +23,9 @@
 ## HUM009
 [人文名家专题系列课程](HUM009).
 
+## IPE
+[思想政治教育与研究中心](IPE).
+
 ## Outsourcing
 [Outsourcing](Outsourcing).
 
