@@ -8,10 +8,10 @@ function Para = LPPL(Times, Prices, X0)
     % ------- TRAIN -------
     Para = Train(Times, Prices, X0);
     % ------- PREDICT -------
-    % Y    = Predict(Para, 1:N);
+    Y    = Predict(Para, 1:N);
     % ------- FIGURE -------
-    % plot(Times, Prices, Times, Y);
-    % legend('exact', 'fitted');
+    plot(Times, Prices, Times, Y);
+    legend('exact', 'fitted');
 end
 
 
