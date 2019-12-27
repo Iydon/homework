@@ -1,0 +1,37 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program = xelatex
+
+% Hyperref
+    % hyperref
+    \usepackage{hyperref}
+        \hypersetup{
+            pdftitle={PDE Solutions},
+            pdfauthor={Iydon Liang},
+            colorlinks=true,
+            linkcolor=black}
+
+% Math
+    % symbols and environment
+    \usepackage{amsmath,amssymb,physics,siunitx}
+        \numberwithin{equation}{section}
+    % font
+    \usepackage{unicode-math}
+        \unimathsetup{math-style=ISO, bold-style=ISO, mathrm=sym}
+        \setsansfont{FiraGO}[BoldFont=* SemiBold, Numbers=Monospaced]
+        \setmathfont{Fira Math Regular}
+
+% Color box
+    % Question
+    \usepackage{tcolorbox}
+        \tcbuselibrary{theorems}
+        \newtcbtheorem{question}{Question}%
+            {fonttitle=\bfseries,%
+             arc=2mm,separator sign={\ $\blacktriangleright$}}{question}%
+
+% Miscellaneous
+    % graphic
+    \usepackage{graphicx,float}
+    % reading font
+    \usepackage{ebgaramond}
+    % enumerate and itemize
+    \usepackage{enumitem}

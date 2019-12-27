@@ -1,0 +1,174 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program = xelatex
+\begin{question}{4.2}{}
+    A spherical shell with inner radius 1 and outer radius 2 has a steady-state temperature distribution $u$. Its inner boundary is held at $100$\si{\degreeCelsius}. Its outer boundary satisfies $\pdv{u}{\vb{n}}=-\gamma$, where $\gamma$ is a constant.
+    \begin{enumerate}[label=(\alph*)]
+        \item Find the temperature $u$.\footnote{Hint: Everything is radial and hence so is $u$ (i.e.\ $u(r, \theta) = u(r)$).}
+        \item What are the hottest and coldest temperatures?
+        \item Can you choose $\gamma$ so that the temperature on the outer boundary is $20$\si{\degreeCelsius}.
+    \end{enumerate}
+\end{question}
+\begin{enumerate}[label=(\alph*)]
+    \item Because of the radial symmetry of the shell and the boundary conditions, the solution $u$ is radially symmetric, i.e.\ $u=u(r)$. Then it follows that
+        \[
+            u''(r) + \frac{2}{r}u'(r) = 0, \quad 1\leq r\leq 2.
+        \]
+        The general solution of this ODE is given by $u(r)=a/r+b$. Now the boundary conditions yield $u(1)=a+b=100$ and $\eval{\pdv{u}{\vb{n}}}_{r=2}=u'(2)=-a/4=-\gamma$. Hence, $a=4\gamma$, $b=100-4\gamma$, and as a result,
+        \begin{equation}\label{E:4.2-1}
+            u = \frac{4\gamma}{r} + 100 - 4\gamma.
+        \end{equation}
+    \item It follows easily from \eqref{E:4.2-1} that the inner boundary has the hottest temperature which is $100$\si{\degreeCelsius} and the outer boundary has the coldest temperature which is $(100-2\gamma)$\si{\degreeCelsius} if $\gamma\geq 0$; that the outer boundary has the hottest temperature which is $(100-2\gamma)$\si{\degreeCelsius} and the inner boundary has the coldest temperature which is $100$\si{\degreeCelsius} if $\gamma<0$.
+    \item Again by \eqref{E:4.2-1} we have $\eval{u}_{r=2}=100-2\gamma$. Thus, once we choose $\gamma=40$ then the temperature on the outer boundary is $20$\si{\degreeCelsius}.
+\end{enumerate}
+
+
+\begin{question}{4.5}{}
+    Select a suitable method to solve the following boundary value problems:
+    \begin{enumerate}[label=(\arabic*)]
+        \item \[
+                \begin{cases}
+                    \Delta u=0 & \text{in $\Omega=\{(r,\theta)\mid 0\leq r<R, 0\leq\theta<2\pi\}$} \\
+                    u(R,\theta)=A\cos\theta & \\
+                \end{cases}
+            \]
+        \item \footnote{Hint: the region and B.C.\ are radially symmetric and hence the solution should be radially symmetric.}\[
+                \begin{cases}
+                    \Delta u=1 & \text{in $\Omega=\{(r,\theta)\mid 0\leq r<R, 0\leq\theta<2\pi\}$} \\
+                    u(R,\theta)=0 & \\
+                \end{cases}
+            \]
+        \item \footnote{Hint: For each ﬁxed $r$, $u(r, \theta)$ is $2\pi$−periodic function of $\theta$ which can be expanded by the eigenfunctions with $2\pi$-period B.C.. Thus $u$ takes the form of\[u(r,\theta)=A_0(r)+\sum_{n=1}^\infty(A_n(r)\cos(n\theta)+B_n(r)\sin(n\theta)).\]}\[
+                \begin{cases}
+                    \Delta u=1 & \text{in $\Omega=\{(r,\theta)\mid 0\leq r<R, 0\leq\theta<2\pi\}$} \\
+                    u(R,\theta)=0 & \\
+                \end{cases}
+            \]
+        \item \[
+                \begin{cases}
+                    \Delta u=0 & \text{in $\Omega=\{(x,y)\mid 0<x<\pi, 0<y<\pi\}$} \\
+                    u(0,y)=0 & u(\pi,y)=\cos^2y \\
+                    u_y(x,0)=0 & u_y(x,\pi)=0
+                \end{cases}
+            \]
+        \item \[
+                \begin{cases}
+                    \Delta u=0 & \text{in $\Omega=\{(x,y)\mid 0<x<a, 0<y<b\}$} \\
+                    u(0,y)=0 & u(a,y)=0 \\
+                    \eval{\left(\pdv{u}{y}+u\right)}_{y=0}=0 & u(x,b)=g(x)
+                \end{cases}
+            \]
+    \end{enumerate}
+\end{question}
+\begin{enumerate}[label=(\arabic*)]
+    \item We know the general solution of Laplace equation in polar coordinates as \eqref{E:4.5-1}.
+        \begin{equation}\label{E:4.5-1}
+            u(r,\theta) = C_0 + D_0\ln r + \sum_{n=1}^\infty(C_nr^n+D_nr^{-n})(A_n\cos(n\theta)+B_n\sin(n\theta)).
+        \end{equation}
+        Note that the desired solution $u(r,\theta)$ must be bounded on $\bar{\Omega}$. Therefore, we obtain
+        \begin{equation}\label{E:4.5-2}
+            u(r,\theta) = C_0 + \sum_{n=1}^\infty r^n(A_n\cos(n\theta)+B_n\sin(n\theta)).
+        \end{equation}
+        Now the boundary condition implies
+        \[
+            u(R,\theta) = C_0 + \sum_{n=1}^\infty R^n(A_n\cos(n\theta)+B_n\sin(n\theta)) = A\cos\theta,
+        \]
+        from which it follows $A_1=A$ and others equal zero. By \eqref{E:4.5-2}, we get the solution
+        \[
+            u(r,\theta) = \frac{A}{R}r\cos\theta = \frac{A}{R}x.
+        \]
+    \item Since $\Omega$ and the boundary condition are radially symmetric, we expect that $u$ be radially symmetric: $u=u(r)$. Then we have
+        \[
+            u''(r) + \frac{1}{r}u'(r) = 1.
+        \]
+        That is,
+        \[
+            \left(ru'\right)' = r,
+        \]
+        from which it follows $ru'=r^2/2+C$ and as a result
+        \[
+            u(r) = \frac{r^2}{4} + C\ln r + D.
+        \]
+        Notice that we have $C=0$ since the solution $u$ is bounded. The boundary condition $u(R,\theta)=0=R^2/4+D$ gives us $D=-R^2/4$. Therefore, the solution is given By
+        \[
+            u = \frac{r^2-R^2}{4}.
+        \]
+    \item For each fixed $r\in[0,R]$, $u(r,\theta)$ is a periodic function of $\theta$ with period $2\pi$. Thus $u(r,\theta)$ can be expanded by eigenfunctions of the eigenvalue problem
+        \[
+            \begin{cases}
+                X''(\theta) + \lambda X(\theta) = 0 & \theta\in(0, 2\pi), \\
+                X \text{ is periodic with period $2\pi$.} & \\
+            \end{cases}
+        \]
+        Therefore,
+        \[
+            u(r,\theta) = A_0(r) + \sum_{n=1}^\infty (A_n(r)\cos(n\theta) + B_n\sin(n\theta)).
+        \]
+        Substituting this into
+        \[
+            u_{rr} + \frac{1}{r}u_r + \frac{1}{r^2}u_{\theta\theta} = \frac{A}{2}r^2\sin(2\theta),
+        \]
+        we obtain
+        \[
+            \begin{aligned}
+                A_0''(r) &+ \frac{1}{r}A_0'(r) + \sum_{n=1}^\infty\left[\left(A_n''(r) + \frac{1}{r}A_n'(r) - \frac{n^2}{r^2}A_n(r)\right)\cos(n\theta)\right. \\
+                &+ \left.\left(B_n''(r) + \frac{1}{r}B_n'(r) - \frac{n^2}{r^2}B_n(r)\right)\sin(n\theta)\right] = \frac{A}{2}r^2\sin(2\theta), \\
+            \end{aligned}
+        \]
+        from which it follows
+        \[
+            \begin{cases}
+                A_0''(r) + \frac{1}{r}A_0'(r) = 0 & 0\leq r<R \\
+                B_2''(r) + \frac{1}{r}B_2'(r) - \frac{A}{r^2}B_2(r) = \frac{A}{2}r^2, 0\leq r<R,
+            \end{cases}
+        \]
+        and all the other $A_n$ and $B_n$ are equal to zero. The first equation has general solution
+        \[
+            A_0(r) = a\ln r + b.
+        \]
+        To get a particular solution for $B_2$, we use the trivial solution $B_2(r)=Cr^\alpha$, then we have
+        \[
+            C[\alpha(\alpha-1)+\alpha-4]r^{\alpha-2} = \frac{A}{2}r^2.
+        \]
+        Therefore, $\alpha=4$ and $C=A/24$. Now the general solution for $B_2$ is
+        \[
+            B_2(r) = cr^2 + dr^{-2} + \frac{A}{24}r^4.
+        \]
+        As a result,
+        \[
+            u(r,\theta) = a\ln r + b + \left(cr^2 + dr^{-2} + \frac{A}{24}r^4\right)\sin(2\theta).
+        \]
+        Since $u$ is bounded, $a=0=d$. Notice that the boundary condition gives
+        \[
+            0 = u(R,\theta) = b + \left(cR^2+\frac{A}{24}R^4\right)\sin(2\theta),
+        \]
+        from which it follows $b=0$ and $c=-AR^2/24$. Finally, we obtain the solution
+        \[
+            u(r,\theta) = \frac{A}{24}r^2(r^2-R^2)\sin(2\theta).
+        \]
+    \item We use the method of separation of variables. Assume $u(x,y)=X(x)Y(y)$. Then we have $0=\Delta u=u_{xx}+u_{yy}=X''Y+XY''$, from which it follows
+        \begin{equation}\label{E:4.5-3}
+            -\frac{X''}{X} = \frac{Y''}{Y} = -\lambda.
+        \end{equation}
+        Combined with the given boundary condition, we obtain the following eigenvalue problem for $Y$,
+        \[
+            \begin{cases}
+                Y''(y) + \lambda Y(y) = 0, \\
+                Y'(0) = Y'(\pi) = 0.
+            \end{cases}
+        \]
+        Thus, $\lambda_n=n^2$ and $Y_n(y)=\cos(ny)$ for $n=0,1,2,\ldots$. Then from \eqref{E:4.5-3}, one must have $X''(x)-n^2X(x)=0$. The boundary condition $u(0,y)=0$ implies that $X(0)=0$. As a result, we get
+        \[
+            \begin{cases}
+                X_0(x) = ax, & \text{if $n=0$,} \\
+                X_n(x) = B_n(e^{nx}-e^{-nx}), & \text{if $n=1,2,\ldots$}.
+            \end{cases}
+        \]
+        Now we obtain the solution
+        \[
+            u(x,y) = ax + \sum_{n=1}^\infty B_n(e^{nx}-e^{-nx})\cos(ny).
+        \]
+        Plugging in the boundary condition $u(\pi,y)=\cos^2(y)=(1+\cos(2y))/2$ gives us $a=1/(2\pi)$, $B_2=1/\left(2(e^{2\pi}-e^{-2\pi})\right)$, and others equal zero. Finally, we obtain the solution
+        \[
+            u(x,y) = \frac{1}{2\pi}x + \frac{e^{2x}-e^{-2x}}{2(e^{2\pi}-e^{-2\pi})}\cos(2y).
+        \]
+\end{enumerate}
