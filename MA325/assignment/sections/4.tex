@@ -22,6 +22,34 @@
 \end{enumerate}
 
 
+\begin{question}{4.3}{}
+    Suppose that $u$ is harmonic function in disk $D=\{r<2\}$ and that $u=3\sin(2\theta)+1$ for $r=2$. Without finding the solution, answer the following questions:
+    \begin{enumerate}[label=(\alph*)]
+        \item Find the maximum value of $u$ in $\bar{D}$.
+        \item Calculate the value of $u$ at the origin.
+    \end{enumerate}
+\end{question}
+\begin{enumerate}[label=(\alph*)]
+    \item By maximum principle, we know that the maximum value of $u$ in $\bar{D}$ is attained on the boundary $\partial D$. Since for $r=2$, we have $u=3\sin(2\theta)+1$, which clearly has the maximum value $4$. Thus, the maximum value of $u$ in $\bar{D}$ is $4$.
+    \item Using the mean value property for harmonic functions, we obtain that
+        \[
+            u(0,0) = \frac{1}{4\pi}\int_{\abs{\vb{x}}=2}u(\vb{x})\dd\vb{x} = \frac{1}{4\pi}\int_0^{2\pi}[3\sin(2\theta)+1]\cdot 2\dd\theta = 1.
+        \]
+\end{enumerate}
+
+
+\begin{question}{4.4 \index{Unsolved}}{}
+    Find the Green's function $G(M;M_0)$ for the Dirichlet problem in the first quadrant of plane:
+    \[
+        \begin{cases}
+            -\Delta G = \delta(M-M_0) & \text{in $\Omega=\{(x,y)\mid x>0, y>0\}$}; \\
+            G(0,y) = 0 & \text{for all $y\geq 0$}; \\
+            G(x,0) = 0 & \text{for all $x\geq 0$};
+        \end{cases}
+    \]
+\end{question}
+
+
 \begin{question}{4.5}{}
     Select a suitable method to solve the following boundary value problems:
     \begin{enumerate}[label=(\arabic*)]
@@ -228,7 +256,7 @@
 \end{enumerate}
 
 
-\begin{question}{4.6 (Bonus)}{}
+\begin{question}{4.6 (Bonus) \index{Unsolved}}{}
     Find the solutions that depend only on $r$ of the \textbf{Helmholtz equation} $-\Delta u=\lambda^2 u$ in 3-D, where $\lambda>0$ is a constant.\footnote{Hint: Define a new function $Z(r)=u(r)/\sqrt{\lambda r}$, then let $r=\rho/\lambda$. The resulting equation has the form of standard Bessel differential equation of order $1/2$, which has analytic solution as a series expansion.}
 \end{question}
 
@@ -251,3 +279,80 @@ Assume that $u$ is a solution of the given BVP. Then by divergence theorem we ha
     \int_\Omega f\dd\vb{x} = \int_\Omega\Delta u\dd\vb{x} = \int_\Omega\grad\cdot\grad u\dd\vb{x} = \oint_{\partial\Omega} \pdv{u}{\vb{n}} \dd S = \oint_{\partial\Omega} g \dd S,
 \]
 which proves the desired result.
+
+
+\begin{question}{4.8 \index{Unsolved}}{}
+    Let $\Omega$ be a bounded domain in $\RR^n$ with smooth boundary. Consider Poisson equation with Neumann boundary condition
+    \[
+        \begin{cases}
+            -\Delta G_N(\vb{x};\vb{x}_0) = \delta(\vb{x}-\vb{x}_0), & x\in\Omega \\
+            \pdv{G_N}{\vb{n}}(\vb{x};\vb{x}_0) = \const C, & x\in\partial\Omega,
+        \end{cases}
+    \]
+    where $\vb{n}$ is the unit outer normal of $\partial\Omega$, $\vb{x}_0$ is a fixed point in $\Omega$. DO this problem formally.
+    \begin{enumerate}[label=(\roman*)]
+        \item Find the value of $\const C$ such that the above BVP has a solution.
+        \item By use $G_N$, find a formula for $u(\vb{x}_0)$, where $u$ is a solution of
+            \[
+                \begin{cases}
+                    -\Delta u = f(\vb{x}), & \vb{x}\in\Omega, \\
+                    \pdv{u}{\vb{n}} = g(\vb{x}), & \vb{x}\in\partial\Omega.
+                \end{cases}
+            \]
+    \end{enumerate}
+\end{question}
+
+
+\begin{question}{4.9 \index{Unsolved}}{}
+    Consider Poisson equation
+    \[
+        \begin{cases}
+            -\Delta u = f(\vb{x}), &\vb{x}\in\RR^3, \\
+            \lim_{\abs{\vb{x}}\to\infty} u = 0, & \\
+        \end{cases}
+    \]
+    where
+    \[
+        f(\vb{x}) = \begin{cases}
+            1, & \abs{\vb{x}}\leq 1 \\
+            0, & \abs{\vb{x}} > 1. \\
+        \end{cases}
+    \]
+    \begin{enumerate}[label=(\roman*)]
+        \item Solve his equation (leave your answer as an integral).
+        \item\label{I:4.9-1} Find $\lim_{\abs{\vb{x}}\to\infty} \abs{\vb{x}}u(\vb{x})$.
+        \item Let $c$ be the limit found in \ref{I:4.9-1}. Then
+            \[
+                u(\vb{x}) \approx \frac{c}{\abs{\vb{x}}}
+            \]
+            for $\abs{\vb{x}}$ large. Interpret this physically.
+    \end{enumerate}
+\end{question}
+
+
+\begin{question}{4.10 (Harnack inequality) \index{Unsolved}}{}
+    Let $u$ be a nonnegative harmonic function in $\RR^n$. Prove that
+    \begin{equation}\label{E:4.10-1}
+        \sup_{\RR^n} u \leq 2^n\inf_{\RR^n} u.
+    \end{equation}
+    \footnote{Hint: take an arbitrary pair of points $P$ and $Q$. Let $R=\abs{P-Q}$}. Use the mean value property of harmonic functions on the balls $B_R(P)$ and $B_{2R}(Q)$ (balls centered at $P$ and $Q$ with radius $R$ and $2R$, respectively).
+\end{question}
+
+
+\begin{question}{4.11 (Liouville Theorem)}{}
+    Prove that any harmonic function $u$ in the whole $\RR^n$ that is either bounded from below or above must be a constant function.\footnote{Hint: You may consider wither either $u-\inf u$ or $\sup u-u$.}
+\end{question}
+Use the Harnack inequality. Assume first that $u$ is bounded below. Applying \eqref{E:4.10-1} to the nonnegative harmonic function $u-\inf u$, we then obtain
+\[
+    \sup(u-\inf u) \leq 2^n\inf(u-\inf u) = 2^n(\sup u - \sup u) = 0,
+\]
+which yields that $u\equiv\sup u$.
+
+
+\begin{question}{4.12 (Decay rate of harmonic functions) \index{Unsolved}}{}
+    Suppose $u$ is harmonic in exterior of the ball $B_R(0)$ in $\RR^3$ such that it decays at infinity: $\lim_{\abs{x}\to\infty}u(x)=0$.
+    \begin{enumerate}[label=(\roman*)]
+        \item Define $v(x)=MG_0(x)-u(x)$, where $G_0$ is the fundamental solution of Laplace equation, and the constant $M$ is taken large enough such that $v>0$ on $\partial B_R(0)$. Prove that $v$ is positive in the exterior of $B_R(0)$.\footnote{Hint: argue by contradiction and use the strong maximum principle.}
+        \item Prove that $u$ decays at infinity at least as fast as the fundamental solution.\footnote{Hint: What you need to show is that there is some constant $C>0$ and large $R_0>0$ such that \[\frac{\abs{u(x)}}{G_0(x)}\leq C,\] for $\abs{x}\geq R_0$.}
+    \end{enumerate}
+\end{question}
