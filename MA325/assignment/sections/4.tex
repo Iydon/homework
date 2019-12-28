@@ -147,7 +147,7 @@
         \]
     \item We use the method of separation of variables. Assume $u(x,y)=X(x)Y(y)$. Then we have $0=\Delta u=u_{xx}+u_{yy}=X''Y+XY''$, from which it follows
         \begin{equation}\label{E:4.5-3}
-            -\frac{X''}{X} = \frac{Y''}{Y} = -\lambda.
+            -\frac{X''}{X} = \frac{Y''}{Y} \equiv -\lambda.
         \end{equation}
         Combined with the given boundary condition, we obtain the following eigenvalue problem for $Y$,
         \[
@@ -171,4 +171,83 @@
         \[
             u(x,y) = \frac{1}{2\pi}x + \frac{e^{2x}-e^{-2x}}{2(e^{2\pi}-e^{-2\pi})}\cos(2y).
         \]
+    \item Similar to the previous problem, by assuming $u(x,y)=X(x)Y(y)$, we obtain
+        \[
+            \frac{X''}{X} = -\frac{Y''}{Y} \equiv -\lambda.
+        \]
+        Together with the boundary condition, we get the following eigenvalue problem
+        \[
+            \begin{cases}
+                X''(x) + \lambda X(x) = 0, \\
+                X(0) = X(a) = 0,
+            \end{cases}
+        \]
+        from which it follows
+        \[
+            \begin{cases}
+                \lambda_n = \left(\frac{n\pi}{a}\right)^2 & \\
+                X_n(x) = \sin\left(\frac{n\pi}{a}x\right), & n=1,2,\ldots. \\
+            \end{cases}
+        \]
+        Also notice that the ODE for $Y$,
+        \[
+            Y''(y) - \left(\frac{n\pi}{a}\right)^2Y(y) = 0,
+        \]
+        has the general solution
+        \[
+            Y_n(y) = C_n e^{\frac{n\pi}{a}y} + D_ne^{-\frac{n\pi}{a}y},\quad n=1,2,\ldots.
+        \]
+        Therefore, by superposition principle, we obtain that
+        \begin{equation}\label{E:4.5-4}
+            u(x,y) = \sum_{n=1}^\infty \sin\left(\frac{n\pi}{a}x\right)\left(C_ne^{\frac{n\pi}{a}y} + D_ne^{\frac{n\pi}{a}y}\right).
+        \end{equation}
+        Now we have to determine the coefficients $C_n$ and $D_n$. By direct calculations,
+        \[
+            \eval{\left(\pdv{u}{y}+u\right)}_{y=0} = \sum_{n=1}^\infty \sin\left(\frac{n\pi}{a}x\right)\left[\frac{n\pi}{a}(C_n-D_n)+C_n+D_n\right] = 0.
+        \]
+        Therefore, we must have
+        \begin{equation}\label{E:4.5-5}
+            \frac{n\pi}{a}(C_n-D_n) + C_n + D_n = 0.
+        \end{equation}
+        On the other hand,
+        \[
+            u(x,b) = \sum_{n=1}^\infty\sin\left(\frac{n\pi}{a}x\right)\left(C_ne^{\frac{n\pi}{a}b} + D_ne^{-\frac{n\pi}{a}b}\right) = g(x),
+        \]
+        from which we derive
+        \[
+            \frac{a}{2}\left(C_ne^{\frac{n\pi}{a}b} + D_ne^{-\frac{n\pi}{a}b}\right) = \int_0^a g(x)\sin\left(\frac{n\pi}{a}x\right) \dd x.
+        \]
+        Combined with \eqref{E:4.5-5}, we see that
+        \begin{equation}\label{E:4.5-6}
+            \begin{cases}
+                C_n = \frac{2(n\pi-a)}{a\left[(n\pi-a)e^{\frac{n\pi}{a}b}+(n\pi+a)e^{-\frac{n\pi}{a}b}\right]} \int_0^a g(x)\sin\left(\frac{n\pi}{a}x\right) \dd x, \\
+                D_n = \frac{2(n\pi+a)}{a\left[(n\pi-a)e^{\frac{n\pi}{a}b}+(n\pi+a)e^{-\frac{n\pi}{a}b}\right]} \int_0^a g(x)\sin\left(\frac{n\pi}{a}x\right) \dd x.
+            \end{cases}
+        \end{equation}
+        Thus, the solution of our original problem is given by \eqref{E:4.5-4}, where the coefficients $C_n$ and $D_n$ are determined by \eqref{E:4.5-6}.
 \end{enumerate}
+
+
+\begin{question}{4.6 (Bonus)}{}
+    Find the solutions that depend only on $r$ of the \textbf{Helmholtz equation} $-\Delta u=\lambda^2 u$ in 3-D, where $\lambda>0$ is a constant.\footnote{Hint: Define a new function $Z(r)=u(r)/\sqrt{\lambda r}$, then let $r=\rho/\lambda$. The resulting equation has the form of standard Bessel differential equation of order $1/2$, which has analytic solution as a series expansion.}
+\end{question}
+
+
+\begin{question}{4.7}{}
+    Show that there is no solution of
+    \[
+        \begin{cases}
+            \Delta u=f, & \text{in $\Omega\subset\RR^3$}, \\
+            \pdv{u}{\vb{n}}=g, & \text{on $\partial\Omega$}, \\
+        \end{cases}
+    \]
+    unless
+    \[
+        \int_\Omega f\dd\vb{x} = \oint_{\partial\Omega} g\dd S.
+    \]
+\end{question}
+Assume that $u$ is a solution of the given BVP. Then by divergence theorem we have
+\[
+    \int_\Omega f\dd\vb{x} = \int_\Omega\Delta u\dd\vb{x} = \int_\Omega\grad\cdot\grad u\dd\vb{x} = \oint_{\partial\Omega} \pdv{u}{\vb{n}} \dd S = \oint_{\partial\Omega} g \dd S,
+\]
+which proves the desired result.
