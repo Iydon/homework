@@ -1,0 +1,20 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program = xelatex
+\section{文章排版规范及工具声明}
+\begin{itemize}
+    \item 文章采用排版规范如下：
+        \begin{itemize}
+            \item 本文主体语言为中文，正文部分排版遵循 \emph{Chinese Copywriting Guidelines for Better Written Communication}\cite{liu2019chinese}，文后参考文献著录规则遵循 \gbt\cite{wiki2018文后参考文献著录规则} 标准；
+            \item 参考内容如果存在官网，则直接引用官网相应部分，否则一律引用维基百科\cite{wiki2019wikipedia}；
+            \item 中文字体族采用文泉驿\cite{wiki2019wqy}开源汉字字体项目，英文字体族采用 Garamond\cite{wiki2019garamond} 开源字体项目；
+            \item 中文书名采用书名号标明（例如《摩尔根〈古代社会〉一书摘要》），英文书名采用 \emph{Italic Font} 标明（例如上文 \emph{Chinese $\ldots$}），英文术语采用 \texttt{Typewriter Font}（例如上文 \gbt）。
+        \end{itemize}
+
+    \item 文章采用工具声明如下：
+        \begin{itemize}
+            \item 本文排版采用 \LaTeX\cite{latex2019website} 专业学术排版系统；
+            \item 涉及到代码采用 \python\ 编程语言，且遵循 \pepeight\cite{rossum2013pep} 标准、\mitlicense\cite{wiki2019mit} 协议。
+        \end{itemize}
+\end{itemize}
+
+此外，文章的字数统计采用附录~\ref{A:wordcount} 的脚本（即只统计 \unicode{4E00} 至 \unicode{9FA5}，以及 \unicode{00B7}、\unicode{00D7}、\unicode{2018}、\unicode{2019}、\unicode{201C}、\unicode{201D}、\unicode{2026}、\unicode{3001}、\unicode{300C}、\unicode{300D}、\unicode{FF01}、\unicode{FF08}、\unicode{FF09}、\unicode{FF0C}、\unicode{FF1A}、\unicode{FF1B}、\unicode{FF1F} 的\textbf{中文字符}及\textbf{中文标点}），因此本文字数统计的结果为 \wordcount。

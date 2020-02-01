@@ -1,0 +1,24 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program = xelatex
+\documentclass[a4paper,AutoFakeSlant,AutoFakeBold]{ctexart}
+    \input{config/preamble}
+    \input{config/info}
+\begin{document}
+    \maketitle
+    \input{sections/0}\clearpage
+
+    \input{sections/1}
+    \input{sections/2}
+    \input{sections/3}
+    \input{sections/4}
+
+    % Appendix
+    \clearpage
+    \begin{appendices}
+        \input{sections/appendix}
+    \end{appendices}
+
+    % Reference
+    \clearpage
+    \input{sections/reference}
+\end{document}

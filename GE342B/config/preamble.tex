@@ -1,0 +1,43 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX program = xelatex
+
+% Symbols
+\newcommand{\gbt}{\texttt{GB/T 7714-2015}}
+\newcommand{\python}{\texttt{Python}}
+\newcommand{\mitlicense}{\texttt{MIT}}
+\newcommand{\pepeight}{\texttt{PEP 8}}
+\newcommand{\unicode}[1]{\texttt{U+#1}}
+\newcommand{\wordcount}{\immediate\write18{if [ ! -f wordcount ]; then ./wordcount.py > wordcount; fi}\input{wordcount}}
+
+% Packages without parameters
+\usepackage{graphicx,float,subcaption}
+\usepackage{amsmath,physics}
+\usepackage{ebgaramond}
+% \usepackage{showkeys}
+
+% Packages with parameters
+\usepackage[section]{placeins}
+\usepackage[inline]{enumitem}
+\usepackage[hmargin=1in,vmargin=1in]{geometry}
+\usepackage[titletoc]{appendix}
+\usepackage{tcolorbox}
+    \tcbuselibrary{breakable,minted}
+    \newtcbinputlisting{\pythonfile}[2]{
+        listing engine=minted,minted style=trac,minted language=python,
+        minted options={numbers=left,breaklines},
+        title=\texttt{#2},listing only,breakable,
+        left=6mm,right=6mm,top=2mm,bottom=2mm,listing file={#1/#2}}
+\usepackage{hyperref}
+    \hypersetup{
+        pdfauthor={},
+        colorlinks=true,
+        linkcolor=black}
+\usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \renewcommand{\headrulewidth}{0.4pt}
+\usepackage{unicode-math}
+    \unimathsetup{math-style=ISO, bold-style=ISO, mathrm=sym}
+    \setsansfont{FiraGO}[BoldFont=* SemiBold, Numbers=Monospaced]
+    \setmathfont{Fira Math Regular}
+\usepackage[style=gb7714-2015]{biblatex}
+    \addbibresource{ref.bib}

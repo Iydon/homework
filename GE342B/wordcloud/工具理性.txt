@@ -1,0 +1,169 @@
+"Instrumental" and "value rationality" are classic labels sociologist Max Weber coined for two kinds of human reasoning. They reason instrumentally by judging which factual means will “work” to achieve given ends. They reason value-rationally by judging which valued ends will be “right,” legitimate in continuous social situations.
+
+Weber observed that people reason in both ways, but the ways can be separated and reach contrary judgments. When means that work conditionally are not legitimate, and ends that are permanently legitimate don’t work, reason is contaminated and unable to correlate behavior and resolve conflicts. Here are Weber's original definitions, followed by a comment showing his doubt that humans are rational to believe that unconditionally right ends can be correlated with conditionally efficient means.
+
+Social action, like all action, may be...: (1) instrumentally rational (zweckrational), that is, determined by expectations as to the behavior of objects in the environment and of other human beings; these expectations are used as "conditions" or "means" for the attainment of the actor's own rationally pursued and calculated ends; (2) value-rational (wertrational), that is, determined by a conscious belief in the value for its own sake of some ethical, aesthetic, religious, or other form of behavior, independently of its prospects of success; ...
+
+... the more the value to which action is oriented is elevated to the status of an absolute value, the more "irrational" in this [instrumental] sense the corresponding action is. For the more unconditionally the actor devotes himself to this value for its own sake, ... the less he is influenced by considerations of the [conditional] consequences of his action[1]
+
+This article demonstrates the possible paradox of rationality contaminating itself. It reports the practice of two Harvard professors—John Rawls and Robert Nozick—selecting value-rational ends and then instrumentally rational means to achieve them. It reports criticism of this separation by Emory University professor James Gouinlock and Harvard professor Amartya Sen. Despite these disagreements, the scholarly community continues to accept as unavoidable this paradox of rationality contaminating itself.
+
+
+Contents
+1	John Rawls
+2	Robert Nozick
+3	James Gouinlock
+4	Amartya Sen
+5	See also
+6	References
+John Rawls
+Philosopher John Rawls accepted the reality of Weber's two kinds of rationality. He reasoned value rationally to identify unconditionally just patterns of social action capable of providing humans with a permanent instrumental moral compass. In two works, A Theory of Justice, published in 1971, and Justice as Fairness, published in 2002, he claimed to have identified one such pattern, valued both for its intrinsic legitimacy and its instrumental efficiency.
+
+Rawls did not use Weber's labels when making Weber's distinction. He relabeled social action “institutions” to identify rational patterns of socially prescribed behavior. He relabeled instrumental rationality "the rational” to identify institutions believed to work conditionally. He relabeled value rationality "the reasonable” to identify principles believed to be unconditionally legitimate.[2]:30-36, 83
+
+Rawls recognized that individuals have conflicting interests and moral judgments. But he imagined groups of people in a hypothetical original position—stripped of personal interests and conditions—agreeing value rationally on intrinsically just institutions, forever worthy of voluntary obedience.
+
+Let us assume that each person beyond a certain age and possessed of the requisite intellectual capacity develops a [value rational] sense of justice under normal circumstances. We acquire skill in judging things to be just and unjust, and in supporting these judgments by [instrumental] reasons.[2]:8, 41
+
+He searched traditional philosophies for reasonable universal propositions about justice, and adopted one as fundamental. He concluded that humans have an innate sense of fair distribution of social advantages. It provides “a workable [instrumental] and systematic moral [value-rational] conception."[2]:xvii, 10, 14, 497-8 It overrides the "irreconcilable differences in citizens' reasonable comprehensive religious and philosophical conceptions of the world …”[3]:3 It can replace the dominant modern school of moral philosophy, utilitarianism, that prescribes satisfaction of individual wants as unconditionally just.[2]:12, 58, 124
+
+Common sense views the reasonable, but not, in general, the rational as a moral idea involving moral sensibility. … the reasonable is viewed as a basic intuitive [value rational] moral idea; it may be applied to persons, their decisions, and actions, as well as to principles and standards, to comprehensive doctrines and to much else.[3]:7, 82
+
+Rawls reasoned that if citizens design an institution that always redistributes unplanned advantages fairly, they will sense its justice and obey it voluntarily. This reasonable institution will successfully turn instrumental means into value rational ends, forestalling contaminated rationality.
+
+Justice is the first virtue of institutions [patterns of behavior], as truth is of systems of thought [patterns of belief]. ... laws and institutions no matter how [instrumentally] efficient and well-arranged must be reformed or abolished if they are [value rationally] unjust. Each person possesses an inviolability founded on justice that even the [utilitarian] welfare of society as a whole cannot override. ... Being first virtues of human activities, truth and justice are uncompromising.[2]:3–4
+
+Rawls recognized that his fair institution would redistribute advantages unequally. But that unintended consequence will be just "if [it results] in compensating benefits for everyone, and in particular for the least advantaged members of society." Community belief in this principle will provide a value rational "overlapping consensus" on instrumentally just behavior patterns.[2]:6
+
+The intuitive [value rational] idea is that since everyone's well-being depends upon a scheme of [instrumental] cooperation without which no one could have a satisfactory life, the division of advantages should be such as to draw forth the willing cooperation of everyone taking part in it, including those less well situated.[2]:13
+
+Just as each person must decide by rational reflection what constitutes his good, that is, the system of ends which it is rational for him to pursue, so a group of persons must decide once and for all what is to count among them as just and unjust. The choice which rational men would make in this hypothetical situation of equal liberty ... determines the [value rational] principles of justice.[2]:10–11
+
+... justice as fairness is not reasonable [legitimate] in the first place unless it generates its own [instrumentally efficient] support in a suitable way by addressing each citizen's [value rational] reason, as explained within its own framework. ... A liberal conception of political legitimacy aims for a public basis of justification and appeals to free public reason, and hence to citizens viewed as reasonable and rational.[3]:186
+
+Rawls hoped that his theory of justice would generate a rational and reasonable "overlapping consensus.” Instead, it resulted in a double paradox, neither working nor acceptable as legitimate. It failed his criterion of universal intuitive acceptance as an embodiment of justice, but he continued to endorse it. In his 1999 revision of A Theory of Justice he reasserted his faith that justice as fairness would be recognized as an instrumentally efficient institution valued “for its own sake.”[2]:xi
+
+Robert Nozick
+Philosopher Robert Nozick accepted the reality of Weber's two kinds of rationality. He believed that conditional means are capable of achieving unconditional ends. He did not search traditional philosophies for value rational principles of justice, as Rawls had done, because he accepted well-established utilitarian propositions, which Rawls found unacceptable. In 1974, three years after publication of Rawls's Theory of Justice, he published Anarchy, State, and Utopia, rebutting that theory. In 1993 he published The Nature of Rationality, refining Weber's understanding of instrumental and value rationality.
+
+The first sentence of Anarchy, State, and Utopia asserted a value rational principle of justice: Individual want satisfaction is legitimate.
+
+Individuals have rights, and there are things no person or group may do to them (without violating their right). So strong and far-reaching are these rights that they raise the question of what, if anything, the state and its officials may do.[4]:ix
+
+Nozick's basic right was the principle of entitlement to just deserts.[4]:150-55 He replaced Rawls's complex value reasoning about fair redistribution with a simple principle of distributive justice: any distribution of holdings justly acquired must be forever respected because valued for its own sake.[4]:18-22
+
+Humans know intuitively—before and apart from social conditions—that they want utility, along with a logical corollary that planning one's individual pursuit of utility is moral—life-fulfilling.
+
+A person’s shaping his life in accordance with some overall [value rational] plan is his way of giving meaning to his life; only a being with the [value rational] capacity to shape his life [instrumentally] can have or strive for meaningful life.[4]:50
+
+The utilitarian right to satisfy individual ends does not prescribe just institutions. Instead, it creates a "moral side restraint.” It forbids social rules that require one individual to serve the interests of others. It entitles every human to be treated as a value rational end in himself, never to be used as means to ends pursued by others.[4]:32-3, 333
+
+Nozick's statement of this utilitarian principle invalidated Rawls's justice as fair redistribution by definition. The behavior Rawls identified as the epitome of justice violates the right Nozick believed was the epitome of justice—a rational paradox. Rawls's institution destroys individual freedom to enjoy just deserts of pursuing one's ends with instrumentally chosen means.[4]:215-7, 224-6
+
+Nozick followed this rejection-by-definition with 48 pages explaining logical flaws in Rawls's just redistribution. Anarchy ended as it began, asserting that Rawls's justice as fair redistribution is unjust, and that only institutions of a minimal state—protecting established social advantages—can be just.[4]:333
+
+Twenty years later, Nozick turned from debating value rational principles with Rawls to explaining how the human capacity for value rationality creates universal propositions capable of providing an instrumental moral compass for humanity.
+
+He opened Nature of Rationality with a chapter heading and first sentence setting the stage for eliminating the distinction between instrumental and value rationality. Chapter 1 was entitled "How to Do Things with Principles"; the first sentence asked: "What are principles for?"[5]:3 Translating into Weber's labels, Nozick was proposing to explain how universal principles connect unconditional ends to work instrumentally. These connections eliminate the distinction between instrumental and value rationality.
+
+Principles that are legitimate also "work" by coordinating actions that become legitimate as their success becomes recognized. Individuals are free to apply principles they find work for them, and to behave accordingly. Chapter 1 explained four ways that individuals use principles to correlate group behavior instrumentally.
+
+Nozick then moved on to explain that instrumental rationality—finally using Weber's label—cannot shape workable and just institutions by itself. Only value rationality can identify utility as a universal end. He then relabeled Weber's kinds of rationality "[instrumental] rationality of decision" and "[value] rationality of belief".[5]:xiv
+
+He gave instrumental rationality pride of place as "the means-ends connection" and "the efficient and effective achieving of goals".[5]:180 "Instrumental rationality is within the intersection of all theories of rationality... [It] is the default theory, the theory that all discussants of rationality take for granted.””[5]:133 But he accepted the traditional proposition that instrumental rationality is incomplete because value-free. It only reveals value-free facts as means for pursuing fact-free self-interested utility.
+
+On this instrumental conception, rationality consists in the effective and efficient achievement of goals, ends, and desires. About the goals themselves, an instrumental conception has little to say.[5]:64
+
+Something is instrumentally rational with respect to given goals, ends, desires, and utilities when it is causally effective in realizing or satisfying these. But the notion of instrumental rationality gives us no way to evaluate the rationality of these goals, ends, and desires themselves, except as instrumentally effective in achieving further goals taken as given. Even for cognitive goals such as believing the truth, we seem to have only an instrumental justification. At present we have no adequate theory of the substantive [instrumental] rationality of goals and desires,...[5]:139
+
+By "substantive rationality of goals and desires", Nozick meant explaining how applying principles generates utility—intrinsically valuable satisfaction—for actors who accept them. This proposition required more relabeling.
+
+Weber's "instrumental rationality" and Rawls's "the rational" became actors' "causally expected utility"—satisfaction with workmanlike behavior—and "evidentially expected utility"—satisfaction with predicted utility after successful instrumental action. Weber's "value rationality" and Rawls's “the reasonable” became actors' "symbolic utility"—satisfaction with behavior that, in itself, symbolizes universal justice. Jointly, these three sorts of utility establish the social measure of “decision value”—instrumentally successful moral actions.[5]:43-48, 63, 133, 181
+
+"Even if rationality were understood and explained only as instrumental rationality, that rationality can come to be valued in part for itself ... and so come to have intrinsic [fact-free] value.[5]:136
+
+One way we are not simply instrumentally rational is in caring about symbolic meanings, apart from what they cause or produce. ... Symbolic meanings [fact-free values] are a way of rising above the usual causal nexus of desires, and it is symbolically important to us that we do this. ... Even with the processes of forming and maintaining our beliefs, then, we can care not simply about what those processes causally produce but also about what they symbolize. Our discussion of principles ... was for the most part, instrumental; we considered the functions that principles could serve. Here we see a possible meta-function—to rise above the serving of other functions—and so following principles too may have a symbolic utility.[5]:139
+
+Our explorations have led us to new principles of rationality. A principle of rational decision mandates the maximization of decision-value, which takes us beyond the simply instrumental structure of rationality. Two principles govern rational (even apparently purely theoretical) belief, dissolving the dualism between the theoretical [value rational?] and the practical [instrumental?]: do not believe any statement less credible than some incompatible alternative—the intellectual component—but then believe a statement only if the expected utility of doing so is greater than that of not believing it—the practical component. And rationality of belief involves two aspects: support by reasons that make the belief credible [workable], and generation by a process that reliably produces true [moral] beliefs.[5]:175-6
+
+Nozick's assertion of a value rational human right to pursue individual utility resulted in the same double paradox as Rawls’s institution of justice as fairness. He admitted that it was not rationally persuasive — "most people I know and respect disagree with me"[5]:x— but continued to believe that both instrumental and value rationality are universally known to satisfy human wants. Neither expert in value rationality was able to convince the other with contaminated reason.
+
+James Gouinlock
+Philosopher James Gouinlock does not believe in the reality of Weber's two kinds of rationality. He became a critic of the separation between instrumental and value rationality while describing and extending John Dewey's efforts to understand human intelligence. Belief in two criteria for reasoning was one of many popular dualism against which he and Dewey railed. They did not believe anything could be valued in isolation—good “for its own sake.”
+
+In his introduction to volume two of Dewey's collected works, John Dewey The Later Works 1925–53, published in 1984, Gouinlock criticized the modern practice of value rationality as represented by Rawls and Nozick. He developed that criticism in his 1993 study, Rediscovering the Moral Life. In 2004, he published Eros and the Good, describing his personal effort to eliminate the dualism.
+
+Gouinlock's 1984 introduction never used Weber's labels “instrumental and value rationality.” Instead, it distinguished Dewey's explanation of rationality—itself sometimes labeled "instrumentalism" and identified with "pragmatism"—from two traditional schools of philosophy that assumed divided rationality: rationalism and classical empiricism.
+
+The rationalist supposes that knowledge is the direct intuition of essences [value rational ends]; the empiricist supposes that it is a summary of antecedently given sense data [instrumental means].[6]:xii
+
+Rationalists are prone to favor Weber's value rationality. They assume a human deductive capacity for immediate knowledge of meaningful beliefs and behaviors—fact-free human ends. Empiricists, by contrast, favor Weber's instrumental rationality. They assume a human inductive capacity to recognize how brute facts work as value-free means.
+
+Gouinlock explained Dewey's reasons for rejecting both poles of this traditional division. He quoted from a Dewey article on pragmatism to show how Dewey replaced value rational objects, labeled by Rawls “institutions” and by Nozick “principles” with “general ideas”—an intellectual tool relating means to conditional ends serially and inter-independently.
+
+Value [ends proposed] implies a movement from one condition to another [which] implies an ideational function. If the object [end] is to be deliberately sought, there has to be at least a rudimentary conception of [instrumental] means, some plan in accordance with which the movement towards the object will proceed.[6]:xx
+
+Dewey wrote of "intelligence" rather than “rationality" because he considered reasoning to be a two-step way of thinking, not two distinct structural capacities. It involves endless linking of available means to proposed ends. Gouinlock wrote: "Realization of the good life [a contextual end for Dewey, not Nozick’s universal want satisfaction] depends … on the exercise of intelligence. Indeed, his instrumentalism ... is a theory concerning the nature of intelligent conduct."[6]:ix
+
+Gouinlock criticized Rawls and Nozick for contaminating conditional instrumental reasoning by isolating value rational principles of truth and justice from experienced conditions.[9]:xxx, xxxv-vi
+
+Dewey, of course, was the sworn foe of all forms of rationalistic and absolutistic philosophizing … just [as] these traits are reappearing in contemporary moral thought. The most conspicuous example is A Theory of Justice by Rawls. This text aspires to a rational deduction of eternally valid principles of justice. The book called forth another, Anarchy, State and Utopia by his colleague, Robert Nozick, who provided his own deduction.[6]:xxxv
+
+Dewey's “general ideas” were not pre-known legitimate ends actors intended to achieve. They were hypothetical visions of ways of acting that might solve existing problems developmentally, restoring correlated behavior in conditions that obstruct it. They visualize where a situation should go; what “from here to there” looks like.
+
+In Rediscovering the Moral Life, Gouinlock again criticized Rawls and Nozick for imagining value rational principles in their heads, while ignoring facts of human nature and real-life moral conditions.[7]:248–68 He listed traditional forms of value-rationality, all of which he found incompetent to serve humans as moral compass.
+
+Yet philosophers have typically thought of justification as an appeal to such things as a Platonic form, a rational principle, a divine command, a self-evident truth, the characterization of a rational agent, the delineation of an ultimate good [all identified by value rationality] ...
+
+... If the conflicts between moral positions were all reducible to cognitive claims [of what it right], then we could settle such matters by appeal to familiar [deductive] procedures. They are not reducible, so additional [inductive] considerations must be deployed.[7]:323
+
+Gouinlock's "additional considerations" ignored claims that legitimate ends work by maximizing utility. His virtues must solve problems developmentally. Instead of trying to identify eternally legitimate institutions, he searched for continuity in virtuous ways of behaving.
+
+While there are neither axiomatic nor unexceptionable principles, there are virtues—enduring dispositions to behave in certain sorts of ways—that are appropriate to the moral condition and are defensible in just that capacity.
+
+... Virtues are not philosophic constructs. They are born of the [instrumental] demands and opportunities of associated life in varying environments. Courage, truthfulness, constancy, reliability, cooperativeness, adaptability, charity, sensitivity, rationality, and the like are distinguished because of their great [instrumental] efficacies in the life of a people.[7]:292
+
+We are tailoring these virtues to the moral condition, not to abstract [value-rational] reason or to moral sentiment. We look for behavior that will address our problems, not compound them. One of the keys to this aim is to think of [instrumental] dispositions suitable to beginning and sustaining moral discourse and action, not bringing indisputable finality to them. They should be effective in the processes of the moral life, not in determining an inflexible outcome to them."[7]:296
+
+By treating rationality as a criterion for judging means-ends working to produce developmental consequences, Gouinlock gave practical meaning to Dewey's instrumentally reasoning: "For the virtue of rationality I ask no more than a sincere attempt to seek the truth relevant to a given situation."[7]:296
+
+What is finally at stake ... is not the elaboration of a system of moral principles, but a way of life—a life with a certain [institutional] character and quality."[7]:324
+
+Amartya Sen
+Early in the 21st century, economist Amartya Sen expressed doubts about the separation of instrumental from value rationality, similar to doubts Max Weber expressed early in the 20th century. In 2002 he published a collection of his papers under the title Rationality and Freedom to explain how these two normative conceptions are conditional and inter-related. In 2009 he published The Idea of Justice, questioning whether unconditional value rationality used inconclusively by Harvard colleagues Rawls and Nozick is legitimate at all. He recognized that the alternative to human rationality is rarely insanity. It is more often conceptions that contaminate reasoning.
+
+... prejudices typically ride on the back of some kind of reasoning—weak and arbitrary though it might be. Indeed, even very dogmatic persons tend to have some kinds of reasons, possibly very crude ones, in support of their dogmas ... Unreason is mostly not the practice of doing without reasoning altogether, but of relying on very primitive and very defective reasoning.[8]:xviii
+
+In Rationality and Freedom, Sen defined rationality as a discipline "subjecting one's choices—of [instrumental] actions as well as of [value rational] objectives, values and priorities—to reasoned scrutiny".[9]:4 More forcefully than Weber, he questioned the rationality of believing that unconditionally legitimate ends can be correlated with conditionally efficient means. He essentially made both instrumental and value rationality conditional, eliminating the paradox of reason contaminating reason. To scrutinize choices seems to mean treating them as hypotheses to be tested, not as knowledge already acquired. All knowledge is conditional, subject to revision.
+
+Sen relabeled instrumental and value rationality by naming their traditional defects. Weber's value-rationality became "process-independent" reasoning. It ignores instrumental means as it judges intended consequences: "the goodness of outcomes" always valuable in themselves. Its use produces fact-free intrinsically good knowledge. Weber's instrumental rationality became "consequence-independent" theory, because its practitioners develop "right procedures”—instrumental means for reasoning—without evaluating ends. Its use produces value-free facts.[9]:278-81 His message was that rationality requires using "both the [instrumental] 'dueness' of processes and the [value-rational] 'goodness of narrowly defined 'outcomes.'"[9]:314
+
+Reason has its use not only in the pursuit of a given set of objectives and values, but also in scrutinizing the objectives and values themselves. ... Rationality cannot be just an instrumental requirement for the pursuit of some given—and unscrutinised—set of objectives and values.[9]:39
+
+Sen showed the paradox of believing in fact-free ends and value-free means. Economists have developed a model of "rational action" that creates "rational fools” of both social scientists and the people they study. Sen called the scientist an "instrumental rationalist."
+
+Imagine a scientist observing a man happily cutting off his toes with a blunt knife. Does the scholar judge the man rational or not? Forbidden by the axiom that want satisfaction is good in itself, the scientist can only judge means.
+
+An "instrumental rationalist" is a decision expert whose response to seeing a man engaged in slicing his toes [the man’s value rational fact-free end] with a blunt knife [the man’s instrumental value-free means] is to rush to advise him that he should use a sharper knife to better serve [instrumentally] his evident [value rational] objective.[9]:2, 6-7, 39, 286-7
+
+Regarding his colleagues Rawls and Nozick, Sen was little critical of their practice of instrumental rationality, but quite critical of their practice of value rationality. Their theories were largely “consequence-independent”—fact-free, correct regardless of actual consequences. "Justice as fairness" and "Entitlement theory" are "not only non-consequentialist but they also seem to leave little room for taking substantive note of consequences in modifying or qualifying the rights covered by these principles."[9]:637, 165[8]:89–91
+
+He proposed new terms for Weber's two kinds of rationality, relating them to specific flaws he found in the reasoning of Rawls and Nozick. He labeled their instrumental rationality "transcendental institutionalism" and "arrangement-focused" analysis, prescribing fact-free patterns of correlated behavior assumed to be instrumentally efficient without conditions.[8]:5-8
+
+... Rawls's (1971) "first principle" of "justice as fairness" and Nozick's (1974) "entitlement theory" ... are not only non-consequentialist, but they also seem to leave little room for taking substantive note of consequences in modifying or qualifying the rights covered by these principles.[9]:637
+
+For Rawls, there are eternally and universally just rules of fairness: "comprehensive goals,... deliberately chosen ... through an ethical examination of how one 'should' act [value-rationally].[9]:163 For Nozick there are eternally and universally right rules that cover personal liberties as well as rights of holding, using, exchanging, and bequeathing legitimately owned property."[9]:279
+
+In Idea of Justice, Sen asked “What is the role of [instrumental] rationality and of [value-rational] reasonableness in understanding the demands of justice?”[8]:viii He rejected the search for a theory of perfect justice in favor of a search for practical means to reduce injustice.
+
+Arbitrary reduction of multiple and potentially conflicting [value rational] principles to one solitary survivor, guillotining all the other evaluative criteria, is not, in fact, a prerequisite for getting useful and robust conclusions on what should be done.[8]:4
+
+Sen's analysis was complex, but not his message. He concluded that both instrumental rationality and value-rationality are capable of error. Neither premises nor conclusions about means or ends are ever beyond criticism. Nothing can be taken as relevant or valid in itself. All valuations must be constantly reaffirmed in the continuity of rational inquiry. "We have to get on with the basic task of obtaining workable rules [means] that satisfy reasonable requirements [conditional ends]."[9]:75
+
+There is a strong case ... for replacing what I have been calling transcendental institutionalism—that underlies most of the mainstream approaches to justice in contemporary political philosophy, including John Rawls's theory of justice as fairness—by focusing questions of justice, first, on assessments of social realizations, that is, on what actually happens (rather than merely on the appraisal of institutions and arrangements); and second, on comparative issues of enhancement of justice (rather than trying to identify perfectly just arrangements).[8]:410
+
+Gouinlock's and Sen's criticisms of Weber's dichotomy between instrumental rationality and value-rationality have had little impact on conventional inquiry. The value-rationality practiced by Rawls and Nozick continues to dominate philosophical and scientific inquiry. Confirmation came in 2018 as the British journal The Economist, founded in 1843 on the utilitarian and libertarian principle of value-rational human rights, celebrated its 175th birthday. It praised Rawls and Nozick for the very beliefs Gunlock and Sen identified as dogmatic: “those rights that are essential for humans to exercise their unique power of moral reasoning. ... Both Rawls and Nozick practised ‘ideal theory’—hypothesising about what a perfect society looks like ..."[10]
+
+The first [value rational principle of liberals] is freedom: that it is "not only just and wise but also profitable ... to let people do what they want." The second is the common interest: that "human society … can be an association for the welfare of all.”[11]
+
+Belief in value rationality—unconditionally true and just knowledge—continues to contaminate conditional instrumental rationality.
