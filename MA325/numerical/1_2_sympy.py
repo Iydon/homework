@@ -44,3 +44,13 @@ if __name__ == '__main__':
     order = 2
     D2u, errors = deriving_finite_difference_approximations(u, x, h, hs, order, 2)
     sympy.pretty_print(D2u + errors)
+
+    hs = [-1, 0, 1, 2]
+    order = 3
+    D3u, errors = deriving_finite_difference_approximations(u, x, h, hs, order, 2)
+    sympy.pretty_print(D3u + errors)
+
+    hs = [-2, -1, 1, 2]
+    order = 3
+    D3u, errors = deriving_finite_difference_approximations(u, x, h, hs, order, 2)
+    sympy.pretty_print(D3u + errors)
