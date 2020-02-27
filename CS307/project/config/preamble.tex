@@ -1,0 +1,20 @@
+% Packages without parameters
+\usepackage{graphicx,float,subcaption}
+\usepackage{amsmath,physics}
+\usepackage{lipsum}
+
+% Packages with parameters
+\usepackage[section]{placeins}
+\usepackage{tcolorbox}
+    \tcbuselibrary{breakable,minted}
+    \newtcbinputlisting{\pythonfile}[2]{
+        listing engine=minted,minted style=trac,minted language=python,
+        minted options={numbers=left,breaklines},
+        title=\texttt{#2},listing only,breakable,
+        left=6mm,right=6mm,top=2mm,bottom=2mm,listing file={#1}}
+\usepackage{hyperref}
+    \hypersetup{
+        pdfauthor={Iydon Liang},
+        colorlinks=true,
+        linkcolor=black,
+    }
