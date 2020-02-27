@@ -1,3 +1,7 @@
+% References
+% https://tex.stackexchange.com/questions/199789/which-bold-style-is-recommended-for-matrix-notation
+
+% Packages
 \usepackage{hyperref}
     \hypersetup{
         pdfauthor={Iydon Liang},
@@ -6,6 +10,13 @@
         colorlinks=true,
         linkcolor=black,
     }
-\usepackage{amsmath}
-\usepackage{physics}
+\usepackage[Glenn]{fncychap}
+\usepackage{amsmath,amssymb,physics,unicode-math}
+\usepackage{nicematrix}
 \usepackage{graphicx}
+\usepackage{enumitem}
+
+% Symbols
+\newcommand{\RR}{\symbb{R}}
+\newcommand{\vx}{\vb{x}}
+\newcommand{\mA}{\vb{A}}

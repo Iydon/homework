@@ -1,1 +1,78 @@
-hello world
+\section{Question 1}
+\begin{enumerate}[label=(\alph*)]
+    \item Write down the definition of \textbf{norm} for a vector space.
+    \item Given $\vx\in\RR^n$, show that followings are norm on $\RR^n$.
+        \begin{enumerate}[label=\roman*.]
+            \item $\norm{\vx}_\infty=\max_{1\leq i\leq n}\abs{x_i}$;
+            \item $\norm{\vx}_1=\sum_{1\leq i\leq n}\abs{x_i}$;
+            \item $\norm{\vx}_2=\qty(\sum_{1\leq i\leq n}\abs{x_i}^2)^{1/2}$.
+        \end{enumerate}
+        Plot the regions for $\norm{\vx}_p\leq 1$ in $\RR^2$ for $p=\infty,1,2$ respectively.
+    \item Given the vector norm $\norm{\cdot}_p$ for $\RR^n$, the induced norm for matrices $\mA\in\RR^{n\times n}$ is defined as
+        \[
+            \norm{\mA}_p = \max_{\vx\neq 0}\frac{\norm{\mA\vx}_p}{\norm{\vx}_p}.
+        \]
+        Show that
+        \begin{enumerate}[label=\roman*.]
+            \item $\norm{\mA}_\infty=\max_{1\leq i\leq n}\sum_{j=1}^n\abs{a_{ij}}$;
+            \item $\norm{\mA}_1=\max_{1\leq j\leq n}\sum_{i=1}^n\abs{a_{ij}}$;
+            \item $\norm{\mA}_2=\sqrt{\lambda_{\max}\qty(\mA^T\mA)}$.
+        \end{enumerate}
+\end{enumerate}
+
+
+
+\section{Question 2}
+\begin{enumerate}[label=(\alph*)]
+    \item Use the method of undetermined coefficients to design third order accurate approximation to $u'(\bar{x})$ by using the discrete points $\bar{x}+h$, $\bar{x}$, $\bar{x}-h$, $\bar{x}-2h$.
+    \item Assuming $u(x)$ is smooth enough, compute the truncation error (leading term) for the finite difference formula above.
+    \item What is the truncation error if $u(x) = 4x^4 + 12x^3 + 6x^2 + x^2/2 + \pi$.
+\end{enumerate}
+
+
+
+\section{Question 3}
+\begin{enumerate}[label=(\alph*)]
+    \item For the following $N\times N$ matrix, show that all eigenvalues are given by $\lambda_p = a+2b\cos\tfrac{\pi p}{N+1}$ for $p=1,2,\ldots,N$.
+        \[
+            \qty[\begin{NiceArray}{CCCC}
+                a & b      &        &   \\
+                b & \Ddots & \Ddots &   \\
+                  & \Ddots & \Ddots & b \\
+                  &        & b      & a \\
+            \end{NiceArray}]_{N\times N}
+        \]
+\end{enumerate}
+
+
+
+\section{Question 4}
+\begin{enumerate}[label=(\alph*)]
+    \item For the following $N\times N$ matrix, show that all eigenvalues are given by $\lambda_p = a+2\sqrt{bc}\cos\tfrac{\pi p}{N+1}$ for $p=1,2,\ldots,N$ and $bc>1$.
+        \[
+            \qty[\begin{NiceArray}{CCCC}
+                a & c      &        &   \\
+                b & \Ddots & \Ddots &   \\
+                  & \Ddots & \Ddots & c \\
+                  &        & b      & a \\
+            \end{NiceArray}]_{N\times N}
+        \]
+\end{enumerate}
+
+
+
+\section{Question 5}
+For the 2-point BVP with Neumann boundary conditions:
+\[
+    \begin{cases}
+        u''(x) = f(x), & x\in(0, 1) \\
+        u'(0) = u'(1) = 0 & \\
+    \end{cases}
+\]
+\begin{enumerate}[label=(\alph*)]
+    \item Set the grid points as $x_j=jh$ for $j=0,1,\ldots,N$ and $h=1/N$. Write down the central FD scheme for the main equation with using $u_j$ to approximate $u(x_j)$.
+    \item\label{tmp-1} Add two ``ghost'' points as $x_{-1}=-h$ and $x_{N+1}=1+h$, and two more variables $u_{-1}$ and $u_{N+1}$. Treat the boundary condition as $(u_1-u_{-1})/2h=0$, $(u_{N+1}-u_{N-1})/2h=0$. Assemble all the equations as $\mA\vb{U}=\vb{F}$ where $\vb{U}=[u_0, u_1, \ldots, u_N]^T$.
+    \item Show that $\mA$ is singular, and find out when the system $\mA\vb{U}=\vb{F}$ has solutions.
+    \item Find the kernel space of $\mA$.
+    \item Find out all eigenvalues and eigenvectors for the matrix $\mA$ given in \ref{tmp-1}.
+\end{enumerate}
