@@ -10,13 +10,32 @@
         colorlinks=true,
         linkcolor=black,
     }
+\usepackage{tcolorbox}
+    \tcbuselibrary{theorems,breakable}
+    \newtcbtheorem{solution}{Solution}{
+        colback=white,colframe=orange!90!black,fonttitle=\bfseries,
+        arc=2mm,separator sign={\ $\blacktriangleright$},
+        breakable}{S}
+\usepackage{geometry}
+    \geometry{margin=1in}
+\usepackage{tcolorbox}
+    \tcbuselibrary{breakable,minted}
+    \newtcbinputlisting{\pythonfile}[2]{
+        listing engine=minted,minted style=trac,minted language=python,
+        minted options={numbers=left,breaklines},
+        title=\texttt{#2},listing only,breakable,
+        left=6mm,right=6mm,top=2mm,bottom=2mm,listing file={#1}}
 \usepackage[Glenn]{fncychap}
+\usepackage[titletoc]{appendix}
 \usepackage{amsmath,amssymb,physics,unicode-math}
 \usepackage{nicematrix}
 \usepackage{graphicx}
 \usepackage{enumitem}
 
 % Symbols
+\DeclareMathOperator*{\argmax}{arg\,max}
 \newcommand{\RR}{\symbb{R}}
 \newcommand{\vx}{\vb{x}}
+\newcommand{\vy}{\vb{y}}
 \newcommand{\mA}{\vb{A}}
+\newcommand{\mX}{\vb{X}}
