@@ -20,6 +20,11 @@
     \geometry{margin=1in}
 \usepackage{tcolorbox}
     \tcbuselibrary{breakable,minted}
+    \newtcblisting{matlabcode}[1]{
+        listing engine=minted,minted style=trac,minted language=matlab,
+        minted options={numbers=left,breaklines},
+        title=\texttt{#1},listing only,breakable,
+        left=6mm,right=6mm,top=2mm,bottom=2mm}
     \newtcbinputlisting{\pythonfile}[2]{
         listing engine=minted,minted style=trac,minted language=python,
         minted options={numbers=left,breaklines},
@@ -31,11 +36,64 @@
 \usepackage{nicematrix}
 \usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage{todonotes}
+
+% Information
+\title{Homework for MA325}
+\author{Iydon Liang, 11711217 \\ \href{mailto:11711217@mail.sustech.edu.cn}{11711217@mail.sustech.edu.cn}}
+\date{\today}
 
 % Symbols
 \DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\nullspace}{null}
+\DeclareMathOperator*{\spanof}{span}
 \newcommand{\RR}{\symbb{R}}
 \newcommand{\vx}{\vb{x}}
 \newcommand{\vy}{\vb{y}}
 \newcommand{\mA}{\vb{A}}
 \newcommand{\mX}{\vb{X}}
+
+% Overwrite standard documentclass
+\usepackage{tikz}
+\makeatletter
+\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+\renewcommand{\maketitle}{
+    \begin{titlepage}
+        \newgeometry{hmargin={1.0in,1.5in},vmargin=.15\paperheight}
+        \hfill{\Huge\bfseries\@title}\par
+        \vspace{3cm}\hfill
+        \begin{minipage}{.7\textwidth}
+            \phantom{xx}
+            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ``Software''), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\par
+            \phantom{xx}
+            The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\par
+            \vspace{.5cm}\hfill\@date
+        \end{minipage}
+        \vfill\hfill
+        \begin{minipage}{0.5\linewidth}
+            \begin{flushright}
+                \large\@author
+            \end{flushright}
+        \end{minipage}
+        \begin{minipage}{0.02\linewidth}
+            \rule{1pt}{75pt}
+        \end{minipage}
+        \begin{tikzpicture}[remember picture,overlay,shorten >=-10pt]
+            \coordinate (aux1) at ([yshift=-15pt] current page.north east);
+            \coordinate (aux2) at ([yshift=-410pt] current page.north east);
+            \coordinate (aux3) at ([xshift=-4.5cm] current page.north east);
+            \coordinate (aux4) at ([yshift=-150pt] current page.north east);
+            \begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+                \draw (aux1) -- coordinate (a) ++ (225:5) --++ (-45:5.1) coordinate (b);
+                \draw[shorten <=-10pt] (aux3) -- (a) -- (aux1);
+                \draw[opacity=0.6,titlepagecolor,shorten <=-10pt] (b) --++ (225:2.2) --++ (-45:2.2);
+            \end{scope}
+            \draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <=-10pt] (aux4) --++ (225:0.8) --++ (-45:0.8);
+            \begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+                \draw[shorten <=-10pt] (aux2) --++ (225:3) coordinate[pos=0.45] (c) --++( -45:3.1);
+                \draw (aux2) -- (c) --++ (135:2.5) --++ (45:2.5) --++ (-45:2.5) coordinate[pos=0.3] (d);
+                \draw (d) --+ (45:1);
+            \end{scope}
+        \end{tikzpicture}
+    \end{titlepage}\restoregeometry}
+\makeatother
