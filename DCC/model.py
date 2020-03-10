@@ -5,10 +5,12 @@
 @Time      : 2020/03/11
 @Reference : https://lcondat.github.io/software.html
 '''
+__all__ = ('Denoising', )
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-
 
 
 class Denoising:
@@ -21,7 +23,7 @@ class Denoising:
         Example:
                 >>> from matplotlib.pyplot import cm
                 >>> .
-                >>> algorithms = 'TV', 'TNV'
+                >>> algorithms = 'TV', 'TNV', 'TGV'
                 >>> d = Denoising()
                 >>> fig = plt.figure()
                 >>> length = len(algorithms) + 1
@@ -37,8 +39,8 @@ class Denoising:
         self.y = self._default_image() if y is None else y
         if isinstance(self.y, np.ndarray):
             self.y = self.y.astype(float) / self.y.max()
-        self.shape = self.y.shape
-        self.flag = len(self.shape)==2 and self.shape[0]==self.shape[1]
+        self._shape = self.y.shape
+        self._flag = len(self._shape)==2 and self._shape[0]==self._shape[1]
 
 
     def __repr__(self):
@@ -50,21 +52,21 @@ class Denoising:
     def apply(self, algorithm, **kwargs):
         '''Apply image denoising algorithm.
         '''
-        dimension = len(self.shape)
+        dimension = len(self._shape)
         if dimension == 2:
             api = getattr(self, algorithm, None)
             assert api is not None, f'The algorithm `{algorithm}` does not exist.'
-            if self.flag:
+            if self._flag:
                 return api(**kwargs)
             else:
-                side = max(self.shape)
+                side = max(self._shape)
                 I = Image.fromarray(self.y).resize((side, side))
                 J = Denoising(np.array(I).T).apply(algorithm, **kwargs)
-                K = Image.fromarray(J).resize(self.shape)
+                K = Image.fromarray(J).resize(self._shape)
                 return (np.array(K)).T
         elif dimension == 3:
-            x = np.ndarray(self.shape)
-            for rgb in range(self.shape[-1]):
+            x = np.ndarray(self._shape)
+            for rgb in range(self._shape[-1]):
                 x[:, :, rgb] = Denoising(self.y[:, :, rgb]).apply(algorithm, **kwargs)
             return x
         else:
@@ -99,7 +101,7 @@ class Denoising:
             Lipschitzian, proximable and linear composite terms", J. Optimization
             Theory and Applications, vol. 158, no. 2, pp. 460-479, 2013.
         '''
-        assert self.flag, 'Maybe you should consider `self.apply`'
+        assert self._flag, 'Maybe you should consider `self.apply`'
 
         y = self.y if y is None else y
         σ = 1 / (8*τ)
@@ -161,7 +163,7 @@ class Denoising:
             Lipschitzian, proximable and linear composite terms", J. Optimization Theory
             and Applications, vol. 158, no. 2, pp. 460-479, 2013.
         '''
-        assert self.flag, 'Maybe you should consider `self.apply`'
+        assert self._flag, 'Maybe you should consider `self.apply`'
 
         y = self.y if y is None else y
         σ = 1 / (8*τ)
@@ -213,7 +215,7 @@ class Denoising:
         '''
         raise NotImplementedError
 
-        assert self.flag, 'Maybe you should consider `self.apply`'
+        assert self._flag, 'Maybe you should consider `self.apply`'
 
         y = self.y if y is None else y
         σ = 1 / (72*τ)
@@ -263,7 +265,7 @@ class Denoising:
 
     def _D(self, x):
         # ∇
-        width, height, *_ = self.shape  # 2-dimension
+        width, height, *_ = self._shape  # 2-dimension
         Dh = np.concatenate((np.diff(x, 1, 0), np.zeros((1, width))), axis=0)
         Dv = np.concatenate((np.diff(x, 1, 1), np.zeros((height, 1))), axis=1)
         return Dh, Dv
