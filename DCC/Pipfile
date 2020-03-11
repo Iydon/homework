@@ -10,6 +10,7 @@ numpy = "*"
 matplotlib = "*"
 jupyter = "*"
 pillow = "*"
+tqdm = "*"
 
 [requires]
 python_version = "3.8"

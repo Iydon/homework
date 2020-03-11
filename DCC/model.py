@@ -74,21 +74,29 @@ class Denoising:
             raise NotImplementedError
 
 
-    def show(self, *algorithms, **kwargs):
+    def show(self, *algorithms, raw=None, row=None, **kwargs):
         '''Show the denoising image with `algorithms`.
         '''
+        def api(pos, data, axis, title, **kwargs):
+            fig.add_subplot(*shape, pos)
+            plt.imshow(data, **kwargs)
+            plt.axis(axis)
+            plt.title(title)
+
         if len(algorithms)==1 and isinstance(algorithms[0], (list, tuple)):
             algorithms = algorithms[0]
 
+        bias = int(raw is not None)
+        length = len(algorithms) + 1 + bias
+        row = row or 1
+        shape = (row, (length+row-1)//row)
+
         fig = plt.figure()
-        length = len(algorithms) + 1
-        fig.add_subplot(1, length, 1)
-        plt.imshow(d.y, **kwargs)
-        plt.title('Noised Image')
+        if bias:
+            api(1, raw, 'off', 'Raw Image', **kwargs)
+        api(1+bias, self.y, 'off', 'Noised Image', **kwargs)
         for ith, algorithm in enumerate(algorithms):
-            fig.add_subplot(1, length, ith+2)
-            plt.imshow(d.apply(algorithm), **kwargs)
-            plt.title(algorithm)
+            api(ith+2+bias, self.apply(algorithm), 'off', algorithm, **kwargs)
         plt.show()
 
 
@@ -292,9 +300,8 @@ class Denoising:
         return x[1:-1, 1:-1]
 
 
-    def DK(self, λ=0.1):
-        r'''Denoising/smoothing a given image y with L2-norm. By the way, DK stands for
-        "Don't Know", because I don't know how to name this algorithm.
+    def Tikhonov(self, λ=0.1):
+        r'''Denoising/smoothing a given image y with Tikhonov regularization.
 
         .. math::
 
@@ -309,7 +316,7 @@ class Denoising:
         Example:
             >>> I = np.zeros((nx, ny))
             >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
-            >>> K = Denoising(J).DK()
+            >>> K = Denoising(J).Tikhonov()
 
         References:
             - http://g2s3.com/labs/notebooks/ImageDenoising.html
@@ -412,7 +419,7 @@ if __name__ == '__main__':
     import tqdm
     from matplotlib.pyplot import cm
 
-    algorithms = 'DK', 'TN', 'TV', 'TNV', 'TGV'
+    algorithms = 'Tikhonov', 'TN', 'TV', 'TNV', 'TGV'
 
     I = 100 * np.ones((200, 200))
     I[75:150, 75:150] = 150
