@@ -18,7 +18,7 @@ class Denoising:
         '''Initialize Denoising object.
 
         Argument:
-            - y: numpy.ndarray, default is `self.__default_image()`
+            - y: numpy.ndarray, default is `self._default_image()`
 
         Example:
                 >>> from matplotlib.pyplot import cm
@@ -72,6 +72,24 @@ class Denoising:
             return x
         else:
             raise NotImplementedError
+
+
+    def show(self, *algorithms, **kwargs):
+        '''Show the denoising image with `algorithms`.
+        '''
+        if len(algorithms)==1 and isinstance(algorithms[0], (list, tuple)):
+            algorithms = algorithms[0]
+
+        fig = plt.figure()
+        length = len(algorithms) + 1
+        fig.add_subplot(1, length, 1)
+        plt.imshow(d.y, **kwargs)
+        plt.title('Noised Image')
+        for ith, algorithm in enumerate(algorithms):
+            fig.add_subplot(1, length, ith+2)
+            plt.imshow(d.apply(algorithm), **kwargs)
+            plt.title(algorithm)
+        plt.show()
 
 
     def TV(self, λ=0.1, τ=0.01, ρ=1.0, epochs=100):
@@ -274,6 +292,34 @@ class Denoising:
         return x[1:-1, 1:-1]
 
 
+    def DK(self, λ=0.1):
+        r'''Denoising/smoothing a given image y with L2-norm. By the way, DK stands for
+        "Don't Know", because I don't know how to name this algorithm.
+
+        .. math::
+
+            \min ||x-y||_2^2/2 + λ||x||_2^2
+
+        Argument:
+            - λ: float, lambda
+
+        Return:
+            - numpy.ndarray, same size as `self.y`
+
+        Example:
+            >>> I = np.zeros((nx, ny))
+            >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
+            >>> K = Denoising(J).DK()
+
+        References:
+            - http://g2s3.com/labs/notebooks/ImageDenoising.html
+            - https://image.hanspub.org/Html/16-2620635_25080.htm
+        '''
+        assert self._flag, 'Maybe you should consider `self.apply`'
+
+        return self.y / (1+λ)
+
+
     def add_noise(self, μ=0.5, σ=0.1):
         '''Add normal noise with `μ` and `σ`.
 
@@ -366,23 +412,11 @@ if __name__ == '__main__':
     import tqdm
     from matplotlib.pyplot import cm
 
-    algorithms = 'TN', 'TV', 'TNV', 'TGV'
+    algorithms = 'DK', 'TN', 'TV', 'TNV', 'TGV'
 
     I = 100 * np.ones((200, 200))
     I[75:150, 75:150] = 150
     I += np.random.normal(0, 12, I.shape)
     d = Denoising(I)
 
-    # I = plt.imread('demo.png')
-    # d = Denoising(I).add_noise()
-
-    fig = plt.figure()
-    length = len(algorithms) + 1
-    fig.add_subplot(1, length, 1)
-    plt.imshow(d.y, cmap=cm.gray)
-    plt.title('Noised Image')
-    for ith, algorithm in tqdm.tqdm(enumerate(algorithms)):
-        fig.add_subplot(1, length, ith+2)
-        plt.imshow(d.apply(algorithm), cmap=cm.gray)
-        plt.title(algorithm)
-    plt.show()
+    d.show(algorithms[:3], cmap=cm.gray)
