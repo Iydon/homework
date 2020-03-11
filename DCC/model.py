@@ -426,4 +426,4 @@ if __name__ == '__main__':
     I += np.random.normal(0, 12, I.shape)
     d = Denoising(I)
 
-    d.show(algorithms[:3], cmap=cm.gray)
+    d.show(algorithms, cmap=cm.gray)
