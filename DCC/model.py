@@ -23,7 +23,8 @@ class Denoising:
         Example:
                 >>> from matplotlib.pyplot import cm
                 >>> .
-                >>> algorithms = 'TV', 'TNV', 'TGV'
+                >>> algorithms = 'TN', 'TV', 'TNV', 'TGV'
+                >>> .
                 >>> d = Denoising()
                 >>> fig = plt.figure()
                 >>> length = len(algorithms) + 1
@@ -370,8 +371,11 @@ if __name__ == '__main__':
     I = 100 * np.ones((200, 200))
     I[75:150, 75:150] = 150
     I += np.random.normal(0, 12, I.shape)
-
     d = Denoising(I)
+
+    # I = plt.imread('demo.png')
+    # d = Denoising(I).add_noise()
+
     fig = plt.figure()
     length = len(algorithms) + 1
     fig.add_subplot(1, length, 1)
