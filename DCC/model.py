@@ -243,7 +243,7 @@ class Denoising:
         σ = 1 / (72*τ)
 
         x2 = y.copy()
-        r2 = [np.zeros_like(y) for _ in range(2)]  # initialize dual solution
+        r2 = [np.zeros_like(y) for _ in range(2)]  # initialize vector field
         u2 = [np.zeros_like(y) for _ in range(4)]  # initialize dual solution
 
         for ith in range(epochs):
