@@ -237,6 +237,46 @@ class Denoising:
         return x
 
 
+    def TN(self, λ=0.1, init=0.5, epochs=100, y=None):
+        r'''Denoising/smoothing a given image y with Tikhonov regularization.
+
+        .. math::
+
+            \min ||x-y||_2^2/2 + λ||∇x||_2^2
+
+        Argument:
+            - λ: float, lambda
+            - init: initial value
+            - epochs: int, number of iterations
+            - y: numpy.ndarray, given image, default is `self.y`
+
+        Return:
+            - numpy.ndarray, same size as `y`
+
+        Example:
+            >>> I = np.zeros((nx, ny))
+            >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
+            >>> K = TN(y=J)
+
+        References:
+            - http://g2s3.com/labs/notebooks/ImageDenoising.html
+            - https://image.hanspub.org/Html/16-2620635_25080.htm
+        '''
+        assert self._flag, 'Maybe you should consider `self.apply`'
+
+        y = self.y if y is None else y
+        height, width, *other = y.shape
+
+        x = init * np.ones((height+2, width+2, *other))
+
+        for ith in range(epochs):
+            x[1:-1, 1:-1] = 1/(λ+4) * (
+                x[:-2, :-2] + x[:-2, 2:] + x[2:, :-2] + x[2:, 2:]
+            ) + λ/(λ+4)*y
+
+        return x[1:-1, 1:-1]
+
+
     def add_noise(self, μ=0.5, σ=0.1):
         '''Add normal noise with `μ` and `σ`.
 
@@ -326,17 +366,22 @@ class Denoising:
 
 
 if __name__ == '__main__':
+    import tqdm
     from matplotlib.pyplot import cm
 
-    algorithms = 'TV', 'TNV', 'TGV'
+    algorithms = 'TN', 'TV', 'TNV', 'TGV'
 
-    d = Denoising()
+    I = 100 * np.ones((200, 200))
+    I[75:150, 75:150] = 150
+    I += np.random.normal(0, 12, I.shape)
+
+    d = Denoising(I)
     fig = plt.figure()
     length = len(algorithms) + 1
     fig.add_subplot(1, length, 1)
     plt.imshow(d.y, cmap=cm.gray)
     plt.title('Noised Image')
-    for ith, algorithm in enumerate(algorithms):
+    for ith, algorithm in tqdm.tqdm(enumerate(algorithms)):
         fig.add_subplot(1, length, ith+2)
         plt.imshow(d.apply(algorithm), cmap=cm.gray)
         plt.title(algorithm)
