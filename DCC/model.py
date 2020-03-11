@@ -73,7 +73,7 @@ class Denoising:
             raise NotImplementedError
 
 
-    def TV(self, λ=0.1, τ=0.01, ρ=1.0, epochs=100, y=None):
+    def TV(self, λ=0.1, τ=0.01, ρ=1.0, epochs=100):
         r'''Denoising/smoothing a given image y with the isotropic total variation.
 
         .. math::
@@ -85,15 +85,14 @@ class Denoising:
             - τ: float, calculate proximal parameter
             - ρ: float, relaxation parameter in [1,2)
             - epochs: int, number of iterations
-            - y: numpy.ndarray, given image, default is `self.y`
 
         Return:
-            - numpy.ndarray, same size as `y`
+            - numpy.ndarray, same size as `self.y`
 
         Example:
             >>> I = np.zeros((nx, ny))
             >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
-            >>> K = TV(y=J)
+            >>> K = Denoising(J).TV()
 
         Reference:
             The over-relaxed Chambolle-Pock algorithm is described in L. Condat,
@@ -103,7 +102,7 @@ class Denoising:
         '''
         assert self._flag, 'Maybe you should consider `self.apply`'
 
-        y = self.y if y is None else y
+        y = self.y
         σ = 1 / (8*τ)
 
         x2 = y.copy()
@@ -120,7 +119,7 @@ class Denoising:
         return x
 
 
-    def TNV(self, λ=0.1, τ=0.01, ρ=1.0, epochs=100, y=None):
+    def TNV(self, λ=0.1, τ=0.01, ρ=1.0, epochs=100):
         r'''Denoising/smoothing a given image y with the isotropic total nuclear variation.
 
         .. math::
@@ -132,15 +131,14 @@ class Denoising:
             - τ: float, calculate proximal parameter
             - ρ: float, relaxation parameter in [1,2)
             - epochs: int, number of iterations
-            - y: numpy.ndarray, given image, default is `self.y`
 
         Return:
-            - numpy.ndarray, same size as `y`
+            - numpy.ndarray, same size as `self.y`
 
         Example:
             >>> I = np.zeros((nx, ny))
             >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
-            >>> K = TNV(y=J)
+            >>> K = Denoising(J).TNV()
 
         References:
             This penaly was called the total nuclear variation in * K.M. Holt, Total
@@ -165,7 +163,7 @@ class Denoising:
         '''
         assert self._flag, 'Maybe you should consider `self.apply`'
 
-        y = self.y if y is None else y
+        y = self.y
         σ = 1 / (8*τ)
 
         x2 = y.copy()
@@ -182,7 +180,7 @@ class Denoising:
         return x
 
 
-    def TGV(self, λ1=0.1, λ2=0.15, τ=0.01, ρ=1.9, epochs=100, y=None):
+    def TGV(self, λ1=0.1, λ2=0.15, τ=0.01, ρ=1.9, epochs=100):
         r'''Denoising/smoothing a given image y with the second order total generalized
         variation (TGV), defined in K. Bredies, K. Kunisch, and T. Pock, "Total
         generalized variation," SIAM J. Imaging Sci., 3(3), 492-526, 2010.
@@ -197,15 +195,14 @@ class Denoising:
             - τ: float, calculate proximal parameter
             - ρ: float, relaxation parameter in [1,2)
             - epochs: int, number of iterations
-            - y: numpy.ndarray, given image, default is `self.y`
 
         Return:
-            - numpy.ndarray, same size as `y`
+            - numpy.ndarray, same size as `self.y`
 
         Example:
             >>> I = np.zeros((nx, ny))
             >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
-            >>> K = TGV(y=J)
+            >>> K = Denoising(J).TGV()
 
         References:
             The over-relaxed Chambolle-Pock algorithm is described in L. Condat,
@@ -215,7 +212,7 @@ class Denoising:
         '''
         assert self._flag, 'Maybe you should consider `self.apply`'
 
-        y = self.y if y is None else y
+        y = self.y
         σ = 1 / (72*τ)
 
         x2 = y.copy()
@@ -237,7 +234,7 @@ class Denoising:
         return x
 
 
-    def TN(self, λ=0.1, init=0.5, epochs=100, y=None):
+    def TN(self, λ=0.1, init=0.5, epochs=100):
         r'''Denoising/smoothing a given image y with Tikhonov regularization.
 
         .. math::
@@ -248,15 +245,14 @@ class Denoising:
             - λ: float, lambda
             - init: initial value
             - epochs: int, number of iterations
-            - y: numpy.ndarray, given image, default is `self.y`
 
         Return:
-            - numpy.ndarray, same size as `y`
+            - numpy.ndarray, same size as `self.y`
 
         Example:
             >>> I = np.zeros((nx, ny))
             >>> J = 0.1*np.random.normal(0, 1, (nx, ny)) + I
-            >>> K = TN(y=J)
+            >>> K = Denoising(J).TN()
 
         References:
             - http://g2s3.com/labs/notebooks/ImageDenoising.html
@@ -264,7 +260,7 @@ class Denoising:
         '''
         assert self._flag, 'Maybe you should consider `self.apply`'
 
-        y = self.y if y is None else y
+        y = self.y
         height, width, *other = y.shape
 
         x = init * np.ones((height+2, width+2, *other))
