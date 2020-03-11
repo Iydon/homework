@@ -107,12 +107,12 @@ class Denoising:
         σ = 1 / (8*τ)
 
         x2 = y.copy()
-        Dh2, Dv2 = self._prox_sigma_g_conj(*self._D(x2), λ) # initialize dual solution
+        Dh2, Dv2 = self._prox_sigma_g_conj(*self._D(x2), λ=λ)  # initialize dual solution
 
         for ith in range(epochs):
             x = self._prox_tau_f(x2-τ*self._Dadj(Dh2, Dv2), y, τ)
             d = self._D(2*x - x2)
-            Dh, Dv = self._prox_sigma_g_conj(Dh2+σ*d[0], Dv2+σ*d[1], λ)
+            Dh, Dv = self._prox_sigma_g_conj(Dh2+σ*d[0], Dv2+σ*d[1], λ=λ)
             x2 += ρ * (x-x2)
             Dh2 += ρ * (Dh-Dh2)
             Dv2 += ρ * (Dv-Dv2)
@@ -182,7 +182,7 @@ class Denoising:
         return x
 
 
-    def TGV(self, λ1=0.1, λ2=0.15, τ=0.01, ρ=1.0, epochs=100, y=None):
+    def TGV(self, λ1=0.1, λ2=0.15, τ=0.01, ρ=1.9, epochs=100, y=None):
         r'''Denoising/smoothing a given image y with the second order total generalized
         variation (TGV), defined in K. Bredies, K. Kunisch, and T. Pock, "Total
         generalized variation," SIAM J. Imaging Sci., 3(3), 492-526, 2010.
@@ -213,23 +213,26 @@ class Denoising:
             Lipschitzian, proximable and linear composite terms", J. Optimization Theory
             and Applications, vol. 158, no. 2, pp. 460-479, 2013.
         '''
-        raise NotImplementedError
-
         assert self._flag, 'Maybe you should consider `self.apply`'
 
         y = self.y if y is None else y
         σ = 1 / (72*τ)
 
         x2 = y.copy()
-        Dh2, Dv2 = self._prox_sigma_g_conj(*self._D(x2), λ) # initialize dual solution
+        r2 = [np.zeros_like(y) for _ in range(2)]  # initialize dual solution
+        u2 = [np.zeros_like(y) for _ in range(4)]  # initialize dual solution
 
         for ith in range(epochs):
-            x = self._prox_tau_f(x2-τ*self._Dadj(Dh2, Dv2), y, τ)
+            temp = tuple(τ*j for j in self._Jadj(*u2))
+            d = self._Dadj(*temp, body=slice(None, -1), tail=slice(-1, None))
+            x = self._prox_tau_f(x2-d, y, τ)
+            r = self._prox_tau_fr(r2[0]+temp[0], r2[1]+temp[1], τ, λ1)
             d = self._D(2*x - x2)
-            Dh, Dv = self._prox_sigma_g_conj(Dh2+σ*d[0], Dv2+σ*d[1], λ)
+            j = self._J(d[0]-2*r[0]+r2[0], d[1]-2*r[1]+r2[1])
+            u = self._prox_sigma_g_conj(*(u2[i]+σ*j[i] for i in range(4)), λ=λ2)
             x2 += ρ * (x-x2)
-            Dh2 += ρ * (Dh-Dh2)
-            Dv2 += ρ * (Dv-Dv2)
+            r2 = [r2[i]+ρ*(r[i]-r2[i]) for i in range(2)]
+            u2 = [u2[i]+ρ*(u[i]-u2[i]) for i in range(4)]
 
         return x
 
@@ -271,20 +274,43 @@ class Denoising:
         return Dh, Dv
 
 
-    def _Dadj(self, Dh, Dv, index=slice(0, 1)):
-        D2h = np.concatenate((Dh[index, :], np.diff(Dh, 1, 0)), axis=0)
-        D2v = np.concatenate((Dv[:, index], np.diff(Dv, 1, 1)), axis=1)
+    def _J(self, r1, r2):
+        width, height, *_ = self._shape  # 2-dimension
+        u1 = np.concatenate((r1[0:1, :], np.diff(r1, axis=0)), axis=0)
+        u2 = np.concatenate((np.diff(r1, axis=1), np.zeros((width, 1))), axis=1)
+        u3 = np.concatenate((r2[:, 0:1], np.diff(r2, axis=1)), axis=1)
+        u4 = np.concatenate((np.diff(r2, axis=0), np.zeros((1, height))), axis=0)
+        return u1, u2, u3, u4
+
+
+    def _Dadj(self, Dh, Dv, head=slice(0, 1), body=slice(0, None), tail=slice(-1, -1)):
+        D2h = np.concatenate((Dh[head, :], np.diff(Dh[body, :], 1, 0), Dh[tail, :]), axis=0)
+        D2v = np.concatenate((Dv[:, head], np.diff(Dv[:, body], 1, 1), Dh[:, tail]), axis=1)
         return -(D2h + D2v)
+
+
+    def _Jadj(self, u1, u2, u3, u4):
+        r1 = np.concatenate((-np.diff(u1, axis=0), u1[-1:, :]), axis=0) - \
+            np.concatenate((u2[:, 0:1], np.diff(u2, axis=1)), axis=1)
+        r2 = np.concatenate((-np.diff(u3, axis=1), u3[:, -1:]), axis=1) - \
+            np.concatenate((u4[0:1, :], np.diff(u4, axis=0)), axis=0)
+        return r1, r2
 
 
     def _prox_tau_f(self, x, y, τ):
         return (x + τ*y) / (1 + τ)
 
 
-    def _prox_sigma_g_conj(self, Dh, Dv, λ):
-        TV = np.sqrt(Dh**2 + Dv**2) / λ
+    def _prox_tau_fr(self, r1, r2, τ, λ):
+        TV = np.sqrt(r1**2 + r2**2) / (τ*λ)
+        TV = 1 - 1/TV.clip(1)
+        return r1*TV, r2*TV
+
+
+    def _prox_sigma_g_conj(self, *Ds, λ):
+        TV = np.sqrt(sum(D**2 for D in Ds)) / λ
         TV = TV.clip(1, None)  # limit the values to [1, inf]
-        return Dh/TV, Dv/TV
+        return tuple(D/TV for D in Ds)
 
 
     def _prox_g(self, Dh, Dv, λ):
