@@ -6,8 +6,9 @@ import os
 import tqdm
 
 from config import user_ids, comment_path, user_path, video_path
+from database import session
 from database import User as UserDB, Video as VideoDB, Comment as CommentDB
-from model import session, User, Video
+from model import User, Video
 
 
 def collect_bilibili_data():
@@ -30,6 +31,12 @@ def collect_bilibili_data():
             if not os.path.exists(h(video.id)):
                 with open(h(video.id), 'w') as fv:
                     json.dump(video.info, fv)
+    for file in tqdm.tqdm(os.listdir(comment_path)):
+        with open(os.path.join(comment_path, file), 'r') as fc:
+            for user_id in json.load(fc):
+                if not os.path.exists(f(user_id)):
+                    with open(f(user_id), 'w') as fu:
+                        json.dump(User(user_id).info, fu, ensure_ascii=False)
 
 
 def convert_to_database():
@@ -40,29 +47,30 @@ def convert_to_database():
     print('User loaing...')
     for file in tqdm.tqdm(os.listdir(user_path)):
         id = file.replace('.json', '')
-        with open(f(file), 'r') as f:
-            data = json.load(f)
+        with open(f(file), 'r') as fr:
+            data = json.load(fr)
             del data['face'], data['birthday']
             session.add(UserDB(id=int(id), **data))
     print('Video loaing...')
     for file in tqdm.tqdm(os.listdir(video_path)):
         id = file.replace('av', '').replace('.json', '')
-        with open(h(file), 'r') as f:
-            data = json.load(f)
+        with open(h(file), 'r') as fr:
+            data = json.load(fr)
             del data['pic'], data['owner']
             session.add(VideoDB(id=int(id), **data))
     print('Comment loading...')
     for file in tqdm.tqdm(os.listdir(comment_path)):
         id = file.replace('av', '').replace('.json', '')
-        with open(f(file), 'r') as f:
-            data = json.load(f)
+        with open(g(file), 'r') as fr:
+            data = json.load(fr)
             for user_id , comments in data.items():
                 for time, content in comments.items():
-                    c = Comment(
+                    c = CommentDB(
                         user_id=int(user_id), video_id=int(id),
                         pubdate=int(time), content=content,
                     )
                     session.add(c)
+            break
     print('Finished...')
     session.commit()
     session.close()
