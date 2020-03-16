@@ -7,6 +7,13 @@ verify_ssl = true
 
 [packages]
 sqlalchemy = "*"
+ipython = "*"
+requests = "*"
+psycopg2 = "*"
+faker = "*"
+fire = "*"
+tqdm = "*"
+retrying = "*"
 
 [requires]
 python_version = "3.7"
