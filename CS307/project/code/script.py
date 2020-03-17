@@ -31,35 +31,60 @@ def collect_bilibili_data():
             if not os.path.exists(h(video.id)):
                 with open(h(video.id), 'w') as fv:
                     json.dump(video.info, fv)
+    result = set()
     for file in tqdm.tqdm(os.listdir(comment_path)):
         with open(os.path.join(comment_path, file), 'r') as fc:
             for user_id in json.load(fc):
-                if not os.path.exists(f(user_id)):
-                    with open(f(user_id), 'w') as fu:
-                        json.dump(User(user_id).info, fu, ensure_ascii=False)
+                result.add(user_id)
+    with open(os.path.join(user_path, 'others.json'), 'w') as fu:
+        json.dump(list(result), fu)
 
 
-def convert_to_database():
+def drop_database():
+    from database import Base, engine
+
+    Base.metadata.drop_all(engine)
+
+
+def convert_to_database(group=100000):
     f = lambda p: os.path.join(user_path, p)
     g = lambda p: os.path.join(comment_path, p)
     h = lambda p: os.path.join(video_path, p)
+    count = 0
 
-    print('User loaing...')
-    for file in tqdm.tqdm(os.listdir(user_path)):
-        id = file.replace('.json', '')
-        with open(f(file), 'r') as fr:
-            data = json.load(fr)
-            del data['face'], data['birthday']
-            session.add(UserDB(id=int(id), **data))
-    print('Video loaing...')
-    for file in tqdm.tqdm(os.listdir(video_path)):
-        id = file.replace('av', '').replace('.json', '')
-        with open(h(file), 'r') as fr:
-            data = json.load(fr)
-            del data['pic'], data['owner']
-            session.add(VideoDB(id=int(id), **data))
+    # print('User loaing...')
+    # for file in tqdm.tqdm(os.listdir(user_path)):
+    #     if file == 'others.json':
+    #         with open(f(file), 'r') as fr:
+    #             for user_id in tqdm.tqdm(json.load(fr)):
+    #                 session.add(UserDB(id=int(user_id)))
+    #                 count += 1
+    #                 if count%group == 0:
+    #                     session.commit()
+    #         continue
+    #     # id = file.replace('.json', '')
+    #     # session.add(UserDB(id=int(id)))
+    #     # session.commit()
+    #     # with open(f(file), 'r') as fr:
+    #     #     data = json.load(fr)
+    #         # del data['face'], data['birthday']
+    #         # session.add(UserDB(id=int(id), **data))
+    # print('Video loaing...')
+    # for file in tqdm.tqdm(os.listdir(video_path)):
+    #     id = file.replace('av', '').replace('.json', '')
+    #     with open(h(file), 'r') as fr:
+    #         data = json.load(fr)
+    #         data['user_id'] = data['owner']
+    #         del data['pic'], data['owner']
+    #         session.add(VideoDB(id=int(id), **data))
+    #         count += 1
+    #         if count%group == 0:
+    #             session.commit()
+    # session.commit()
     print('Comment loading...')
     for file in tqdm.tqdm(os.listdir(comment_path)):
+        if not os.path.exists(os.path.join(video_path, file)):
+            continue
         id = file.replace('av', '').replace('.json', '')
         with open(g(file), 'r') as fr:
             data = json.load(fr)
@@ -70,9 +95,11 @@ def convert_to_database():
                         pubdate=int(time), content=content,
                     )
                     session.add(c)
-            break
-    print('Finished...')
+                    count += 1
+                    if count%group == 0:
+                        session.commit()
     session.commit()
+    print('Finished...')
     session.close()
 
 

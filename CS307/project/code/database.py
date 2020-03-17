@@ -20,15 +20,16 @@ class User(Base):
     videos = relationship('Video', back_populates='user')
     comments = relationship('Comment', back_populates='user')
 
-    name = Column(String, nullable=False)
-    sex = Column(String, nullable=False)
-    sign = Column(String, nullable=False)
-    level = Column(Integer, nullable=False)
-    archive_view = Column(Integer, nullable=False)
-    article_view = Column(Integer, nullable=False)
-    likes = Column(Integer, nullable=False)
-    following = Column(Integer, nullable=False)
-    follower = Column(Integer, nullable=False)
+    # 前期下载数据量有些大，所以这里暂时注释掉
+    # name = Column(String, nullable=True)
+    # sex = Column(String, nullable=True)
+    # sign = Column(String, nullable=True)
+    # level = Column(Integer, nullable=True)
+    # archive_view = Column(Integer, nullable=True)
+    # article_view = Column(Integer, nullable=True)
+    # likes = Column(Integer, nullable=True)
+    # following = Column(Integer, nullable=True)
+    # follower = Column(Integer, nullable=True)
 
 
 class Video(Base):
