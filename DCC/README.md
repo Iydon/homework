@@ -1,5 +1,6 @@
-# Architecture
-This Warm-up Project focuses more on code design than mathematical derivation, we collect some denoising algorithms together into [`Denoising`](model.py) class, and use abbreviation of algorithm name as function name (TV, TNV, TGV, TN, Tikhonov). Then we provide 3 apis to help you get started more easily. But if you want to customize instead, we recommend you to check source code of these apis to know more about our design.
+# Project 0
+## Architecture
+This Warm-up Project focuses more on code design than mathematical derivation, we collect some denoising algorithms together into [`Denoising`](0/model.py) class, and use abbreviation of algorithm name as function name (TV, TNV, TGV, TN, Tikhonov). Then we provide 3 apis to help you get started more easily. But if you want to customize instead, we recommend you to check source code of these apis to know more about our design.
 
 ```python
 class Denoising:
@@ -33,16 +34,23 @@ class Denoising:
 
 The results are shown below.
 
-![](result.png)
+![](0/result.png)
 
 
-
-# Requirements
+## Requirements
 We use `pipenv` to manage project virtual environment, and the version of `python` is 3.8, for this version is more parallel-friendly compared to others. You may check the requirements in [`Pipfile`](Pipfile) and [`Pipfile.lock`](Pipfile.lock).
 
 
-
-# References
+## References
 - https://lcondat.github.io/software.html
 - http://g2s3.com/labs/notebooks/ImageDenoising.html
 - https://image.hanspub.org/Html/16-2620635_25080.htm
+
+
+
+- - -
+
+
+
+# Project 1
+todo
