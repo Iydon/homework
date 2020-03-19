@@ -1,5 +1,12 @@
-NUM = 2
-CMD = mpiexec -np $(NUM) python
+# example: https://github.com/jbornschein/mpi4py-examples
+NUM = 4
+CMD = mpirun -np $(NUM) --use-hwthread-cpus python
 
 all:
-	$(CMD) 1.py
+	# NotImplementedError
+
+test:
+	$(CMD) test.py
+
+bench:
+	$(CMD) bench.py
