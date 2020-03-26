@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+'''
+@Reference: https://github.com/wenj18/HW_TV3d
+'''
 import numpy as np
 
 
@@ -15,10 +18,6 @@ class Worker:
         self._size = I.shape
 
     def next(self, J, number=4):
-        '''
-        Reference:
-            - https://github.com/wenj18/HW_TV3d
-        '''
         row, col, channel = self._size
         for ith in range(number):
             start = ith*row // number - 1
@@ -81,7 +80,6 @@ class Worker:
             yield Is[:, :, idx]
 
 
-
 def default_image(nx, ny, nz, mean=0, sigma=12):
     I = 100 * np.ones((nx, ny, nz), dtype='float64')
     f = lambda ratio1, ratio2, number: slice(int(number*ratio1), int(number*ratio2))
@@ -97,7 +95,7 @@ if __name__ == '__main__':
     comm = MPI.COMM_WORLD
     size = comm.Get_size()
     rank = comm.Get_rank()
-    number = [None, 240, 120, 80, 60, 48][size]
+    number = [None, 240, 120, 80, 60][size]
     nx, ny, nz = 200, 200, size*number
 
     # Split images
@@ -109,7 +107,7 @@ if __name__ == '__main__':
             else:
                 comm.Send(J.copy(), dest=ith, tag=10)
     else:
-        origin = np.empty([200, 200, number], dtype='float64')
+        origin = np.empty((nx, ny, number), dtype='float64')
         comm.Recv(origin, source=0, tag=10)
     plt.figure()
     plt.imshow(origin[:, 100, :], 'gray')
@@ -120,7 +118,7 @@ if __name__ == '__main__':
     w = Worker(origin)
     *_, channel = J.shape
     for t in range(T):
-        if rank == 0 and not t % 5:
+        if rank == 0 and not t%5:
             print(t, 'out of', T)
         J = w.next(J)
 
