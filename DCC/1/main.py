@@ -93,12 +93,12 @@ if __name__ == '__main__':
     from mpi4py import MPI
     import matplotlib.pyplot as plt
 
-    T = 200
+    T = 100
     comm = MPI.COMM_WORLD
     size = comm.Get_size()
     rank = comm.Get_rank()
-    number = [None, 1000, 500, 333, 250, 200][size]
-    nx, ny, nz = 1000, 1000, size*number
+    number = [None, 240, 120, 80, 60, 48][size]
+    nx, ny, nz = 200, 200, size*number
 
     # Split images
     if rank == 0:
