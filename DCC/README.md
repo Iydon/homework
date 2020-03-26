@@ -53,4 +53,12 @@ We use `pipenv` to manage project virtual environment, and the version of `pytho
 
 
 # Project 1
-todo
+## Architecture
+pass
+
+
+## References
+- https://mathscinet.ams.org/mathscinet-getitem?mr=2496060
+- https://computing.llnl.gov/tutorials/parallel_comp/
+- https://mathscinet.ams.org/mathscinet-getitem?mr=2983026
+- https://github.com/wenj18/HW_TV3d

@@ -14,6 +14,7 @@ tqdm = "*"
 mpi4py = "*"
 pylint = "*"
 autopep8 = "*"
+plotly = "*"
 
 [requires]
 python_version = "3.8"
