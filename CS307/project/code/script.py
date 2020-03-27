@@ -86,9 +86,10 @@ def convert_to_database(group=100000):
             data['user_id'] = data['owner']
             del data['pic'], data['owner']
             user_id = data['user_id']
-            if user_id not in users:
+            if str(user_id) not in users:
+                users.append(str(user_id))
                 if not session.query(UserDB).filter(UserDB.id==user_id).count():
-                    session.add(UserDB(id=int(user_id)))
+                    session.add(UserDB(id=user_id))
                     session.commit()
             session.add(VideoDB(id=int(id), **data))
             count += 1
