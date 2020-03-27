@@ -53,22 +53,31 @@ def convert_to_database(group=100000):
     count = 0
 
     print('User loaing...')
+    with open(f('others.json'), 'r') as fr:
+        users = json.load(fr)
+        for user_id in tqdm.tqdm(users):
+            session.add(UserDB(id=int(user_id)))
+            count += 1
+            if count%group == 0:
+                session.commit()
     for file in tqdm.tqdm(os.listdir(user_path)):
         if file == 'others.json':
-            with open(f(file), 'r') as fr:
-                for user_id in tqdm.tqdm(json.load(fr)):
-                    session.add(UserDB(id=int(user_id)))
-                    count += 1
-                    if count%group == 0:
-                        session.commit()
             continue
-        # id = file.replace('.json', '')
-        # session.add(UserDB(id=int(id)))
-        # session.commit()
-        # with open(f(file), 'r') as fr:
-        #     data = json.load(fr)
-            # del data['face'], data['birthday']
-            # session.add(UserDB(id=int(id), **data))
+        id = file.replace('.json', '')
+        if id not in users:
+            session.add(UserDB(id=int(id)))
+            session.commit()
+            session.add(UserDB(id=int(user_id)))
+            count += 1
+            if count%group == 0:
+                session.commit()
+    for file in tqdm.tqdm(os.listdir(user_path)):
+        if file == 'others.json':
+            continue
+        id = file.replace('.json', '')
+        if id not in users:
+            session.add(UserDB(id=int(id)))
+            session.commit()
     print('Video loaing...')
     for file in tqdm.tqdm(os.listdir(video_path)):
         id = file.replace('av', '').replace('.json', '')
@@ -76,6 +85,11 @@ def convert_to_database(group=100000):
             data = json.load(fr)
             data['user_id'] = data['owner']
             del data['pic'], data['owner']
+            user_id = data['user_id']
+            if user_id not in users:
+                if not session.query(UserDB).filter(UserDB.id==user_id).count():
+                    session.add(UserDB(id=int(user_id)))
+                    session.commit()
             session.add(VideoDB(id=int(id), **data))
             count += 1
             if count%group == 0:
@@ -106,6 +120,7 @@ def convert_to_database(group=100000):
 if __name__ == '__main__':
     commands = dict(
         collect_bilibili_data=collect_bilibili_data,
+        drop_database=drop_database,
         convert_to_database=convert_to_database,
     )
     fire.Fire(commands)
