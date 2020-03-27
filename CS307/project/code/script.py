@@ -52,35 +52,35 @@ def convert_to_database(group=100000):
     h = lambda p: os.path.join(video_path, p)
     count = 0
 
-    # print('User loaing...')
-    # for file in tqdm.tqdm(os.listdir(user_path)):
-    #     if file == 'others.json':
-    #         with open(f(file), 'r') as fr:
-    #             for user_id in tqdm.tqdm(json.load(fr)):
-    #                 session.add(UserDB(id=int(user_id)))
-    #                 count += 1
-    #                 if count%group == 0:
-    #                     session.commit()
-    #         continue
-    #     # id = file.replace('.json', '')
-    #     # session.add(UserDB(id=int(id)))
-    #     # session.commit()
-    #     # with open(f(file), 'r') as fr:
-    #     #     data = json.load(fr)
-    #         # del data['face'], data['birthday']
-    #         # session.add(UserDB(id=int(id), **data))
-    # print('Video loaing...')
-    # for file in tqdm.tqdm(os.listdir(video_path)):
-    #     id = file.replace('av', '').replace('.json', '')
-    #     with open(h(file), 'r') as fr:
-    #         data = json.load(fr)
-    #         data['user_id'] = data['owner']
-    #         del data['pic'], data['owner']
-    #         session.add(VideoDB(id=int(id), **data))
-    #         count += 1
-    #         if count%group == 0:
-    #             session.commit()
-    # session.commit()
+    print('User loaing...')
+    for file in tqdm.tqdm(os.listdir(user_path)):
+        if file == 'others.json':
+            with open(f(file), 'r') as fr:
+                for user_id in tqdm.tqdm(json.load(fr)):
+                    session.add(UserDB(id=int(user_id)))
+                    count += 1
+                    if count%group == 0:
+                        session.commit()
+            continue
+        # id = file.replace('.json', '')
+        # session.add(UserDB(id=int(id)))
+        # session.commit()
+        # with open(f(file), 'r') as fr:
+        #     data = json.load(fr)
+            # del data['face'], data['birthday']
+            # session.add(UserDB(id=int(id), **data))
+    print('Video loaing...')
+    for file in tqdm.tqdm(os.listdir(video_path)):
+        id = file.replace('av', '').replace('.json', '')
+        with open(h(file), 'r') as fr:
+            data = json.load(fr)
+            data['user_id'] = data['owner']
+            del data['pic'], data['owner']
+            session.add(VideoDB(id=int(id), **data))
+            count += 1
+            if count%group == 0:
+                session.commit()
+    session.commit()
     print('Comment loading...')
     for file in tqdm.tqdm(os.listdir(comment_path)):
         if not os.path.exists(os.path.join(video_path, file)):

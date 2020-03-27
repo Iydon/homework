@@ -2,6 +2,7 @@
 '''
 @Reference: https://github.com/wenj18/HW_TV3d
 '''
+import collections
 import numpy as np
 
 
@@ -64,19 +65,19 @@ class Worker:
         return J
 
     @classmethod
-    def split(cls, total, number):
+    def split(cls, total, number, overlap=0):
         total = tuple(total)
         length = len(total)
         start = 0
         for ith in range(number):
             end = (ith+1) * length // number
-            yield total[start:end]
+            yield total[start:end+overlap]
             start = end
 
     @classmethod
-    def split_images(cls, Is, number):
+    def split_images(cls, Is, number, overlap=1):
         *_, total = Is.shape
-        for idx in cls.split(range(total), number):
+        for idx in cls.split(range(total), number, overap):
             yield Is[:, :, idx]
 
 
