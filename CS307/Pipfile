@@ -15,6 +15,7 @@ fire = "*"
 tqdm = "*"
 retrying = "*"
 pymysql = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"
