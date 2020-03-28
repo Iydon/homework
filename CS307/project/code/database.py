@@ -7,14 +7,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from config import database_path, choice
+from config import database_path, string_max_len
 
 
 Base = declarative_base()
 
 
-if 'MySQL' in choice:
-    String = String(100)
+String = String(string_max_len)
 
 
 class User(Base):
@@ -72,7 +71,7 @@ class Comment(Base):
 
 engine = create_engine(database_path)
 Base.metadata.create_all(engine)
-DBSession = sessionmaker(bind=engine)
+DBSession = sessionmaker(bind=engine, autoflush=False)
 session = DBSession()
 
 

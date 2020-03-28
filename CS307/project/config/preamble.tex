@@ -4,6 +4,8 @@
 \usepackage{lipsum}
 
 % Packages with parameters
+\usepackage{geometry}
+    \geometry{margin=1in}
 \usepackage[section]{placeins}
 \usepackage{tcolorbox}
     \tcbuselibrary{breakable,minted}
@@ -12,9 +14,30 @@
         minted options={numbers=left,breaklines},
         title=\texttt{#2},listing only,breakable,
         left=6mm,right=6mm,top=2mm,bottom=2mm,listing file={#1}}
+    \newtcblisting{python}[1]{
+        listing engine=minted,minted style=trac,minted language=python,
+        minted options={numbers=left,breaklines},
+        title=\texttt{#1},listing only,breakable,
+        left=6mm,right=6mm,top=2mm,bottom=2mm}
+	\tcbuselibrary{xparse}
+		\DeclareTotalTCBox{\verbbox}{ O{orange} v !O{} }{
+            fontupper=\ttfamily,nobeforeafter,tcbox raise base,
+			arc=0pt,outer arc=0pt,top=0pt,bottom=0pt,left=0mm,
+			right=0mm,leftrule=0pt,rightrule=0pt,toprule=0.3mm,
+			bottomrule=0.3mm,boxsep=0.5mm,bottomrule=0.3mm,boxsep=0.5mm,
+			colback=#1!10!white,colframe=#1!50!black,#3}{#2}
 \usepackage{hyperref}
     \hypersetup{
         pdfauthor={Iydon Liang},
         colorlinks=true,
         linkcolor=black,
     }
+\usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \renewcommand{\headrulewidth}{0.4pt}
+\usepackage[style=gb7714-2015]{biblatex}
+    \addbibresource{ref.bib}
+\usepackage[titletoc]{appendix}
+
+% Constant
+\newcommand{\bilibili}{\includegraphics[height=10pt]{figures/bilibili}}

@@ -9,6 +9,7 @@ from config import user_ids, comment_path, user_path, video_path
 from database import session
 from database import User as UserDB, Video as VideoDB, Comment as CommentDB
 from model import User, Video
+from config import string_max_len
 
 
 def collect_bilibili_data():
@@ -75,14 +76,17 @@ def convert_to_database(group=100000):
             continue
         id = file.replace('.json', '')
         if id not in users:
-            session.add(UserDB(id=int(id)))
-            session.commit()
+            if not session.query(UserDB).filter(UserDB.id==int(id)).count():
+                session.add(UserDB(id=int(id)))
+                session.commit()
     print('Video loaing...')
     for file in tqdm.tqdm(os.listdir(video_path)):
         id = file.replace('av', '').replace('.json', '')
         with open(h(file), 'r') as fr:
             data = json.load(fr)
             data['user_id'] = data['owner']
+            if len(data['desc']) > string_max_len:
+                data['desc'] = data['desc'][:string_max_len]
             del data['pic'], data['owner']
             user_id = data['user_id']
             if str(user_id) not in users:
@@ -102,19 +106,53 @@ def convert_to_database(group=100000):
         id = file.replace('av', '').replace('.json', '')
         with open(g(file), 'r') as fr:
             data = json.load(fr)
+            result = [None] * sum(map(len, data.values()))
+            ith = 0
             for user_id , comments in data.items():
                 for time, content in comments.items():
-                    c = CommentDB(
+                    if len(content) > string_max_len:
+                        content = content[:string_max_len]
+                    result[ith] = CommentDB(
                         user_id=int(user_id), video_id=int(id),
                         pubdate=int(time), content=content,
                     )
-                    session.add(c)
-                    count += 1
-                    if count%group == 0:
-                        session.commit()
-    session.commit()
+                    ith += 1
+            session.bulk_save_objects(result) # more faster
+            session.commit()
     print('Finished...')
     session.close()
+
+
+def convert_to_database_with_bulk(users, videos, comments, number=100000):
+    '''Perform a bulk save of the given iterations
+
+    Argument:
+        - users: Iterable
+        - videos: Iterable
+        - comments: Iterable
+        - number: int, number of elements
+
+    References:
+        - https://stackoverflow.com/questions/3659142/bulk-insert-with-sqlalchemy-orm
+        - https://tutorials.technology/tutorials/Fast-bulk-insert-with-sqlalchemy.html
+    '''
+    # raise NotImplementedError
+
+    def split(its, number):
+        result = [None] * number
+        ith = 0
+        for ele in its:
+            result[ith] = ele
+            if (ith+1)%number == 0:
+                yield result
+                ith = 0
+            ith += 1
+        yield tuple(filter(bool, result))
+
+    for groups in (users, videos, comments):
+        for group in split(groups, number):
+            session.bulk_save_objects(group)
+            session.commit()
 
 
 if __name__ == '__main__':
@@ -122,5 +160,6 @@ if __name__ == '__main__':
         collect_bilibili_data=collect_bilibili_data,
         drop_database=drop_database,
         convert_to_database=convert_to_database,
+        convert_to_database_with_bulk=convert_to_database_with_bulk,
     )
     fire.Fire(commands)
