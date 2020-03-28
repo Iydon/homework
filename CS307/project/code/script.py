@@ -67,7 +67,6 @@ def convert_to_database(group=100000):
         if id not in users:
             session.add(UserDB(id=int(id)))
             session.commit()
-            session.add(UserDB(id=int(user_id)))
             count += 1
             if count%group == 0:
                 session.commit()
