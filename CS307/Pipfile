@@ -16,6 +16,7 @@ tqdm = "*"
 retrying = "*"
 pymysql = "*"
 matplotlib = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.8"
