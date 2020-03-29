@@ -17,12 +17,12 @@
 %
 % # References
 % 1. https://stackoverflow.com/questions/4279358/pythons-underlying-hash-data-structure-for-dictionaries
-\title{数据库管理系统 \\ DBMS}
+\title{通过 \bilibili\ 数据集探究数据库管理系统的性能优势}
 
 \maketitle\tableofcontents\clearpage
 
 \section{介绍}
-\lipsum[1]
+本实验的目的是通过 \bilibili\ 数据集探究自己实现的数据库部分功能与 \texttt{DBMS} 之间的性能差异，同时比较不同 \texttt{DBMS} 之间的区别，最后利用 \texttt{DBMS} 提高数据的检索能力，加速数据分析。
 
 
 
@@ -59,21 +59,71 @@
 
 
 \subsection{实验细节}
-\lipsum[3]
+时间记录均为多次实验（5 次），后对时间取平均值，减少误差。
+
+首先进行比较 \texttt{DBMS} 与 \texttt{RAM}，根据 \texttt{Python} 中 Hashmap 的设计\cite{python2010rees}以及实际的计算，发现 \verbbox{Video} 表格可以导入内存，在硬盘中因为由许多小文件，所以大小为 98M。
+\texttt{Python} 中因为涉及到指针，使用 \texttt{sys.getsizeof} 计算对象大小会造成误差，因此通过递归方式对原对象解构，得出内存中数据大小为 22M，同时以 \verbbox{Video.id} 为数据库索引。实验将 IO 读取与 \texttt{RAM} 索引进行分别计时，但是由于爬取的数据为 Json 格式，解析耗时较长，因此预处理为 CSV 格式，同时实现序列化 CSV 格式文件的功能（堵塞方式读取），提升效果显著。
+其中 SQL 语句为 \texttt{select * from Video as v where v.title like "\%substr\%"}，其中 \texttt{substr} 可以为任意关键词，本次实验选取 \bilibili\ 标题中较容易火的关键词：“震惊”、“内幕”、“锤”、“抑郁”、“盗”、“赞”。
+最后结果如图~\ref{F:dbms_vs_ram}。
+
+接下来进行不同 \texttt{DBMS} 之间的比较，包括 \texttt{PostgreSQL}、\texttt{MySQL} 与 \texttt{SQLite}。因为采用 \texttt{ORM} 进行数据库建模，因此在不同数据库之间转换较为容易，可以通过程序进行比较而非手动运行并记录数据。本次实验选取了五个方面：检索小数据库（\verbbox{Video}）、检索大数据库（\verbbox{Comment}）、使用关联对象、聚合函数以及分组。
+最后结果如图~\ref{F:different_dbms}。
+
+最后的实验则测试实现相同功能的 \texttt{Python} 程序与 \texttt{DBMS} 之间的区别，具体可以见第~\ref{S:extra} 节，因为前些天电脑出问题重装，原先程序丢失，所以并无对比，但是直观可以感受到 \texttt{DBMS} 的效率要远高于相同功能的程序，且不需要进行复杂的逻辑判断，只需要构造相应的 \texttt{SQL} 语句即可。
 
 
 \subsection{实验结果}
-\lipsum[4]
+第一次实验虽然 \texttt{DBMS} 性能略差于直接使用 \texttt{RAM} 读取数据，但是它们之间进行比较是不公平的，因为 \texttt{DBMS} 每次得到请求会通过硬盘索引数据，所以 \texttt{RAM} 读取数据的结果应加上 IO 消耗的时间，同时考虑到自己的程序只对单个 CSV 格式文件进行解析序列化，如果增加复杂的关系等，拓展性是不如 \texttt{DBMS}，因此 \texttt{DBMS} 更为出色。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{code/plot/dbms_vs_ram.png}
+    \caption{\texttt{DBMS} 与 \texttt{RAM} 比较}\label{F:dbms_vs_ram}
+\end{figure}
+
+第二次实验在 98M 与 3.4G 的数据量上可以看出大概的趋势，即 \texttt{PostgreSQL} 较优于 \texttt{SQLite} 较优于 \texttt{MySQL}。这个结果有些不符合直觉，因为 \texttt{SQLite} 将所有数据保存为一个文件，同时本次实验只进行索引，可能这个数据量小于 \texttt{MySQL} 的优势区间。但是 \texttt{SQLite} 的劣势显而易见：缺乏用户管理与性能优化的灵活性。
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{code/plot/different_dbms.png}
+    \caption{不同 \texttt{DBMS} 比较}\label{F:different_dbms}
+\end{figure}
 
 
 
 \section{结论}
-\lipsum[5]
+使用 \texttt{DBMS} 对持久化数据进行管理有非常大的优势，不仅其管理数据速度快，而且其响应时间较小。同时 \texttt{DBMS}（除报告中使用的 \texttt{SQLite}）可以通过事务管理对用户数据进行保护，避免低权用户操作敏感数据。同时参考相应的文献可以得到 \texttt{DBMS} 的其他优势，例如并发能力、降低数据冗余、事务管理（Transaction Management）等。
 
 
 
-\section{附加内容}
-\lipsum[6]
+\section{附加内容}\label{S:extra}
+\subsection{提及到的 Bonus}
+\begin{enumerate}
+    \item 用户权限管理的思路是通过监控服务器某一端口（例如 42926），通过异步 IO 与高并发的方式，将不同用户的请求分为不同的协程，验证由安全散列算法生成的密码散列确定其权限，由服务器判断是否将数据返回给用户；
+    \item 本实验的数据集约为 3.7G，其中 \verbbox{Comment} 约为 3.4G，前面的实验通过检索大数据集比较不同 \texttt{DBMS} 性能差异时使用了不能完全载入内存的数据。
+\end{enumerate}
+
+
+\subsection{提高检索能力，加速数据分析}
+由于报告作者最近兼职在 \bilibili\ 做 \texttt{UP} 主，因此经常对其进行相应的数据分析，通过 \texttt{DBMS} 可以快速获取不同视频的点赞、投币、收藏的数据，并对其进行分析，如图~\ref{F:like-coin-favorite} 与图~\ref{F:like-coin-favorite-2}。
+初步得出以下结论：
+\begin{enumerate}
+    \item 大概 2017 年之前点赞等更“值钱”一些（这里的”值钱“指的是当时大家看重推荐视频的权利，或者是有些数据丢失了造成了我的错觉，前者可能的解释是当时部分 UP 主是课余兴趣才投稿的，随着用户基数增大变成盈利手段，号召一键三连，这句话没有负面意思毕竟人是要吃饭的）；
+    \item 现在的部分知名 UP 主也是从早期粉丝少通过不断更新积累粉丝（发现知名 UP 主部分远古稿件的点赞等数据不好看，而且大部分人为考古，比如 老番茄、中国BOY 等，与现在有些“UP”短期粉丝快速增长活跃度低形成对比，这句话也没有负面意思毕竟有名气了到哪里粉丝都会关注）；
+    \item     不适当的评论或多来自于三观容易受影响的未成年人（简单看了公开资料，部分“不适当”的评论或来自于未成年人，当然可能也包括心智未成熟的部分成年人，部分 UP 主可能也没有注意到自己的视频中或多或少出现具有误导性、带“情感色彩”词汇，然后由观看者进行进一步加工，理解成为自己想要的意思，进而产生不适当言论，毕竟刷视频多了，分配到一个视频的思考时间与能力会相应减少，而且视频相较文本信息更容易接受）。
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth]{figures/like_coin_favorite.png}
+    \caption{点赞 + 投币 + 收藏 直观展示图及离群值}\label{F:like-coin-favorite}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\textwidth]{figures/like_coin_favorite-2.png}
+    \caption{不同年份 点赞 + 投币 + 收藏 直观展示图}\label{F:like-coin-favorite-2}
+\end{figure}
+
+同时最近也尝试做更进一步的研究，敬请期待，详情请参考 \href{https://github.com/iydon/bilibili}{GitHub}。
 
 
 
