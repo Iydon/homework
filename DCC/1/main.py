@@ -18,70 +18,66 @@ class Worker:
         self._eps = eps
         self._size = I.shape
 
-    def next(self, J, number=4):
+    def next(self, J, number=8):
         row, col, channel = self._size
         for ith in range(number):
             start = ith*row // number - 1
             end = (ith+1)*row // number + 1
             if start < 0:
-                start = start + 1
-                DfJx = J[(start+1):(end+1), :, :]-J[start:end, :, :]
+                start += 1
+                DfJx = J[(start+1):(end+1), :, :] - J[start:end, :, :]
             elif end > row:
-                end = end-1
+                end -= 1
                 DfJx = J[list(range(start+1, end))+[end-1], :, :] - J[start:end, :, :]
             else:
-                DfJx = J[(start+1):(end+1), :, :]-J[start:end, :, :]
-            DfJy = J[start:end, list(range(1, col))+[col-1], :]-J[start:end, :, :]
-            DfJz = J[start:end, :, list(range(1, channel))+[channel-1]]-J[start:end, :, :]
-            TempDJ = (self._eps+DfJx*DfJx+DfJy*DfJy+DfJz*DfJz)**(1/2)
-            DivJx = DfJx/TempDJ
-            DivJy = DfJy/TempDJ
-            DivJz = DfJz/TempDJ
-            del TempDJ
+                DfJx = J[(start+1):(end+1), :, :] - J[start:end, :, :]
+            DfJy = J[start:end, list(range(1, col))+[col-1], :] - J[start:end, :, :]
+            DfJz = J[start:end, :, list(range(1, channel))+[channel-1]] - J[start:end, :, :]
+            TempDJ = (self._eps + DfJx*DfJx + DfJy*DfJy + DfJz*DfJz) ** (1/2)
+            DivJx = DfJx / TempDJ
+            DivJy = DfJy / TempDJ
+            DivJz = DfJz / TempDJ
             mi, ni, li = DivJx.shape
             if start == 0:
-                div = DivJx[0:(mi-1), :, :]-DivJx[[0]+list(range(mi-2)), :, :] \
-                    + DivJy[0:(mi-1), :, :]-DivJy[0:(mi-1), [0]+list(range(ni-1)), :]\
-                    + DivJz[0:(mi-1), :, :]-DivJz[0:(mi-1),
-                                                :, [0]+list(range(li-1))]
-                J[start:(end-1), :, :] += self._dt * div - self._dt*self._lam * \
-                    (J[start:(end-1), :, :]-self.I[start:(end-1), :, :])
+                div = DivJx[0:(mi-1), :, :] - DivJx[[0]+list(range(mi-2)), :, :] \
+                    + DivJy[0:(mi-1), :, :] - DivJy[0:(mi-1), [0]+list(range(ni-1)), :] \
+                    + DivJz[0:(mi-1), :, :] - DivJz[0:(mi-1), :, [0]+list(range(li-1))]
+                J[start:(end-1), :, :] += self._dt*div \
+                    - self._dt * self._lam * (J[start:(end-1), :, :]-self.I[start:(end-1), :, :])
             elif end == row:
-                mi = mi + 1
-                end = end + 1
-                div = DivJx[1:(mi-1), :, :]-DivJx[0:(mi-2), :, :] \
-                    + DivJy[1:(mi-1), :, :]-DivJy[1:(mi-1), [0]+list(range(ni-1)), :]\
-                    + DivJz[1:(mi-1), :, :]-DivJz[1:(mi-1),
-                                                :, [0]+list(range(li-1))]
-                J[(start+1):(end-1), :, :] += self._dt * div - self._dt*self._lam * \
-                    (J[(start+1):(end-1), :, :]-self.I[(start+1):(end-1), :, :])
+                mi += 1
+                end += 1
+                div = DivJx[1:(mi-1), :, :] - DivJx[0:(mi-2), :, :] \
+                    + DivJy[1:(mi-1), :, :] - DivJy[1:(mi-1), [0]+list(range(ni-1)), :] \
+                    + DivJz[1:(mi-1), :, :] - DivJz[1:(mi-1), :, [0]+list(range(li-1))]
+                J[(start+1):(end-1), :, :] += self._dt*div \
+                    - self._dt * self._lam * (J[(start+1):(end-1), :, :]-self.I[(start+1):(end-1), :, :])
             else:
-                div = DivJx[1:(mi-1), :, :]-DivJx[0:(mi-2), :, :] \
-                    + DivJy[1:(mi-1), :, :]-DivJy[1:(mi-1), [0]+list(range(ni-1)), :]\
-                    + DivJz[1:(mi-1), :, :]-DivJz[1:(mi-1),
-                                                :, [0]+list(range(li-1))]
-                J[(start+1):(end-1), :, :] += self._dt * div - self._dt*self._lam * \
-                    (J[(start+1):(end-1), :, :]-self.I[(start+1):(end-1), :, :])
+                div = DivJx[1:(mi-1), :, :] - DivJx[0:(mi-2), :, :] \
+                    + DivJy[1:(mi-1), :, :] - DivJy[1:(mi-1), [0]+list(range(ni-1)), :]\
+                    + DivJz[1:(mi-1), :, :] - DivJz[1:(mi-1), :, [0]+list(range(li-1))]
+                J[(start+1):(end-1), :, :] += self._dt*div \
+                    - self._dt * self._lam * (J[(start+1):(end-1), :, :]-self.I[(start+1):(end-1), :, :])
         return J
 
     @classmethod
-    def split(cls, total, number, overlap=0):
+    def split(cls, total, number):
         total = tuple(total)
         length = len(total)
         start = 0
         for ith in range(number):
             end = (ith+1) * length // number
-            yield total[start:end+overlap]
+            yield total[start:end]
             start = end
 
     @classmethod
-    def split_images(cls, Is, number, overlap=1):
+    def split_images(cls, Is, number):
         *_, total = Is.shape
-        for idx in cls.split(range(total), number, overap):
+        for idx in cls.split(range(total), number):
             yield Is[:, :, idx]
 
 
-def default_image(nx, ny, nz, mean=0, sigma=12):
+def default_image(nx=200, ny=200, nz=200, mean=0, sigma=12):
     I = 100 * np.ones((nx, ny, nz), dtype='float64')
     f = lambda ratio1, ratio2, number: slice(int(number*ratio1), int(number*ratio2))
     I[f(0.5, 0.75, nx), f(0.5, 0.75, ny), f(0.5, 0.75, nz)] = 150.0
