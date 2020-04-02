@@ -95,6 +95,8 @@ if __name__ == '__main__':
     number = [None, 240, 120, 80, 60][size]
     nx, ny, nz = 200, 200, size*number
 
+    time = MPI.Wtime()
+
     # Split images
     if rank == 0:
         I = default_image(nx, ny, nz)
@@ -143,3 +145,6 @@ if __name__ == '__main__':
     else:
         sendbuf = J.copy()
         comm.Send(sendbuf, dest=0, tag=30)
+
+    time = MPI.Wtime() - time
+    print(rank, time)
