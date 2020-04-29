@@ -1,8 +1,12 @@
+# built-in
 from itertools import repeat
 from os import listdir
 from os.path import join
 from time import time
-
+# multi-processing
+import multiprocessing as mp
+# matlab interface and numerical
+from array import array
 import numpy as np
 from scipy.io import loadmat
 
@@ -19,6 +23,27 @@ def load_row_col_paint():
         row = tuple(map(f, data['rKey'][0]))
         col = tuple(map(f, data['cKey'][0]))
         yield row, col, data['Paint']
+
+
+def api(row, col, **kwargs):
+    pib = PaintItBack(row, col, **kwargs)
+    pib.doit()
+    return pib.paint
+
+
+def matlab_api(row, col):
+    '''MATLAB API
+    '''
+    def f(x):
+        if isinstance(x, float):
+            return (int(x), )
+        else:
+            return tuple(map(int, x))
+    g = lambda x: array('d', x)
+    # default kwargs
+    kwargs = dict(threshold=64, n_processes=0)
+    result = api(tuple(map(f, row)), tuple(map(f, col)), **kwargs)
+    return tuple(map(g, result.tolist()))
 
 
 class Timer:
@@ -41,20 +66,40 @@ class Timer:
         return self._tic_toc
 
 
+class Pool:
+    '''Pool
+    '''
+    def __init__(self, processes=None):
+        self._processes = mp.cpu_count() \
+            if processes is None else processes
+
+    def __enter__(self):
+        if self._processes:
+            self._pool = mp.Pool(processes=self._processes)
+            return self._pool
+
+    def __exit__(self, type, value, traceback):
+        if self._processes:
+            self._pool.close()
+            self._pool.join()
+
+
 class PaintItBack:
     '''Paint it back game.
     '''
-    def __init__(self, row, col, threshold=64):
+    def __init__(self, row, col, threshold=64, n_processes=0):
         '''
         Argument:
             - row: tuple[tuple]
             - col: tuple[tuple]
             - threshold: int, see `self._intersection`
+            - n_processes: int, whether to use `multiprocessing`
         '''
         self._row = row
         self._col = col
         self._threshold = threshold
         self._paint = - np.ones((len(row), len(col)), dtype=int)
+        self._processes = n_processes
 
     def __repr__(self):
         return f'<PaintItBack @ {hash(self):#x}>'
@@ -65,10 +110,24 @@ class PaintItBack:
 
     @property
     def is_finished(self):
-        return not (self._paint==-1).sum()
+        return not (self._paint==-1).any()
+
+    @property
+    def is_initialized(self):
+        return (pib.paint==-1).all()
 
     def doit(self):
         # simple fill algorithm
+        if self._processes:
+            self.doit_parallel()
+        else:
+            self.doit_serial()
+        if self.is_finished:
+            return None
+        # todo
+        raise NotImplementedError
+
+    def doit_serial(self):
         while True:
             comparison = self._paint.copy()
             for ith, row in enumerate(self._row):
@@ -77,10 +136,20 @@ class PaintItBack:
                 self._intersection(self._paint[:, jth], col)
             if (comparison==self._paint).all():
                 break
-        if self.is_finished:
-            return None
-        # todo
-        pass
+
+    def doit_parallel(self):
+        f = self._intersection
+        with Pool(self._processes) as p:
+            while True:
+                comparison = self._paint.copy()
+                for ith, row in enumerate(self._row):
+                    args = self._paint[ith, :], row
+                    self._paint[ith, :] = p.apply_async(f, args=args).get()
+                for jth, col in enumerate(self._col):
+                    args = self._paint[:, jth], col
+                    self._paint[:, jth] = p.apply_async(f, args=args).get()
+                if (comparison==self._paint).all():
+                    break
 
     def _intersection(self, origin, choices):
         '''Intersection of all possibilities.
@@ -90,10 +159,10 @@ class PaintItBack:
             - choices: tuple
 
         Return:
-            - None
+            - numpy.ndarray
         '''
         if not choices:
-            return None
+            return origin
         m = len(choices) + 1
         n = len(origin) - sum(choices) - m + 2
         count = [0] * len(origin)
@@ -106,7 +175,7 @@ class PaintItBack:
             else:
                 total += 1
                 if total > self._threshold:
-                    return None
+                    return origin
                 for ith, value in enumerate(f(numbers)):
                     count[ith] += value
         for ith, value in enumerate(count):
@@ -114,6 +183,7 @@ class PaintItBack:
                 origin[ith] = 0
             elif value == total:
                 origin[ith] = 1
+        return origin
 
     def _expand(self, marks):
         '''Expand marks.
@@ -193,7 +263,7 @@ class PaintItBack:
 
 if __name__ == '__main__':
     for row, col, paint in load_row_col_paint():
-        pib = PaintItBack(row, col)
+        pib = PaintItBack(row, col, threshold=64, n_processes=0)
         with Timer() as t:
             pib.doit()
         shape = '{}x{}'.format(*paint.shape)
