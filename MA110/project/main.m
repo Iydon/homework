@@ -32,11 +32,11 @@ disp(Records);
 
 
 function [Paint, time] = python_api(row, col)
-    % call api
-    api = py.importlib.import_module('main');
-    % py.importlib.reload(api);
+    % load api from model
+    model = py.importlib.import_module('model');
+    % py.importlib.reload(model);
     tic;
-    Tuple = api.matlab_api(row, col);
+    Tuple = model.matlab_api(row, col);
     time = toc;
     % convert python object to matlab matrix
     Paint = zeros(length(row), length(col));

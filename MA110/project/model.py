@@ -1,28 +1,45 @@
 # built-in
 from itertools import repeat
 from os import listdir
-from os.path import join
+from os.path import exists, join
 from time import time
-# multi-processing
+# multi-processing and optimize
 import multiprocessing as mp
 # matlab interface and numerical
 from array import array
 import numpy as np
-from scipy.io import loadmat
+try:
+    from scipy.io import loadmat
+except:
+    pass
 
 
-def load_row_col_paint():
+def load_row_col_paint(convert=False):
+    '''Load data from `mat` and convert to `npz`.
+    '''
     def f(x):  # squeeze
         y = x.tolist()
         return tuple(y[0])if y else tuple()
     dir_name = 'data'
+    flag_name = '.flag'
+    flag = exists(join(dir_name, flag_name))
     for file_name in listdir(dir_name):
         path = join(dir_name, file_name)
-        data = loadmat(path)
-        # __import__('IPython').embed(colors='Linux')
+        if flag:
+            if path.endswith('.npz'):
+                data = np.load(path, allow_pickle=True)
+            else:
+                continue
+        else:
+            data = loadmat(path)
+            if convert:
+                np.savez(path.replace('.mat', '.npz'), **data)
         row = tuple(map(f, data['rKey'][0]))
         col = tuple(map(f, data['cKey'][0]))
         yield row, col, data['Paint']
+    if convert and not flag:
+        with open(join(dir_name, flag_name), 'a+') as f:
+            f.write(f'{time()}\n')
 
 
 def api(row, col, **kwargs):
@@ -41,7 +58,7 @@ def matlab_api(row, col):
             return tuple(map(int, x))
     g = lambda x: array('d', x)
     # default kwargs
-    kwargs = dict(threshold=64, n_processes=0)
+    kwargs = dict(threshold=64, scale=2, n_steps=-1, n_processes=0)
     result = api(tuple(map(f, row)), tuple(map(f, col)), **kwargs)
     return tuple(map(g, result.tolist()))
 
@@ -86,20 +103,37 @@ class Pool:
 
 class PaintItBack:
     '''Paint it back game.
+
+    API:
+        - property
+            - paint
+            - is_finished
+            - is_initial
+        - function
+            - doit()
+            - equal_to(numpy.ndarray)
+        - classmethod
+            - _inverse(numpy.ndarray)
     '''
-    def __init__(self, row, col, threshold=64, n_processes=0):
+    def __init__(self, row, col, threshold=64, scale=2, n_steps=-1, n_processes=0):
         '''
         Argument:
             - row: tuple[tuple]
             - col: tuple[tuple]
             - threshold: int, see `self._intersection`
+            - scale: int, multiply `self._threshold` when algorithm fails
+            - n_steps: int, max steps
             - n_processes: int, whether to use `multiprocessing`
         '''
         self._row = row
         self._col = col
+        self._iths = set(range(len(row)))
+        self._jths = set(range(len(col)))
         self._threshold = threshold
-        self._paint = - np.ones((len(row), len(col)), dtype=int)
+        self._scale = scale
+        self._steps = n_steps
         self._processes = n_processes
+        self._paint = -np.ones((len(row), len(col)), dtype=int)
 
     def __repr__(self):
         return f'<PaintItBack @ {hash(self):#x}>'
@@ -113,45 +147,59 @@ class PaintItBack:
         return not (self._paint==-1).any()
 
     @property
-    def is_initialized(self):
+    def is_initial(self):
         return (pib.paint==-1).all()
 
+    def equal_to(self, paint):
+        try:
+            return (self._paint==paint).all()
+        except:
+            return False
+
     def doit(self):
-        # simple fill algorithm
         if self._processes:
-            self.doit_parallel()
+            self._doit_parallel()
         else:
-            self.doit_serial()
-        if self.is_finished:
-            return None
-        # todo
-        raise NotImplementedError
+            self._doit_serial()
+        assert self.is_finished, 'Algorithm fails.'
 
-    def doit_serial(self):
-        while True:
+    def _doit_serial(self):
+        while self._steps != 0:
+            self._steps -= 1
             comparison = self._paint.copy()
-            for ith, row in enumerate(self._row):
-                self._intersection(self._paint[ith, :], row)
-            for jth, col in enumerate(self._col):
-                self._intersection(self._paint[:, jth], col)
-            if (comparison==self._paint).all():
+            for ith in self._iths.copy():
+                row = self._row[ith]
+                self._intersection(self._paint[ith, :], row, ith=ith)
+            for jth in self._jths.copy():
+                col = self._col[jth]
+                self._intersection(self._paint[:, jth], col, jth=jth)
+            if self.is_finished:
                 break
+            if (comparison==self._paint).all():
+                self._threshold *= self._scale
 
-    def doit_parallel(self):
+    def _doit_parallel(self):
         f = self._intersection
         with Pool(self._processes) as p:
-            while True:
+            while self._steps != 0:
+                self._steps -= 1
                 comparison = self._paint.copy()
-                for ith, row in enumerate(self._row):
-                    args = self._paint[ith, :], row
-                    self._paint[ith, :] = p.apply_async(f, args=args).get()
-                for jth, col in enumerate(self._col):
-                    args = self._paint[:, jth], col
-                    self._paint[:, jth] = p.apply_async(f, args=args).get()
-                if (comparison==self._paint).all():
+                for ith in self._iths.copy():
+                    self._paint[ith, :] = p.apply_async(f,
+                        args=(self._paint[ith, :], self._row[ith]),
+                        kwds=dict(ith=ith)
+                    ).get()
+                for jth in self._jths.copy():
+                    self._paint[:, jth] = p.apply_async(f,
+                        args=(self._paint[:, jth], self._col[jth]),
+                        kwds=dict(jth=jth)
+                    ).get()
+                if self.is_finished:
                     break
+                if (comparison==self._paint).all():
+                    self._threshold *= self._scale
 
-    def _intersection(self, origin, choices):
+    def _intersection(self, origin, choices, ith=None, jth=None):
         '''Intersection of all possibilities.
 
         Argument:
@@ -161,6 +209,10 @@ class PaintItBack:
         Return:
             - numpy.ndarray
         '''
+        # check wheather `ith` and `jth` is valid
+        # if (isinstance(ith, int) and ith not in self._iths) \
+        #         or (isinstance(jth, int) and jth not in self._jths) \
+        #         or (not choices):
         if not choices:
             return origin
         m = len(choices) + 1
@@ -169,20 +221,23 @@ class PaintItBack:
         total = 0
         f = lambda ns: self._expand(self._convert_choices(choices, ns))
         for numbers in self._n_balls_m_boxes(n, m):
-            for ith, value in enumerate(f(numbers)):
-                if 0 <= origin[ith] != value:
+            for o, value in zip(origin, f(numbers)):
+                if 0 <= o != value:
                     break
             else:
-                total += 1
                 if total > self._threshold:
                     return origin
-                for ith, value in enumerate(f(numbers)):
-                    count[ith] += value
-        for ith, value in enumerate(count):
+                total += 1
+                for kth, value in enumerate(f(numbers)):
+                    count[kth] += value
+        for kth, value in enumerate(count):
             if value == 0:
-                origin[ith] = 0
+                origin[kth] = 0
             elif value == total:
-                origin[ith] = 1
+                origin[kth] = 1
+        if (origin!=-1).all():
+            isinstance(ith, int) and self._iths.remove(ith)
+            isinstance(jth, int) and self._jths.remove(jth)
         return origin
 
     def _expand(self, marks):
@@ -202,7 +257,7 @@ class PaintItBack:
 
         Argument:
             - chioces: tuple
-            - number: iterable
+            - numbers: iterable
         '''
         numbers = iter(numbers)
         yield -next(numbers)
@@ -263,10 +318,10 @@ class PaintItBack:
 
 if __name__ == '__main__':
     for row, col, paint in load_row_col_paint():
-        pib = PaintItBack(row, col, threshold=64, n_processes=0)
+        pib = PaintItBack(row, col, threshold=64, scale=2, n_steps=-1, n_processes=0)
         with Timer() as t:
             pib.doit()
         shape = '{}x{}'.format(*paint.shape)
-        flag = '√' if (pib.paint==paint).all() else '×'
+        flag = '√' if pib.equal_to(paint) else '×'
         elapse = f'{t.elapse:>4.2f}s = {1000*t.elapse:>8.2f}ms'
-        print(shape, flag, elapse, sep='\t')
+        print(f'{shape}\t{flag}\t{elapse}')
