@@ -20,7 +20,7 @@ def load_row_col_paint(convert=False):
     def f(x):  # squeeze
         y = x.tolist()
         return tuple(y[0])if y else tuple()
-    dir_name = 'data'
+    dir_name = join('..', 'data')
     flag_name = '.flag'
     flag = exists(join(dir_name, flag_name))
     for file_name in listdir(dir_name):
@@ -267,6 +267,18 @@ class PaintItBack:
         yield choices[-1]
         yield -next(numbers)
 
+    def _convert_choices_and_expand(self, chioces, numbers):
+        '''Combine and optimize two functions.
+
+        Note:
+            - cannot improve efficiency
+        '''
+        ith = -1
+        for kth in range(len(chioces)):
+            ith += numbers[kth] + 1
+            yield from range(ith, ith+chioces[kth])
+            ith += chioces[kth]
+
     def _n_balls_m_boxes(self, n, m):
         '''All possibilities of n balls and m boxes.
 
@@ -317,6 +329,11 @@ class PaintItBack:
 
 
 if __name__ == '__main__':
+    try:
+        from model import PaintItBack
+    except:
+        pass
+
     for row, col, paint in load_row_col_paint():
         pib = PaintItBack(row, col, threshold=64, scale=2, n_steps=-1, n_processes=0)
         with Timer() as t:

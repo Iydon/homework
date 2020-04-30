@@ -1,9 +1,4 @@
-if isempty(pyversion)
-    fprintf('此问题为非数值，使用 MATLAB 可能不是很合适，所以使用较为熟悉的 Python 进行合理的封装。');
-    fprintf('如果您能看到这些信息，说明您的 MATLAB 无法调用 Python 程序，请先进行相应的配置。');
-end
-
-dir_name = 'data';
+dir_name = '../data';
 verbose = false;
 
 number = length({dir(dir_name).name}) - 2;  % . and ..
@@ -14,7 +9,9 @@ for ith = 1: number
     file_name = fullfile(dir_name, [num2str(ith),'.mat']);
     load(file_name);
     % calculate and time it
-    [result, time] = python_api(rKey, cKey);
+    tic;
+    result = paintItBack_v0(rKey, cKey);
+    time = toc;
     % record and display
     File(ith) = string(file_name);
     Size(ith) = sprintf('%dx%d', size(Paint));
@@ -29,18 +26,3 @@ for ith = 1: number
 end
 Records = table(File, Size, Time, Correct);
 disp(Records);
-
-
-function [Paint, time] = python_api(row, col)
-    % load api from model
-    model = py.importlib.import_module('model');
-    % py.importlib.reload(model);
-    tic;
-    Tuple = model.matlab_api(row, col);
-    time = toc;
-    % convert python object to matlab matrix
-    Paint = zeros(length(row), length(col));
-    for ith = 1: length(row)
-        Paint(ith, :) = Tuple{ith};
-    end
-end
