@@ -164,9 +164,10 @@ class PaintItBack:
         assert self.is_finished, 'Algorithm fails.'
 
     def _doit_serial(self):
+        previous_hash = current_hash = 0
         while self._steps != 0:
             self._steps -= 1
-            comparison = self._paint.copy()
+            current_hash = self._paint.sum()
             for ith in self._iths.copy():
                 row = self._row[ith]
                 self._intersection(self._paint[ith, :], row, ith=ith)
@@ -175,15 +176,17 @@ class PaintItBack:
                 self._intersection(self._paint[:, jth], col, jth=jth)
             if self.is_finished:
                 break
-            if (comparison==self._paint).all():
+            if (current_hash==previous_hash).all():
                 self._threshold *= self._scale
+            previous_hash = current_hash
 
     def _doit_parallel(self):
+        previous_hash = current_hash = 0
         f = self._intersection
         with Pool(self._processes) as p:
             while self._steps != 0:
                 self._steps -= 1
-                comparison = self._paint.copy()
+                current_hash = self._paint.sum()
                 for ith in self._iths.copy():
                     self._paint[ith, :] = p.apply_async(f,
                         args=(self._paint[ith, :], self._row[ith]),
@@ -196,8 +199,9 @@ class PaintItBack:
                     ).get()
                 if self.is_finished:
                     break
-                if (comparison==self._paint).all():
+                if (current_hash==previous_hash).all():
                     self._threshold *= self._scale
+                previous_hash = current_hash
 
     def _intersection(self, origin, choices, ith=None, jth=None):
         '''Intersection of all possibilities.
