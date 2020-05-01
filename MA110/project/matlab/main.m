@@ -8,9 +8,19 @@ for ith = 1: number
     % Paint, cKey, rKey
     file_name = fullfile(dir_name, [num2str(ith),'.mat']);
     load(file_name);
+    for kth = 1: length(rKey)
+        if isempty(rKey{kth})
+            rKey{kth} = -1;
+        end
+    end
+    for kth = 1: length(cKey)
+        if isempty(cKey{kth})
+            cKey{kth} = -1;
+        end
+    end
     % calculate and time it
     tic;
-    result = paintItBack_v0(rKey, cKey);
+    result = paintItBack(rKey, cKey, 64, 2, -1);
     time = toc;
     % record and display
     File(ith) = string(file_name);
