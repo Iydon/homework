@@ -20,7 +20,7 @@ for ith = 1: number
     end
     % calculate and time it
     tic;
-    result = paintItBack(rKey, cKey, 64, 2, -1);
+    result = paintItBack_mex(rKey, cKey, 64, 2, -1);
     time = toc;
     % record and display
     File(ith) = string(file_name);

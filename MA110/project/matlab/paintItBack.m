@@ -73,8 +73,12 @@ function origin = intersection(self, origin, choices)
     n = len - sum(choices) - m + 2;
     count = zeros(1, len);
     total = 0;
+    number = nchoosek(n+m-1, m-1);
+    if number > self.threshold
+        return;
+    end
     numbers = n_balls_m_boxes(n, m);
-    for ith = 1: nchoosek(n+m-1, m-1)
+    for ith = 1: number
         temp = convert_choices_and_expand(choices, numbers(ith, :));
         pmet = true(1, len);
         pmet(temp) = false;
@@ -105,7 +109,8 @@ end
 function result = n_balls_m_boxes(n, m)
     global ITH_GLOBAL;
     ITH_GLOBAL = 1;
-    result = zeros(nchoosek(n+m-1, m-1), m-1);
+    number = nchoosek(n+m-1, m-1);
+    result = zeros(number, m-1);
     result = nested(n, m, zeros(1, m-1), result);
 end
 
