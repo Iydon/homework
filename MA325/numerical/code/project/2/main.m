@@ -18,14 +18,17 @@ A = get_A(N, dt, h, epsilon, beta);
 % Parameters of others
 number = ceil(50 / dt) + 1;
 verbose = true;
-gif_flag = true;
+gif_flag = false;
 gif_delay = 0.01;
 gif_filename = 'allen_cahn.gif';
-solution_flag = false;
+solution_flag = true;
 solution_height = 3;
 solution_width = 2;
 solutions_Ts = [0, 2, 5, 8, 20, 50];
 energy = NaN(1, number);
+% fast solver
+[p, q] = meshgrid(1: N);
+lambda = 1 + beta*dt - 2*(cos(p*h/2)+cos(q*h/2)-2)*epsilon^2*dt/h^2;
 
 % Solve linear system
 for ith = 1: number
@@ -49,12 +52,24 @@ for ith = 1: number
     end
     % iterate
     energy(ith) = get_energy(U0, N, epsilon, h);
+    tic;
     F = get_F(U0, dt, beta, f);
-    U0 = A \ F;
+    % U0 = matlab_solver(A, F);
+    U0 = dst_solver(lambda, F, U0, N, f, beta, dt);
+    toc
 end
 % plot((1: number)*dt, energy)
 
 
+
+function U0 = matlab_solver(A, F)
+    U0 = A \ F;
+end
+
+function U0 = dst_solver(lambda, F, U0, N, f, beta, dt)
+    F = f(U0)*dt + (1+beta*dt)*U0;
+    U0 = dst2(idst2(reshape(F, N, N)) ./ lambda);
+end
 
 function U0 = get_U0(N)
     % U0 has zero mean with size (N, N)
