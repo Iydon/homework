@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.mirrors.ustc.edu.cn/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+facenet-pytorch = "*"
+ipython = "*"
+torch = "*"
+torchvision = "*"
+opencv-python = "*"
+pandas = "*"
+matplotlib = "*"
+tqdm = "*"
+
+[requires]
+python_version = "3.8"
