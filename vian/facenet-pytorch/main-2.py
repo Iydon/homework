@@ -1,16 +1,30 @@
+import json
 import os
+import time
+
+import pandas as pd
+from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
 from model import FaceNet
 
 
+# 参数设置
 root = 'images'
 threshold = 1
-output = 'result.csv'
+output = 'result.json'
+validation = '验证集.csv'
 
-result = dict()
+
+# 数据读取
+y_true = dict(zip(*map(
+    lambda x: x[-1], pd.read_csv(os.path.join(root, validation)).items()
+)))
+y_pred = dict()
+tic = time.time()
+# 使用模型
 fn = FaceNet(mtcnn=dict(post_process=True, keep_all=False))
 for dirname, _, filenames in os.walk(root):
-    if filenames:
+    if filenames and validation not in filenames and '.DS_Store' not in filenames:
         print(dirname)
         key = int(os.path.split(dirname)[-1])
         for filename in filenames:
@@ -18,8 +32,16 @@ for dirname, _, filenames in os.walk(root):
             fn.add_image(fn.imread(path), key)
         x, y = fn._kwargs['data'][key]
         flag = int((x-y).norm() < threshold)
-        result[key] = flag
+        y_pred[key] = flag
         fn._kwargs['data'].clear()
+# 结果写入
 with open(output, 'w') as f:
-    for key in sorted(result):
-        f.write(f'{key},{result[key]}\n')
+    toc = time.time() - tic
+    data = dict(
+        y=dict(true=true, pred=pred), time=toc,
+        score=dict(
+            accuracy=accuracy_score(true, pred), precision=precision_score(true, pred),
+            recall=recall_score(true, pred), roc_auc=roc_auc_score(true, pred),
+        ),
+    )
+    json.dump(data, f, ensure_ascii=False, indent=2)
