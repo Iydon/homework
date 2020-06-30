@@ -37,6 +37,8 @@ for dirname, _, filenames in os.walk(root):
 # 结果写入
 with open(output, 'w') as f:
     toc = time.time() - tic
+    keys = sorted(y_pred)
+    true, pred = tuple(y_true[k] for k in keys), tuple(y_pred[k] for k in keys)
     data = dict(
         y=dict(true=true, pred=pred), time=toc,
         score=dict(
