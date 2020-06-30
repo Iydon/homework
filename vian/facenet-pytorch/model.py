@@ -120,9 +120,8 @@ class FaceNet:
         else:
             face = cv2.resize(image, (self._mtcnn.image_size, self._mtcnn.image_size))
             faces = (torch.Tensor(face.transpose(2, 1, 0)), )
-        return self._resnet(
-            torch.stack(tuple(faces)).to(self._kwargs['device'])
-        ).detach().cpu()
+        faces = faces if self._kwargs['mtcnn'].get('keep_all', True) else (faces, )
+        return self._resnet(torch.stack(faces).to(self._kwargs['device'])).detach().cpu()
 
     def _distances(self, embedding, **kwargs):
         return {
