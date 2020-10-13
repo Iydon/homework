@@ -17,6 +17,9 @@
 ## MA110
 [MATLAB 程序设计](MA110)
 
+## CS205
+[C/C++ Program Design](CS205)
+
 ## CS307
 [数据库原理](CS307)
 
