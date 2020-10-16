@@ -2,6 +2,15 @@
 #include <ctime>
 #include <iostream>
 
+#define TIMEIT(statement) { \
+    Timer *_timer = new Timer(); \
+    _timer->tic(); \
+    statement; \
+    _timer->toc(); \
+    _timer->print(); \
+    delete _timer; \
+}
+
 using namespace std;
 
 
