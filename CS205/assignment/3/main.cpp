@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-#include "timer.cpp"
-#include "vector.cpp"
+#include "timer.h"
+#include "vector.h"
 
 #include "cblas.h"
 

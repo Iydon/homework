@@ -81,8 +81,8 @@ Besides, we can use `g++ -O3` to improve efficiency. Since the question is quite
 |filename|description|
 |---|---|
 |[main.cpp](main.cpp)|Main function, which is the designated start of the program.|
-|[vector.cpp](vector.cpp)|Vector class template, which contains the main logic of the vector, such as initialization, dot product, etc.|
-|[timer.cpp](timer.cpp)|Timer utility to measure the number of microseconds (or milliseconds) for certain statements.|
+|[vector.h](vector.h)|Vector class template, which contains the main logic of the vector, such as initialization, dot product, etc.|
+|[timer.h](timer.h)|Timer utility to measure the number of microseconds (or milliseconds) for certain statements.|
 |[Makefile](Makefile)|Configuration file for make utility, which defines set of tasks to be executed.|
 
 
