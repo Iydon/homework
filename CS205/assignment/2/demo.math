@@ -1,0 +1,7 @@
+# comment
+xx = 1 + 2 * {-3.14e-2 + sqrt(pi)} ...
+    / sin(cos(1+pi)) + atan2(2, 1)
+ln(pi)
+yy = xx + _
+yy *= e
+print(y)

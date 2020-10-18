@@ -1,0 +1,210 @@
+#pragma once
+
+
+#include <iostream>
+#include <map>
+#include <cmath>
+#include <regex>
+#include <vector>
+
+
+#define UF(o, s) this->unary_functions[#o] = [] (REAL number) -> REAL { s; };
+#define UFD(o) UF(o, return o(number);)
+#define BFD(o) BF(o, return left o right;)
+#define BF(o, s) this->binary_functions[#o] = [] (REAL left, REAL right) -> REAL { s; };
+#define VF(o, s) this->variable_functions[#o] = [this] (string key, REAL value) -> REAL { s; return this->variables[key]; };
+#define VFD(o) VF(o, this->variables[key] o value;)
+
+
+using namespace std;
+
+
+struct token {
+    enum TokenType {
+        UNARY_FUNCTION, BINARY_FUNCTION, VARIABLE_FUNCTION, NUMBER, VARIABLE,
+        LEFT_PARENTHESE, RIGHT_PARENTHESE, LEFT_BRACE, RIGHT_BRACE, COMMA
+    } type;
+    string value;
+};
+
+
+template<class REAL = double, class INTEGER = int>
+class Globals {
+    /*
+     * 全局变量与函数
+     */
+    public:
+        // 变量定义
+        map<string, function<REAL(REAL)>> unary_functions;
+        map<string, function<REAL(REAL, REAL)>> binary_functions;
+        map<string, function<REAL(string, REAL)>> variable_functions;
+        map<string, REAL> variables;
+        map<string, regex> patterns;
+
+        // 构造器
+        Globals () {
+            this->initialize_functions();
+            this->initialize_variables();
+            this->initialize_patterns();
+        }
+
+        function<REAL(REAL)> get_unary_function(string key) {
+            return this->unary_functions.at(key);
+        }
+
+        function<REAL(REAL, REAL)> get_binary_function(string key) {
+            return this->binary_functions.at(key);
+        }
+
+        function<REAL(string, REAL)> get_variable_function(string key) {
+            return this->variable_functions.at(key);
+        }
+
+    private:
+        void initialize_functions() {
+            // unary and binary functions
+            UFD(+);UFD(-);UFD(!);UFD(cos);UFD(sin);UFD(tan);UFD(acos);UFD(asin);UFD(atan);UFD(cosh);UFD(sinh);UFD(tanh);UFD(acosh);UFD(asinh);UFD(atanh);UFD(exp);UFD(log2);UFD(log10);UFD(sqrt);UFD(erf);UFD(ceil);UFD(floor);UFD(round);UFD(abs);
+            BFD(+);BFD(-);BFD(*);BFD(/);BFD(>);BFD(<);BFD(==);BFD(>=);BFD(<=);BFD(!=);BFD(||);BFD(&&);
+
+            UF(ln, return log(number););
+            UF(print, cout << number << endl; return number;)
+
+            BF(%, return fmod(left, right););
+            BF(^, return pow(left, right););
+            BF(|, return (INTEGER)left | (INTEGER)right;);
+            BF(&, return (INTEGER)left & (INTEGER)right;);
+            BF(atan2, return atan2(left, right););
+
+            // functions involving variables
+            VFD(=);VFD(+=);VFD(-=);VFD(*=);VFD(/=);
+
+            VF(%=, this->variables[key] = fmod(this->variables[key], value););
+            VF(^=, this->variables[key] = pow(this->variables[key], value););
+            VF(|=, this->variables[key] = (INTEGER)this->variables[key] | (INTEGER)value;);
+            VF(&=, this->variables[key] = (INTEGER)this->variables[key] & (INTEGER)value;);
+            VF(<<=, this->variables[key] = (INTEGER)this->variables[key] << (INTEGER)value;);
+            VF(>>=, this->variables[key] = (INTEGER)this->variables[key] >> (INTEGER)value;);
+        }
+
+        void initialize_variables() {
+            this->variables["pi"] = 3.14159265358979323846;
+            this->variables["e"] = 2.71828182845904523536;
+            this->variables["_"] = 0;
+        }
+
+        void initialize_patterns() {
+            this->patterns["number"] = "([1-9]\\d*|0)(\\.\\d*)?([eE][+-]?([1-9]\\d*|0))?";
+            this->patterns["comment"] = "#[^\\n]*";
+            this->patterns["whitespace"] = "[ \\r\\t\\f\\v]+";
+            this->patterns["breakline"] = "\\.\\.\\.\\n*";
+        }
+};
+
+
+template<class REAL = double, class INTEGER = int>
+class Interpreter {
+    /*
+     * 解释器
+     */
+    public:
+        void run(string code) {
+            vector<string> lines = this->split_lines(
+                this->remove_comment_whitespace_breakline(code)
+            );
+            for (int ith=0; ith<lines.size(); ith++) {
+                this->globals.variables["_"] = this->parse(
+                    this->split_tokens(lines[ith])
+                );
+            }
+        }
+
+    private:
+        Globals<REAL, INTEGER> globals;
+
+        string remove_comment_whitespace_breakline(string code) {
+            return regex_replace(
+                regex_replace(
+                    regex_replace(code, this->globals.patterns["comment"], ""),
+                    this->globals.patterns["whitespace"], ""
+                ), this->globals.patterns["breakline"], ""
+            );
+        }
+
+        vector<string> split_lines(string code) {
+            vector<string> result;
+            if (code != "") {
+                size_t pos, size = code.size();
+                for (int ith=0; ith<size; ith++) {
+                    pos = code.find("\n", ith);
+                    if (pos<size && ith!=pos) {
+                        result.push_back(code.substr(ith, pos-ith));
+                        ith = pos;
+                    }
+                }
+            }
+            return result;
+        }
+
+        vector<token> split_tokens(string line) {
+            // TODO
+            vector<token> result;
+            int ith, jth, type;
+            string name, segment;
+            regex number = this->globals.patterns["number"];
+            smatch match;
+            // iteration
+            for (ith=0; ith<line.size(); ith++) {
+                // *_PARENTHESE, *_BRACE, COMMA
+                if (line[ith] == '(') {
+                    result.push_back({token::LEFT_PARENTHESE, "("});
+                } else if (line[ith] == ')') {
+                    result.push_back({token::RIGHT_PARENTHESE, ")"});
+                } else if (line[ith] == '{') {
+                    result.push_back({token::LEFT_BRACE, "{"});
+                } else if (line[ith] == '}') {
+                    result.push_back({token::RIGHT_BRACE, "}"});
+                } else if (line[ith] == ',') {
+                    result.push_back({token::COMMA, ","});
+                } else {
+                    // *_FUNCTION
+                    name = "";
+                    for (jth=ith; jth<line.size(); jth++) {
+                        segment = line.substr(ith, jth-ith+1);
+                        if (this->globals.unary_functions.count(segment))
+                            type = token::UNARY_FUNCTION;
+                        else if (this->globals.binary_functions.count(segment))
+                            type = token::BINARY_FUNCTION;
+                        else if (this->globals.variable_functions.count(segment))
+                            type = token::VARIABLE_FUNCTION;
+                        else continue;
+                        name = segment;
+                    }
+                    if (!name.empty()) {
+                        ith += name.size() - 1;
+                        result.push_back({(token::TokenType)type, name});
+                    // NUMBER
+                    } else if ('0'<=line[ith] && line[ith]<='9') {
+                        segment = line.substr(ith, line.size()-ith);
+                        regex_search(segment, match, number);
+                        result.push_back({token::NUMBER, match[0]});
+                        ith += match.length(0) - 1;
+                    // VARIABLE
+                    } else {
+                        if (result.size() && result.back().type==token::VARIABLE)
+                            result.back().value += line[ith];
+                        else
+                            result.push_back({token::VARIABLE, line.substr(ith, 1)});
+                    }
+                }
+            }
+            return result;
+        }
+
+        REAL parse(vector<token> tokens) {
+            for (int ith=0; ith<tokens.size(); ith++) {
+                cout << tokens[ith].value << " ";
+            }
+            cout << endl;
+            return 0;
+        }
+};
