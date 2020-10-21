@@ -4,7 +4,7 @@ DEMONAME = demo.math
 
 
 compile:
-	g++ -g -std=c++17 $(FILENAME).cpp -o $(TARGETNAME)
+	g++ -O3 -std=c++17 $(FILENAME).cpp -o $(TARGETNAME)
 
 demo:
 	./$(TARGETNAME) $(DEMONAME)

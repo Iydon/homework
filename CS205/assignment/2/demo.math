@@ -1,9 +1,10 @@
 # comment, the result shall be 13.068672553556999
+time on
+
 xx = { ...
     {1 + 2} * {-3.14e-2 + sqrt(pi)} / {sin(cos(1+pi)) + e} ...
 }
 ln(pi)
-yy = {xx + _}
-yy *= {e+1}
+yy = {xx + _} ; yy *= {e+1}
 
 print(yy)

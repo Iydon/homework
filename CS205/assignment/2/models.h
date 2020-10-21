@@ -7,6 +7,8 @@
 #include <regex>
 #include <list>
 
+#include "timer.h"
+
 
 #define UF(o, s) this->unary_functions[#o] = [] (REAL number) -> REAL { s; };
 #define UFD(o) UF(o, return o(number);)
@@ -96,6 +98,7 @@ class Globals {
             this->patterns["comment"] = "#[^\\n]*";
             this->patterns["whitespace"] = "[ \\r\\t\\f\\v]+";
             this->patterns["breakline"] = "\\.\\.\\.\\n*";
+            this->patterns["semicolon"] = ";";
         }
 };
 
@@ -107,24 +110,34 @@ class Interpreter {
      */
     public:
         void run(string code) {
+            this->timer.tic();
             list<string> lines = this->split_lines(
                 this->remove_comment_whitespace_breakline(code)
             );
             for (auto &line : lines) {
-                this->globals.variables["_"] = this->parse(
-                    this->split_tokens(line)
-                );
+                if (!this->command(line)) {
+                    this->globals.variables["_"] = this->parse(
+                        this->split_tokens(line)
+                    );
+                }
             }
+            this->timer.toc();
+            if (this->whether_to_time)
+                this->timer.print();
         }
 
     private:
         Globals<REAL, INTEGER> globals;
+        Timer timer;
+        bool whether_to_time = false;
 
         string remove_comment_whitespace_breakline(string code) {
             return regex_replace(
                 regex_replace(
-                    regex_replace(code, this->globals.patterns["comment"], ""),
-                    this->globals.patterns["whitespace"], ""
+                    regex_replace(
+                        regex_replace(code, this->globals.patterns["comment"], ""),
+                        this->globals.patterns["semicolon"], "\n"
+                    ), this->globals.patterns["whitespace"], ""
                 ), this->globals.patterns["breakline"], ""
             );
         }
@@ -145,7 +158,9 @@ class Interpreter {
         }
 
         list<token> split_tokens(string line) {
-            // TODO
+            /*
+             * 分离 token
+             */
             list<token> result;
             int ith, jth, type;
             string name, segment;
@@ -197,6 +212,9 @@ class Interpreter {
         }
 
         REAL parse(list<token> tokens) {
+            /*
+             * 根据 token 得出结果
+             */
             int stack = 0;
             REAL result;
             list<token> priority;
@@ -244,6 +262,9 @@ class Interpreter {
         }
 
         REAL parse_arithmetic(list<token> tokens) {
+            /*
+             * 无优先级无显性函数调用表达式的解析
+             */
             REAL result;
             token previous;
             list<token>::iterator it = tokens.begin();
@@ -251,14 +272,14 @@ class Interpreter {
             if (tokens.size() == 1)
                 return this->to_real(tokens.front());
             // 递归状态
-            switch ((*it).type) {
+            switch (it->type) {
                 case token::NUMBER:
                 case token::VARIABLE: {
                     previous = *it;
-                    switch ((*(++it)).type) {
+                    switch ((++it)->type) {
                         case token::UNARY_FUNCTION:
                         case token::BINARY_FUNCTION: {
-                            result = this->globals.binary_functions[(*it).value](
+                            result = this->globals.binary_functions[it->value](
                                 this->to_real(previous), this->to_real(*(++it))
                             );
                             *it = {token::NUMBER, to_string(result)};
@@ -267,7 +288,7 @@ class Interpreter {
                         }
 
                         case token::VARIABLE_FUNCTION: {
-                            result = this->globals.variable_functions[(*it).value](
+                            result = this->globals.variable_functions[it->value](
                                 previous.value, this->to_real(*(++it))
                             );
                             *it = {token::NUMBER, to_string(result)};
@@ -278,7 +299,7 @@ class Interpreter {
                 }
 
                 case token::UNARY_FUNCTION: {
-                    result = this->globals.unary_functions[(*it).value](this->to_real(*(++it)));
+                    result = this->globals.unary_functions[it->value](this->to_real(*(++it)));
                     *it = {token::NUMBER, to_string(result)};
                     tokens.pop_front();
                     return this->parse_arithmetic(tokens);
@@ -301,6 +322,9 @@ class Interpreter {
         }
 
         void print(list<token> tokens) {
+            /*
+             * 用于 debug 输出信息
+             */
             string names[] = {
                 "UNARY_FUNCTION", "BINARY_FUNCTION", "VARIABLE_FUNCTION", "NUMBER", "VARIABLE",
                 "LEFT_PARENTHESE", "RIGHT_PARENTHESE", "LEFT_BRACE", "RIGHT_BRACE", "EMPTY"
@@ -308,5 +332,39 @@ class Interpreter {
             for (auto &t : tokens)
                 cout << t.value << "(" << names[t.type] << ")" << " ";
             cout << endl;
+        }
+
+        template<typename K, typename V>
+        void print(map<K, V> dict, string prefix="", string suffix="\n") {
+            for (typename map<K, V>::iterator it=dict.begin(); it!=dict.end(); it++) {
+                cout << prefix << it->first << ": " << it->second << suffix;
+            }
+        }
+
+        bool command(string line) {
+            if (line == "variables") {
+                cout << "{" << endl;
+                this->print<string, REAL>(this->globals.variables, "    ", ",\n");
+                cout <<"}" << endl;
+            } else if (line == "functions") {
+                cout << "Unary functions:\n    ";
+                for (auto item : this->globals.unary_functions)
+                    cout << item.first << ", ";
+                cout << endl << endl;
+                cout << "Binary functions:\n    ";
+                for (auto item : this->globals.binary_functions)
+                    cout << item.first << ", ";
+                cout << endl << endl;
+                cout << "Variable functions:\n    ";
+                for (auto item : this->globals.variable_functions)
+                    cout << item.first << ", ";
+                cout << endl << endl;
+            } else if (line == "timeon") {
+                this->whether_to_time = true;
+            } else if (line == "timeoff") {
+                this->whether_to_time = false;
+            } else
+                return false;
+            return true;
         }
 };
