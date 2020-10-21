@@ -21,6 +21,7 @@ pass
 - http://www.cplusplus.com/reference/vector/vector/
 - http://www.cplusplus.com/reference/map/map/
 - http://www.cplusplus.com/reference/regex/
+- http://www.cplusplus.com/reference/list/list/
 - https://en.cppreference.com/w/cpp/language/enum
 - https://en.cppreference.com/w/cpp/language/lambda
 - https://zhuanlan.zhihu.com/p/143884880

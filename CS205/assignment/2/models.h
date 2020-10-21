@@ -5,7 +5,7 @@
 #include <map>
 #include <cmath>
 #include <regex>
-#include <vector>
+#include <list>
 
 
 #define UF(o, s) this->unary_functions[#o] = [] (REAL number) -> REAL { s; };
@@ -22,7 +22,7 @@ using namespace std;
 struct token {
     enum TokenType {
         UNARY_FUNCTION, BINARY_FUNCTION, VARIABLE_FUNCTION, NUMBER, VARIABLE,
-        LEFT_PARENTHESE, RIGHT_PARENTHESE, LEFT_BRACE, RIGHT_BRACE, COMMA
+        LEFT_PARENTHESE, RIGHT_PARENTHESE, LEFT_BRACE, RIGHT_BRACE, EMPTY
     } type;
     string value;
 };
@@ -73,7 +73,6 @@ class Globals {
             BF(^, return pow(left, right););
             BF(|, return (INTEGER)left | (INTEGER)right;);
             BF(&, return (INTEGER)left & (INTEGER)right;);
-            BF(atan2, return atan2(left, right););
 
             // functions involving variables
             VFD(=);VFD(+=);VFD(-=);VFD(*=);VFD(/=);
@@ -108,12 +107,12 @@ class Interpreter {
      */
     public:
         void run(string code) {
-            vector<string> lines = this->split_lines(
+            list<string> lines = this->split_lines(
                 this->remove_comment_whitespace_breakline(code)
             );
-            for (int ith=0; ith<lines.size(); ith++) {
+            for (auto &line : lines) {
                 this->globals.variables["_"] = this->parse(
-                    this->split_tokens(lines[ith])
+                    this->split_tokens(line)
                 );
             }
         }
@@ -130,8 +129,8 @@ class Interpreter {
             );
         }
 
-        vector<string> split_lines(string code) {
-            vector<string> result;
+        list<string> split_lines(string code) {
+            list<string> result;
             if (code != "") {
                 size_t pos, size = code.size();
                 for (int ith=0; ith<size; ith++) {
@@ -145,16 +144,15 @@ class Interpreter {
             return result;
         }
 
-        vector<token> split_tokens(string line) {
+        list<token> split_tokens(string line) {
             // TODO
-            vector<token> result;
+            list<token> result;
             int ith, jth, type;
             string name, segment;
-            regex number = this->globals.patterns["number"];
             smatch match;
             // iteration
             for (ith=0; ith<line.size(); ith++) {
-                // *_PARENTHESE, *_BRACE, COMMA
+                // *_PARENTHESE, *_BRACE
                 if (line[ith] == '(') {
                     result.push_back({token::LEFT_PARENTHESE, "("});
                 } else if (line[ith] == ')') {
@@ -163,8 +161,6 @@ class Interpreter {
                     result.push_back({token::LEFT_BRACE, "{"});
                 } else if (line[ith] == '}') {
                     result.push_back({token::RIGHT_BRACE, "}"});
-                } else if (line[ith] == ',') {
-                    result.push_back({token::COMMA, ","});
                 } else {
                     // *_FUNCTION
                     name = "";
@@ -185,7 +181,7 @@ class Interpreter {
                     // NUMBER
                     } else if ('0'<=line[ith] && line[ith]<='9') {
                         segment = line.substr(ith, line.size()-ith);
-                        regex_search(segment, match, number);
+                        regex_search(segment, match, this->globals.patterns["number"]);
                         result.push_back({token::NUMBER, match[0]});
                         ith += match.length(0) - 1;
                     // VARIABLE
@@ -200,11 +196,74 @@ class Interpreter {
             return result;
         }
 
-        REAL parse(vector<token> tokens) {
-            for (int ith=0; ith<tokens.size(); ith++) {
-                cout << tokens[ith].value << " ";
+        REAL parse(list<token> tokens) {
+            // 最简单情况
+            switch (tokens.size()) {
+                case 0:
+                    return 0;
+
+                case 1: {
+                    token front = tokens.front();
+                    switch (front.type) {
+                        case token::NUMBER:
+                            return stold(front.value);
+
+                        case token::VARIABLE:
+                            return this->globals.variables[front.value];
+                    }
+                }
             }
+            // 二元表达式解析
+            ;
+            // 优先项与函数项递归解决方案
+            int stack = 0;
+            REAL result;
+            list<token> priority;
+            list<token>::iterator it, begin, end, medium;
+            // 去除优先项
+            for (it=tokens.begin(); it!=tokens.end(); it++) {
+                if ((*it).type == token::LEFT_BRACE) {
+                    if (stack == 0)
+                        begin = it;
+                    stack += 1;
+                } else if ((*it).type == token::RIGHT_BRACE) {
+                    stack -= 1;
+                    if (stack == 0) {
+                        end = it;
+                        priority.assign(++begin, end);
+                        *(--begin) = {token::NUMBER, to_string(this->parse(priority))};
+                        for (medium=(++begin), end++; medium!=end; medium++)
+                            *medium = {token::EMPTY, ""};
+                    }
+                }
+            }
+            tokens.remove_if([] (token t) -> bool { return t.type==token::EMPTY; });
+            // 去除函数项
+            for (it=tokens.begin(); it!=tokens.end(); it++) {
+                if ((*it).type == token::LEFT_PARENTHESE) {
+                    if (stack == 0)
+                        begin = it;
+                    stack += 1;
+                } else if ((*it).type == token::RIGHT_PARENTHESE) {
+                    stack -= 1;
+                    if (stack == 0) {
+                        end = it;
+                        priority.assign(++begin, end);
+                        begin--; begin--;
+                        result = this->globals.unary_functions[(*begin).value](this->parse(priority));
+                        *begin = {token::NUMBER, to_string(result)};
+                        for (medium=++begin, end++; medium!=end; medium++)
+                            *medium = {token::EMPTY, "_"};
+                    }
+                }
+            }
+            tokens.remove_if([] (token t) -> bool { return t.type==token::EMPTY; });
+            return 2.71828;
+        }
+
+        void print(list<token> tokens) {
+            for (auto &t : tokens)
+                cout << t.value << " ";
             cout << endl;
-            return 0;
         }
 };

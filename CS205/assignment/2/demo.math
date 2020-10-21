@@ -1,7 +1,7 @@
 # comment
-xx = 1 + 2 * {-3.14e-2 + sqrt(pi)} ...
-    / sin(cos(1+pi)) + atan2(2, 1)
+xx = {1 + 2 * {-3.14e-2 + sqrt(pi)} ...
+    / {sin(cos(1+pi)) + e}}
 ln(pi)
-yy = xx + _
-yy *= e
+yy = {xx + _}
+yy *= {e+1}
 print(y)
