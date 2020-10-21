@@ -197,25 +197,6 @@ class Interpreter {
         }
 
         REAL parse(list<token> tokens) {
-            // 最简单情况
-            switch (tokens.size()) {
-                case 0:
-                    return 0;
-
-                case 1: {
-                    token front = tokens.front();
-                    switch (front.type) {
-                        case token::NUMBER:
-                            return stold(front.value);
-
-                        case token::VARIABLE:
-                            return this->globals.variables[front.value];
-                    }
-                }
-            }
-            // 二元表达式解析
-            ;
-            // 优先项与函数项递归解决方案
             int stack = 0;
             REAL result;
             list<token> priority;
@@ -253,17 +234,79 @@ class Interpreter {
                         result = this->globals.unary_functions[(*begin).value](this->parse(priority));
                         *begin = {token::NUMBER, to_string(result)};
                         for (medium=++begin, end++; medium!=end; medium++)
-                            *medium = {token::EMPTY, "_"};
+                            *medium = {token::EMPTY, ""};
                     }
                 }
             }
             tokens.remove_if([] (token t) -> bool { return t.type==token::EMPTY; });
-            return 2.71828;
+            // 无优先级无显性函数调用表达式解析
+            return this->parse_arithmetic(tokens);
+        }
+
+        REAL parse_arithmetic(list<token> tokens) {
+            REAL result;
+            token previous;
+            list<token>::iterator it = tokens.begin();
+            // 递归结束条件
+            if (tokens.size() == 1)
+                return this->to_real(tokens.front());
+            // 递归状态
+            switch ((*it).type) {
+                case token::NUMBER:
+                case token::VARIABLE: {
+                    previous = *it;
+                    switch ((*(++it)).type) {
+                        case token::UNARY_FUNCTION:
+                        case token::BINARY_FUNCTION: {
+                            result = this->globals.binary_functions[(*it).value](
+                                this->to_real(previous), this->to_real(*(++it))
+                            );
+                            *it = {token::NUMBER, to_string(result)};
+                            tokens.pop_front(); tokens.pop_front();
+                            return this->parse_arithmetic(tokens);
+                        }
+
+                        case token::VARIABLE_FUNCTION: {
+                            result = this->globals.variable_functions[(*it).value](
+                                previous.value, this->to_real(*(++it))
+                            );
+                            *it = {token::NUMBER, to_string(result)};
+                            tokens.pop_front(); tokens.pop_front();
+                            return this->parse_arithmetic(tokens);
+                        }
+                    }
+                }
+
+                case token::UNARY_FUNCTION: {
+                    result = this->globals.unary_functions[(*it).value](this->to_real(*(++it)));
+                    *it = {token::NUMBER, to_string(result)};
+                    tokens.pop_front();
+                    return this->parse_arithmetic(tokens);
+                }
+            }
+            return 0;
+        }
+
+        REAL to_real(token t) {
+            switch (t.type) {
+                case token::NUMBER:
+                    return stold(t.value);
+
+                case token::VARIABLE:
+                    return this->globals.variables[t.value];
+
+                default:
+                    return 0;
+            }
         }
 
         void print(list<token> tokens) {
+            string names[] = {
+                "UNARY_FUNCTION", "BINARY_FUNCTION", "VARIABLE_FUNCTION", "NUMBER", "VARIABLE",
+                "LEFT_PARENTHESE", "RIGHT_PARENTHESE", "LEFT_BRACE", "RIGHT_BRACE", "EMPTY"
+            };
             for (auto &t : tokens)
-                cout << t.value << " ";
+                cout << t.value << "(" << names[t.type] << ")" << " ";
             cout << endl;
         }
 };
