@@ -164,6 +164,8 @@ print(yy)
 
 ## Result & Verification
 The program runs correctly, that is, the result is consistent with the C++ and Python of the same logic.
+
+- windows:
 ```shell
 $ make compare
 
@@ -181,6 +183,26 @@ Time has elapsed 375µs ≈ 0ms ≈ 0s.
 python demo.py
 13.068672553556999
 Time has elapsed 366.60µs ≈ 0.37ms ≈ 0.00s.
+```
+
+- linux:
+```shell
+$ make compare
+
+=== Math ===
+./math demo.math
+13.0687
+Time has elapsed 231µs ≈ 0ms ≈ 0s.
+
+=== C++ ===
+g++ demo.cpp -o _ && ./_ demo.math
+13.0687
+Time has elapsed 33µs ≈ 0ms ≈ 0s.
+
+=== Python ===
+python demo.py
+13.068672553556999
+Time has elapsed 273.10µs ≈ 0.27ms ≈ 0.00s.
 ```
 
 
