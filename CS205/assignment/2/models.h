@@ -220,7 +220,7 @@ class Interpreter {
             list<token>::iterator it, begin, end, medium;
             // 去除优先项
             for (it=tokens.begin(); it!=tokens.end(); it++) {
-                if (it->.type == token::LEFT_BRACE) {
+                if (it->type == token::LEFT_BRACE) {
                     if (stack == 0)
                         begin = it;
                     stack += 1;
@@ -238,11 +238,11 @@ class Interpreter {
             tokens.remove_if([] (token t) -> bool { return t.type==token::EMPTY; });
             // 去除函数项
             for (it=tokens.begin(); it!=tokens.end(); it++) {
-                if (it->.type == token::LEFT_PARENTHESE) {
+                if (it->type == token::LEFT_PARENTHESE) {
                     if (stack == 0)
                         begin = it;
                     stack += 1;
-                } else if (it->.type == token::RIGHT_PARENTHESE) {
+                } else if (it->type == token::RIGHT_PARENTHESE) {
                     stack -= 1;
                     if (stack == 0) {
                         end = it;
