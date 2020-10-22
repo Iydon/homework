@@ -10,6 +10,7 @@
 #include "timer.h"
 
 
+#define ZF(o, s) this->void_functions[#o] = [] () -> REAL { s; };
 #define UF(o, s) this->unary_functions[#o] = [] (REAL number) -> REAL { s; };
 #define UFD(o) UF(o, return o(number);)
 #define BFD(o) BF(o, return left o right;)
@@ -23,8 +24,8 @@ using namespace std;
 
 struct token {
     enum TokenType {
-        UNARY_FUNCTION, BINARY_FUNCTION, VARIABLE_FUNCTION, NUMBER, VARIABLE,
-        LEFT_PARENTHESE, RIGHT_PARENTHESE, LEFT_BRACE, RIGHT_BRACE, EMPTY
+        VOID_FUNCTION, UNARY_FUNCTION, BINARY_FUNCTION, VARIABLE_FUNCTION, NUMBER,
+        VARIABLE, LEFT_PARENTHESE, RIGHT_PARENTHESE, LEFT_BRACE, RIGHT_BRACE, EMPTY
     } type;
     string value;
 };
@@ -37,6 +38,7 @@ class Globals {
      */
     public:
         // 变量定义
+        map<string, function<REAL()>> void_functions;
         map<string, function<REAL(REAL)>> unary_functions;
         map<string, function<REAL(REAL, REAL)>> binary_functions;
         map<string, function<REAL(string, REAL)>> variable_functions;
@@ -45,31 +47,23 @@ class Globals {
 
         // 构造器
         Globals () {
+            srand(time(0));
             this->initialize_functions();
             this->initialize_variables();
             this->initialize_patterns();
         }
 
-        function<REAL(REAL)> get_unary_function(string key) {
-            return this->unary_functions.at(key);
-        }
-
-        function<REAL(REAL, REAL)> get_binary_function(string key) {
-            return this->binary_functions.at(key);
-        }
-
-        function<REAL(string, REAL)> get_variable_function(string key) {
-            return this->variable_functions.at(key);
-        }
-
     private:
         void initialize_functions() {
-            // unary and binary functions
+            // void, unary and binary functions
             UFD(+);UFD(-);UFD(!);UFD(cos);UFD(sin);UFD(tan);UFD(acos);UFD(asin);UFD(atan);UFD(cosh);UFD(sinh);UFD(tanh);UFD(acosh);UFD(asinh);UFD(atanh);UFD(exp);UFD(log2);UFD(log10);UFD(sqrt);UFD(erf);UFD(ceil);UFD(floor);UFD(round);UFD(abs);
             BFD(+);BFD(-);BFD(*);BFD(/);BFD(>);BFD(<);BFD(==);BFD(>=);BFD(<=);BFD(!=);BFD(||);BFD(&&);
 
+            ZF(rand, return (double)rand()/RAND_MAX;);
+            ZF(time, return time(0);)
+
             UF(ln, return log(number););
-            UF(print, cout << number << endl; return number;)
+            UF(print, cout << number << endl; return number;);
 
             BF(%, return fmod(left, right););
             BF(^, return pow(left, right););
@@ -122,6 +116,8 @@ class Interpreter {
                 }
             }
             this->timer.toc();
+            if (this->whether_to_display)
+                cout << this->globals.variables["_"] << endl;
             if (this->whether_to_time)
                 this->timer.print();
         }
@@ -130,6 +126,7 @@ class Interpreter {
         Globals<REAL, INTEGER> globals;
         Timer timer;
         bool whether_to_time = false;
+        bool whether_to_display = false;
 
         string remove_comment_whitespace_breakline(string code) {
             return regex_replace(
@@ -181,7 +178,9 @@ class Interpreter {
                     name = "";
                     for (jth=ith; jth<line.size(); jth++) {
                         segment = line.substr(ith, jth-ith+1);
-                        if (this->globals.unary_functions.count(segment))
+                        if (this->globals.void_functions.count(segment))
+                            type = token::VOID_FUNCTION;
+                        else if (this->globals.unary_functions.count(segment))
                             type = token::UNARY_FUNCTION;
                         else if (this->globals.binary_functions.count(segment))
                             type = token::BINARY_FUNCTION;
@@ -221,11 +220,11 @@ class Interpreter {
             list<token>::iterator it, begin, end, medium;
             // 去除优先项
             for (it=tokens.begin(); it!=tokens.end(); it++) {
-                if ((*it).type == token::LEFT_BRACE) {
+                if (it->.type == token::LEFT_BRACE) {
                     if (stack == 0)
                         begin = it;
                     stack += 1;
-                } else if ((*it).type == token::RIGHT_BRACE) {
+                } else if (it->type == token::RIGHT_BRACE) {
                     stack -= 1;
                     if (stack == 0) {
                         end = it;
@@ -239,17 +238,20 @@ class Interpreter {
             tokens.remove_if([] (token t) -> bool { return t.type==token::EMPTY; });
             // 去除函数项
             for (it=tokens.begin(); it!=tokens.end(); it++) {
-                if ((*it).type == token::LEFT_PARENTHESE) {
+                if (it->.type == token::LEFT_PARENTHESE) {
                     if (stack == 0)
                         begin = it;
                     stack += 1;
-                } else if ((*it).type == token::RIGHT_PARENTHESE) {
+                } else if (it->.type == token::RIGHT_PARENTHESE) {
                     stack -= 1;
                     if (stack == 0) {
                         end = it;
                         priority.assign(++begin, end);
                         begin--; begin--;
-                        result = this->globals.unary_functions[(*begin).value](this->parse(priority));
+                        if (begin->type == token::VOID_FUNCTION)
+                            result = this->globals.void_functions[begin->value]();
+                        else if (begin->type == token::UNARY_FUNCTION)
+                            result = this->globals.unary_functions[begin->value](this->parse(priority));
                         *begin = {token::NUMBER, to_string(result)};
                         for (medium=++begin, end++; medium!=end; medium++)
                             *medium = {token::EMPTY, ""};
@@ -347,6 +349,10 @@ class Interpreter {
                 this->print<string, REAL>(this->globals.variables, "    ", ",\n");
                 cout <<"}" << endl;
             } else if (line == "functions") {
+                cout << "Void functions:\n    ";
+                for (auto item : this->globals.void_functions)
+                    cout << item.first << ", ";
+                cout << endl << endl;
                 cout << "Unary functions:\n    ";
                 for (auto item : this->globals.unary_functions)
                     cout << item.first << ", ";
@@ -359,10 +365,23 @@ class Interpreter {
                 for (auto item : this->globals.variable_functions)
                     cout << item.first << ", ";
                 cout << endl << endl;
+            } else if (line == "commands" || line == "help") {
+                cout << "exit: terminate program" << endl;
+                cout << "variables: show all variables" << endl;
+                cout << "functions: show all functions" << endl;
+                cout << "commands|help: show all commands" << endl;
+                cout << "time [on|off]: whether to record the running time" << endl;
+                cout << "display [on|off]: whether to display result automatically" << endl;
+            } else if (line == "exit") {
+                exit(0);
             } else if (line == "timeon") {
                 this->whether_to_time = true;
             } else if (line == "timeoff") {
                 this->whether_to_time = false;
+            } else if (line == "displayon") {
+                this->whether_to_display = true;
+            } else if (line == "displayoff") {
+                this->whether_to_display = false;
             } else
                 return false;
             return true;
