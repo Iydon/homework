@@ -2,10 +2,16 @@ import json
 import hashlib
 import pathlib
 
+import numpy as np
 import pandas as pd
+
+from sklearn.base import BaseEstimator
+from sklearn.linear_model import LinearRegression
 
 
 class Dataset:
+    '''纵向数据分析的数据集
+    '''
     def __init__(self, dirname='data', metaname='meta.json', encoding='utf-8'):
         self._dir = pathlib.Path(dirname)
         self._meta = tuple(filter(
@@ -28,8 +34,8 @@ class Dataset:
                 raise NotImplementedError
             data = {
                 id: (
-                    group[meta['xyz']['x']].to_numpy(dtype='float64'),
-                    group[meta['xyz']['y']].to_numpy(dtype='float64')
+                    group[meta['xyz']['x']],
+                    group[meta['xyz']['y']]
                 )
                 for id, group in data.groupby(meta['xyz']['z'])
             }
@@ -57,10 +63,138 @@ class Dataset:
         return f'<Dataset({len(self)}) @ {hash(self):#x}>'
 
 
+class Symbol:
+    '''广义线性模型的符号表示：Y~X
+    '''
+    def __init__(self, meta=None, data=None):
+        self._meta = meta
+        self._data = None if data is None else pd.DataFrame(data)
+        self._hash = self._md5(meta) if meta else None
+        self._names = [list(), list()]  # [Y, X]
+        self._model = None
+
+    def __getitem__(self, key):
+        result = Symbol(self._meta, self._data[key])
+        result._names[0].append(key)
+        return result
+
+    def __add__(self, value):
+        assert self._hash == value._hash
+        result = Symbol(self._meta, None)
+        result._data = pd.concat((self._data, value._data), axis=1)
+        result._names[0] = self._names[0] + value._names[0]
+        return result
+
+    def __eq__(self, value):
+        assert self._hash == value._hash
+        result = Symbol(self._meta, None)
+        result._data = pd.concat((self._data, value._data), axis=1)
+        result._names = [self._names[0], value._names[0]]
+        return result
+
+    def __repr__(self):
+        statement = ', '.join(self._names[0])
+        if self._names[1]:
+            statement += ' ~ ' + ' + '.join(self._names[1])
+        return statement
+
+    @property
+    def data(self):
+        '''多元统计数据
+        '''
+        return self._data
+
+    @property
+    def columns(self):
+        '''按 X，Y 返回数据表头
+        '''
+        return dict(x=self._names[1], y=self._names[0])
+
+    @property
+    def model(self):
+        '''sklearn 线性模型
+        '''
+        if self._model is None:
+            self._model = self.fit()
+        return self._model
+    @model.setter
+    def model(self, value):
+        assert isinstance(value, BaseEstimator)
+        self._model = value
+    @model.deleter
+    def model(self):
+        self._model = None
+
+    @property
+    def xy(self):
+        '''按 X，Y 返回数据
+        '''
+        return self._data[self._names[1]], self._data[self._names[0]]
+
+    def apply(self, function, name=None, **kwargs):
+        '''单元数据变换
+        '''
+        mapper = {
+            column: f'{name or function.__name__}({column})'
+            for column in self._names[0]
+        }
+        result = Symbol(self._meta, None)
+        result._data = self._data.apply(function, **kwargs).rename(columns=mapper)
+        result._names[0] += mapper.values()
+        return result
+
+    def interact(self, function, name, **kwargs):
+        '''多元数据交互
+        '''
+        result = Symbol(self._meta, None)
+        result._data = pd.DataFrame(self._data.apply(function, axis=1, **kwargs))
+        result._data.columns = [name]
+        result._names[0] += result._data.columns.to_list()
+        return result
+
+    def ones(self):
+        '''A new DataFrame, filled with ones
+        '''
+        result = Symbol(self._meta, pd.DataFrame(1, index=self._data.index, columns=list('1')))
+        result._names[0].append('1')
+        return result
+
+    def fit(self, model=LinearRegression, **kwargs):
+        '''Fit linear model
+        '''
+        result = model(**kwargs)
+        result.fit(*self.xy)
+        return result
+
+    def describe(self):
+        '''Generate descriptive statistics
+        '''
+        expression = repr(self)
+        formula = '[{0}] = {2} + {1}'.format(
+            ', '.join(self._names[0]), self.model.intercept_,
+            ' + '.join(map(lambda x: f'{x[0]}*{x[1]}', zip(self.model.coef_.T, self._names[1])))
+        )
+        _locals = locals()
+        return {key: _locals[key] for key in ('expression', 'formula')}
+
+    def _md5(self, obj):
+        return hashlib.md5(repr(obj).encode()).hexdigest()
+
+
 if __name__ == '__main__':
     dataset = Dataset()
-    for meta, data in dataset:
-        print('=' * 64)
-        length = max(map(len, data.columns))
-        for column in data.columns:
-            print(f'{column:{length}}:', meta['header'][column])
+
+    meta, data = dataset.at(0, xy=False)
+    symbol = Symbol(meta, data)
+    symbols = (
+        symbol['count'].apply(np.log)
+        ==
+        symbol[['age', 'smoke']].interact(lambda x: x[0]*x[1], name='age_smoke') +
+        symbol['age'] + symbol['smoke'] + symbol['drug'] + symbol['partners'] + symbol['cesd']
+    )
+    # symbols = (
+    #     symbol[meta['xyz']['y']]
+    #     ==
+    #     sum((symbol[key] for key in meta['xyz']['x']), start=Symbol(meta))
+    # )
+    model = symbols.fit(LinearRegression) or symbols.model

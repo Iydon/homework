@@ -290,7 +290,7 @@
             "level": "铅含量"
         },
         "xyz": {
-            "x": ["time"],
+            "x": ["baseline", "time"],
             "y": "level",
             "z": "treatment"
         },
