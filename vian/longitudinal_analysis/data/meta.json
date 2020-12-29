@@ -1,0 +1,282 @@
+[
+    {
+        "filename": "04fd51e8133f4a0fb62984d240333557",
+        "description": "HIV 数据集，主要目的是估计 CD4+ 细胞下降速度以及协变量对 CD4+ 细胞数目的影响",
+        "header": {
+            "time": "时间",
+            "count": "CD4 细胞个数",
+            "age": "血清转化时的年龄",
+            "smoke": "吸烟状况（以吸烟的包数来衡量）",
+            "drug": "是否使用药物",
+            "partners": "性伴侣的个数",
+            "cesd": "用 CESD 量表测量的抑郁水平（值越大表明抑郁状况越严重）",
+            "id": "感染者的编号"
+        },
+        "xyz": {
+            "x": ["age", "smoke", "drug", "partners", "cesd"],
+            "y": "count",
+            "z": "id"
+        },
+        "attribute": {
+            "balance": false,
+            "response_type": "count"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "11878f6566fc59807c938b156d38660b",
+        "description": "Progabide study (Epileptic seizures)",
+        "header": {
+            "id": "患者 ID",
+            "counts": "癫痫症患者发病的次数",
+            "visit": "当前记录次数（每隔两周记录一次数据，共记录八周）",
+            "treat": "处理效应（0 = 安慰剂，1 = 普罗加比）",
+            "age": "患者的年龄",
+            "weeks": "未知"
+        },
+        "xyz": {
+            "x": ["visit", "treat", "age"],
+            "y": "counts",
+            "z": "id"
+        },
+        "attribute": {
+            "balance": true,
+            "response_type": "count"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "ed37afc170ade49a2cdbb30cf4b69835",
+        "description": "马德拉斯精神分裂症研究，主要目的是分析精神分裂患者在入院治疗后，各个协变量是否会对患者的思维障碍产生影响，参考链接：https://rdrr.io/cran/drm/man/madras.html",
+        "header": {
+            "id": "identification number of a patient",
+            "symptom": "response 'thought disorder'(0 = absent, 1 = present)",
+            "month": "month since hospitalisation",
+            "age": "age indicator(0 = less than 20 years, 1 = 20 or over)",
+            "gender": "sex indicator(0 = male, 1 = female)",
+            "month_2": "interaction term MONTH x AGE",
+            "month_3": "interaction term MONTH x GENDER"
+        },
+        "xyz": {
+            "x": ["month", "age", "gender", "month_2", "month_3"],
+            "y": "symptom",
+            "z": "id"
+        },
+        "attribute": {
+            "balance": false,
+            "response_type": "binary"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "ca38911b0d5f1485cb45b1efd95d522c",
+        "description": "该数据主要用来研究家庭支出和人口统计学变量之间的关系，https://pdfs.semanticscholar.org/d6d3/bb00caec49398f355ab49abb7c7869327dfe.pdf",
+        "header": {
+            "a": "面试总次数",
+            "b": "家庭 ID",
+            "c": "当前观测次数（每个家庭最多观察 8 个季度）",
+            "d": "年份",
+            "e": "季度",
+            "f": "周数",
+            "g": "未成年孩子数",
+            "h": "成人数",
+            "i": "丈夫年龄",
+            "j": "总支出",
+            "k": "丈夫收入",
+            "l": "Stone 价格指数",
+            "m": "在家用餐",
+            "n": "在外用餐",
+            "o": "烟酒",
+            "p": "非耐用品和服务",
+            "q": "衣服",
+            "r": "小耐用品"
+        },
+        "xyz": {
+            "x": ["a", "d", "e", "g", "h", "i", "k", "l"],
+            "y": "j",
+            "z": "b",
+            "_comment": "j，m，n，o，p，q，r 均可以作为响应变量"
+        },
+        "attribute": {
+            "balance": false,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "e183d334193bf6182d9e41c6b1455b47",
+        "description": "小老鼠病理试验研究，集团数据，该试验是用来评估试剂量对老鼠繁殖能力的影响",
+        "header": {
+            "weight": "幼鼠的体重",
+            "id": "窝 ID",
+            "gender": "幼鼠的性别（0 = female，1 = male）",
+            "dose": "药物的剂量（0 = 对照组，1 = 低剂量组，2 = 高剂量组）"
+        },
+        "xyz": {
+            "x": ["gender", "dose"],
+            "y": "weight",
+            "z": "id"
+        },
+        "attribute": {
+            "balance": false,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "e03960d2aa1b7beb37e63d3d72b4510a",
+        "description": "分娩镇痛研究",
+        "header": {
+            "patient": "患者 ID",
+            "treatment": "所属组（0 = 药物治疗组，1 = 安慰剂组）",
+            "time": "时间（分钟）",
+            "rank": "疼痛程度"
+        },
+        "xyz": {
+            "x": ["treatment", "time"],
+            "y": "rank",
+            "z": "patient"
+        },
+        "attribute": {
+            "balance": false,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "f34de24206097a31b5e80bf7d400686a",
+        "description": "工资数据",
+        "header": {
+            "Sub": "ID",
+            "EXP": "未知",
+            "WKS": "工作时间（周）",
+            "OCC": "未知",
+            "IND": "未知",
+            "SOUTH": "是否来自美国南部地区（1 = 南部，0 = 其他）",
+            "SMSA": "未知",
+            "MS": "未知",
+            "FEM": "性别（0 = 男性，1 = 女性）",
+            "UNION": "未知",
+            "ED": "教育程度",
+            "BLK": "种族（0 = 白种人，1 = 黑种人）",
+            "LWAGE": "工资的对数"
+        },
+        "xyz": {
+            "x": ["EXP", "WKS", "OCC", "IND", "SOUTH", "SMSA", "MS", "FEM", "UNION", "ED", "BLK"],
+            "y": "LWAGE",
+            "z": "Sub"
+        },
+        "attribute": {
+            "balance": true,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "dcad3dce8692d10892a69ebbbdd77d1e",
+        "description": "crime data",
+        "header": {
+            "county": "城市 ID",
+            "year": "年份",
+            "crmrte": "犯罪率",
+            "prbarr": "未知",
+            "prbconv": "未知",
+            "prbpris": "未知",
+            "avgsen": "未知",
+            "polpc": "未知",
+            "density": "人口密度",
+            "taxpc": "未知",
+            "west": "0 = 东部，1 = 西部",
+            "central": "未知",
+            "urban": "未知",
+            "pctmin80": "未知",
+            "wcon": "未知",
+            "wtuc": "未知",
+            "wtrd": "未知",
+            "wfir": "未知",
+            "wser": "未知",
+            "wmfg": "未知",
+            "wfed": "未知",
+            "wsta": "未知",
+            "wloc": "未知",
+            "mix": "未知",
+            "pctymle": "未知",
+            "d82": "未知",
+            "d83": "未知",
+            "d84": "未知",
+            "d85": "未知",
+            "d86": "未知",
+            "d87": "未知",
+            "lcrmrte": "未知",
+            "lprbarr": "未知",
+            "lprbconv": "未知",
+            "lprbpris": "未知",
+            "lavgsen": "未知",
+            "lpolpc": "未知",
+            "ldensity": "未知",
+            "ltaxpc": "未知",
+            "lwcon": "未知",
+            "lwtuc": "未知",
+            "lwtrd": "未知",
+            "lwfir": "未知",
+            "lwser": "未知",
+            "lwmfg": "未知",
+            "lwfed": "未知",
+            "lwsta": "未知",
+            "lwloc": "未知",
+            "lmix": "未知",
+            "lpctymle": "未知",
+            "lpctmin": "未知",
+            "clcrmrte": "未知",
+            "clprbarr": "未知",
+            "clprbcon": "未知",
+            "clprbpri": "未知",
+            "clavgsen": "未知",
+            "clpolpc": "未知",
+            "cltaxpc": "未知",
+            "clmix": "未知"
+        },
+        "xyz": {
+            "x": ["year", "prbarr", "prbconv", "prbpris", "avgsen", "polpc", "density", "taxpc", "west", "central", "urban", "pctmin80", "wcon", "wtuc", "wtrd", "wfir", "wser", "wmfg", "wfed", "wsta", "wloc", "mix", "pctymle", "d82", "d83", "d84", "d85", "d86", "d87", "lcrmrte", "lprbarr", "lprbconv", "lprbpris", "lavgsen", "lpolpc", "ldensity", "ltaxpc", "lwcon", "lwtuc", "lwtrd", "lwfir", "lwser", "lwmfg", "lwfed", "lwsta", "lwloc", "lmix", "lpctymle", "lpctmin", "clcrmrte", "clprbarr", "clprbcon", "clprbpri", "clavgsen", "clpolpc", "cltaxpc", "clmix"],
+            "y": "crmrte",
+            "z": "county"
+        },
+        "attribute": {
+            "balance": true,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    }
+]
