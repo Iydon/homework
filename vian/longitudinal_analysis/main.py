@@ -8,7 +8,10 @@ import pandas as pd
 class Dataset:
     def __init__(self, dirname='data', metaname='meta.json', encoding='utf-8'):
         self._dir = pathlib.Path(dirname)
-        self._meta = json.loads((self._dir/metaname).read_text(encoding=encoding))
+        self._meta = tuple(filter(
+            lambda item: item['filename'],  # determine whether it is a sample item
+            json.loads((self._dir/metaname).read_text(encoding=encoding)))
+        )
 
     def at(self, ith, xy=False):
         '''
@@ -55,8 +58,6 @@ class Dataset:
 
 
 if __name__ == '__main__':
-    import os
-
     dataset = Dataset()
     for meta, data in dataset:
         print('=' * 64)

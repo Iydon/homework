@@ -278,5 +278,50 @@
             "orient": "split",
             "encoding": "utf-8"
         }
+    },
+    {
+        "filename": "4e894eae520f7e5dcac7c04cb2ba1ee9",
+        "description": "儿童铅中毒治疗研究",
+        "header": {
+            "id": "儿童 ID",
+            "treatment": "0 = 安慰剂组，1 = 琥巯酸组",
+            "time": "测量周数",
+            "baseline": "基线水平",
+            "level": "铅含量"
+        },
+        "xyz": {
+            "x": ["time"],
+            "y": "level",
+            "z": "treatment"
+        },
+        "attribute": {
+            "balance": true,
+            "response_type": "continuous"
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
+    },
+    {
+        "filename": "",
+        "description": "",
+        "header": {
+        },
+        "xyz": {
+            "x": [],
+            "y": "",
+            "z": ""
+        },
+        "attribute": {
+            "balance": null,
+            "response_type": ""
+        },
+        "format": "json",
+        "kwargs": {
+            "orient": "split",
+            "encoding": "utf-8"
+        }
     }
 ]
