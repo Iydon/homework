@@ -1,7 +1,8 @@
 [
     {
         "filename": "04fd51e8133f4a0fb62984d240333557",
-        "description": "HIV 数据集，主要目的是估计 CD4+ 细胞下降速度以及协变量对 CD4+ 细胞数目的影响",
+        "title": "HIV 数据集",
+        "description": "CD4+ 细胞是人体免疫系统中的一种重要免疫细胞，由于HIV（艾滋病病毒）攻击的对象是 CD4+ 细胞，所以在医学研究中，CD4+ 的检测结果对艾滋病治疗效果以及对患者免疫功能的判断起着极其重要的作用。此数据集的主要目的是估计 CD4+ 细胞下降速度以及协变量对 CD4+ 细胞数目的影响。",
         "header": {
             "time": "时间",
             "count": "CD4 细胞个数",
@@ -13,6 +14,7 @@
             "id": "感染者的编号"
         },
         "xyz": {
+            "t": "time",
             "x": ["age", "smoke", "drug", "partners", "cesd"],
             "y": "count",
             "z": "id"
@@ -29,7 +31,8 @@
     },
     {
         "filename": "11878f6566fc59807c938b156d38660b",
-        "description": "Progabide study (Epileptic seizures)",
+        "title": "普罗加比药物研究",
+        "description": "在一次临床试验研究中，59名癫痫症患者被随机地分为两组，一组服用抗癫痫药普罗加比，一组服用安慰剂。此数据集的主要目的是判定抗癫痫药普罗加比能否降低癫痫症患者发病的次数。",
         "header": {
             "id": "患者 ID",
             "counts": "癫痫症患者发病的次数",
@@ -39,6 +42,7 @@
             "weeks": "未知"
         },
         "xyz": {
+            "t": "visit",
             "x": ["visit", "treat", "age"],
             "y": "counts",
             "z": "id"
@@ -55,17 +59,19 @@
     },
     {
         "filename": "ed37afc170ade49a2cdbb30cf4b69835",
-        "description": "马德拉斯精神分裂症研究，主要目的是分析精神分裂患者在入院治疗后，各个协变量是否会对患者的思维障碍产生影响，参考链接：https://rdrr.io/cran/drm/man/madras.html",
+        "title": "马德拉斯精神分裂症研究",
+        "description": "本数据来自印度马德拉斯精神分裂症的纵向研究，该研究记录了86位精神分裂症患者在首次住院治疗后的第一年内是否出现思维障碍，如果出现则记为 1，否则记为 0。此数据集的主要目的是分析精神分裂患者在入院治疗后，各个协变量是否会对患者的思维障碍产生影响。",
         "header": {
             "id": "identification number of a patient",
-            "symptom": "response 'thought disorder'(0 = absent, 1 = present)",
+            "symptom": "response thought disorder (0 = absent, 1 = present)",
             "month": "month since hospitalisation",
-            "age": "age indicator(0 = less than 20 years, 1 = 20 or over)",
-            "gender": "sex indicator(0 = male, 1 = female)",
+            "age": "age indicator (0 = less than 20 years, 1 = 20 or over)",
+            "gender": "sex indicator (0 = male, 1 = female)",
             "month_2": "interaction term MONTH x AGE",
             "month_3": "interaction term MONTH x GENDER"
         },
         "xyz": {
+            "t": "month",
             "x": ["month", "age", "gender", "month_2", "month_3"],
             "y": "symptom",
             "z": "id"
@@ -82,6 +88,7 @@
     },
     {
         "filename": "ca38911b0d5f1485cb45b1efd95d522c",
+        "title": "西班牙家庭支出数据",
         "description": "该数据主要用来研究家庭支出和人口统计学变量之间的关系，https://pdfs.semanticscholar.org/d6d3/bb00caec49398f355ab49abb7c7869327dfe.pdf",
         "header": {
             "a": "面试总次数",
@@ -104,6 +111,7 @@
             "r": "小耐用品"
         },
         "xyz": {
+            "t": "c",
             "x": ["a", "d", "e", "g", "h", "i", "k", "l"],
             "y": "j",
             "z": "b",
@@ -121,7 +129,8 @@
     },
     {
         "filename": "e183d334193bf6182d9e41c6b1455b47",
-        "description": "小老鼠病理试验研究，集团数据，该试验是用来评估试剂量对老鼠繁殖能力的影响",
+        "title": "小老鼠病理试验研究",
+        "description": "在该研究中，来自同一母体的幼鼠可以看作一个集团，因此该数据属于集团数据。此数据集的主要目的是用来评估试剂量对老鼠繁殖能力的影响。",
         "header": {
             "weight": "幼鼠的体重",
             "id": "窝 ID",
@@ -129,6 +138,7 @@
             "dose": "药物的剂量（0 = 对照组，1 = 低剂量组，2 = 高剂量组）"
         },
         "xyz": {
+            "t": null,
             "x": ["gender", "dose"],
             "y": "weight",
             "z": "id"
@@ -145,7 +155,8 @@
     },
     {
         "filename": "e03960d2aa1b7beb37e63d3d72b4510a",
-        "description": "分娩镇痛研究",
+        "title": "分娩镇痛研究",
+        "description": "在该研究中，83 名孕妇中的 40 名被随机地分到安慰剂组，另外 43 名被分到了药物治疗组。此数据集的主要目的是判定药物治疗能否降低分娩的疼痛程度。",
         "header": {
             "patient": "患者 ID",
             "treatment": "所属组（0 = 药物治疗组，1 = 安慰剂组）",
@@ -153,6 +164,7 @@
             "rank": "疼痛程度"
         },
         "xyz": {
+            "t": "time",
             "x": ["treatment", "time"],
             "y": "rank",
             "z": "patient"
@@ -169,7 +181,8 @@
     },
     {
         "filename": "f34de24206097a31b5e80bf7d400686a",
-        "description": "工资数据",
+        "title": "工资数据",
+        "description": "此数据集的主要目的是研究协变量与工资数据之间的关系。",
         "header": {
             "Sub": "ID",
             "EXP": "未知",
@@ -186,6 +199,7 @@
             "LWAGE": "工资的对数"
         },
         "xyz": {
+            "t": null,
             "x": ["EXP", "WKS", "OCC", "IND", "SOUTH", "SMSA", "MS", "FEM", "UNION", "ED", "BLK"],
             "y": "LWAGE",
             "z": "Sub"
@@ -202,6 +216,7 @@
     },
     {
         "filename": "dcad3dce8692d10892a69ebbbdd77d1e",
+        "title": "美国北卡罗莱纳州的犯罪数据",
         "description": "crime data",
         "header": {
             "county": "城市 ID",
@@ -265,6 +280,7 @@
             "clmix": "未知"
         },
         "xyz": {
+            "t": null,
             "x": ["year", "prbarr", "prbconv", "prbpris", "avgsen", "polpc", "density", "taxpc", "west", "central", "urban", "pctmin80", "wcon", "wtuc", "wtrd", "wfir", "wser", "wmfg", "wfed", "wsta", "wloc", "mix", "pctymle", "d82", "d83", "d84", "d85", "d86", "d87", "lcrmrte", "lprbarr", "lprbconv", "lprbpris", "lavgsen", "lpolpc", "ldensity", "ltaxpc", "lwcon", "lwtuc", "lwtrd", "lwfir", "lwser", "lwmfg", "lwfed", "lwsta", "lwloc", "lmix", "lpctymle", "lpctmin", "clcrmrte", "clprbarr", "clprbcon", "clprbpri", "clavgsen", "clpolpc", "cltaxpc", "clmix"],
             "y": "crmrte",
             "z": "county"
@@ -281,7 +297,8 @@
     },
     {
         "filename": "4e894eae520f7e5dcac7c04cb2ba1ee9",
-        "description": "儿童铅中毒治疗研究",
+        "title": "儿童铅中毒治疗研究",
+        "description": "该数据来自美国疾病控制与预防中心（CDC）的一个儿童铅中毒治疗研究（TLC），试验的对象是在中心注册的血液中铅含量在 \\SIrange[per-mode=symbol, range-phrase=--]{20}{44}{\\micro\\gram\\per\\deci\\liter} 的 12 个月到 33 个月大的儿童，共 100 名，他们被随机分成两组，一组服用安慰剂，一组服用琥巯酸。此数据集的主要目的是判定琥巯酸能否降低血液中铅的含量。",
         "header": {
             "id": "儿童 ID",
             "treatment": "0 = 安慰剂组，1 = 琥巯酸组",
@@ -290,6 +307,7 @@
             "level": "铅含量"
         },
         "xyz": {
+            "t": "time",
             "x": ["baseline", "time"],
             "y": "level",
             "z": "treatment"
@@ -306,10 +324,12 @@
     },
     {
         "filename": "",
+        "title": "",
         "description": "",
         "header": {
         },
         "xyz": {
+            "t": "",
             "x": [],
             "y": "",
             "z": ""
