@@ -1,0 +1,22 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>API: {{ name }}</title>
+      <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+      <link href="{{ url_for('static', filename='css/code.css') }}" rel="stylesheet">
+   </head>
+   <body>
+      <h1>{{ name }}</h1>
+      <pre><code>
+{{ description }}
+      </code></pre>
+      <form action="/api/{{ name }}/y" method="POST">
+         {% autoescape false %}
+            {% for key, (function, kwargs) in data.items() %}
+{{ function(name=key, **kwargs) }}
+            {% endfor %}
+         {% endautoescape %}
+         <p><input type="submit" value="提交" /></p>
+      </form>
+   </body>
+</html>

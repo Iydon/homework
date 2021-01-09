@@ -1,0 +1,16 @@
+[[source]]
+name = "pypi"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = "*"
+ipython = "*"
+requests = {extras = ["socks"], version = "*"}
+nuitka = "*"
+jedi = "==0.17.2"
+
+[requires]
+python_version = "3.8"

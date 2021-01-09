@@ -1,0 +1,15 @@
+{
+    "appannie": {
+        "api_key": "",
+        "cache_dir": "cache/appannie",
+        "meta_file": "meta",
+        "proxies": {
+            "http": "socks5://127.0.0.1:10808",
+            "https": "socks5://127.0.0.1:10808"
+        },
+        "encoding": "utf-8"
+    },
+    "cache": {
+        "cache_dir": "cache"
+    }
+}
