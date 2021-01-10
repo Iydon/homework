@@ -135,6 +135,55 @@ api_hooker = APIHooker(Flask(__name__, static_url_path='/static'))
                 }
             ),
         }, lambda x: send_file(x, as_attachment=True)
+    ).add(
+        api.convert_monthly_download_revenue_to_csv, 'appannie.convert_monthly_download_revenue_to_csv', api.convert_monthly_download_revenue_to_csv.__doc__, {
+            'markets': (
+                form.checkbox, {
+                    'options': ('ios', 'google-play'),
+                }
+            ),
+            'countries': (
+                form.multiple, {
+                    'options': {
+                        country['country_code']: country['country_name']
+                        for country in api.appannie.countries()['country_list']
+                    },
+                }
+            ),
+            'feeds': (
+                form.checkbox, {
+                    'options': ('free', 'paid', 'grossing'),
+                }
+            ),
+            'devices': (
+                form.checkbox, {
+                    'options': ('ios', 'iphone', 'ipad', 'android'),
+                }
+            ),
+            'category_ios': (
+                form.datalist, {
+                    'options': tuple(
+                        category['category_path']
+                        for category in api.appannie.categories('ios')['category_list']
+                    ),
+                }
+            ),
+            'category_google': (
+                form.datalist, {
+                    'options': tuple(
+                        category['category_path']
+                        for category in api.appannie.categories('google-play')['category_list']
+                    ),
+                }
+            ),
+            'start_month': (form.month, dict()),
+            'end_month': (form.month, dict()),
+            'rank': (
+                form.range, {
+                    'min': 1, 'max': 1000, 'step': 1, 'default': 50,
+                }
+            ),
+        }, lambda x: send_file(x, as_attachment=True)
     )
 )
 
