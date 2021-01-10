@@ -10,6 +10,19 @@ api = API(**config['appannie'])
 cache = Cache(**config['cache'])
 api_hooker = APIHooker(Flask(__name__, static_url_path='/static'))
 
+(  # core
+    api_hooker.add(lambda: config.data, 'core.config', 'Check the configuration file, remember to modify it locally.', dict(), jsonify),
+)
+
+(  # cache
+    api_hooker.add(
+        cache.getsize, 'cache.getsize', cache.getsize.__doc__, dict(),
+        lambda x: f'缓存大小 {x/2**20:.3f} MB'
+    ).add(
+        cache.clear_zip_tsv, 'cache.clear_zip_tsv', cache.clear_zip_tsv.__doc__, dict(), str
+    )
+)
+
 (  # appannie
     api_hooker.add(
         api.countries, 'appannie.countries', Appannie.countries.__doc__, dict(), str
@@ -184,15 +197,6 @@ api_hooker = APIHooker(Flask(__name__, static_url_path='/static'))
                 }
             ),
         }, lambda x: send_file(x, as_attachment=True)
-    )
-)
-
-(  # cache
-    api_hooker.add(
-        cache.getsize, 'cache.getsize', cache.getsize.__doc__, dict(),
-        lambda x: f'缓存大小 {x/2**20:.3f} MB'
-    ).add(
-        cache.clear_zip_tsv, 'cache.clear_zip_tsv', cache.clear_zip_tsv.__doc__, dict(), str
     )
 )
 
